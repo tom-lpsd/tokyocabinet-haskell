@@ -1,5 +1,5 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
-module TokyoCabinet where
+module Database.TokyoCabinet where
 
 import Foreign
 import Foreign.Ptr
