@@ -1,7 +1,7 @@
 Name:           TokyoCabinet
 Version:        0.0.1
-Cabal-Version:  >= 1.2
-Lisence:        BSD3
+Cabal-Version:  >= 1.6
+License:        BSD3
 License-File:   LICENSE
 Author:         Tom Tsuruhara
 Maintainer:     tom.lpsd@gmail.com
@@ -10,7 +10,7 @@ Homepage:       http://tom-lpsd.dyndns.org/tom/ (Japanese)
 Category:       Database
 Synopsis:       bindings to tokyocabinet (modern implementaion of DBM)
 Description:    interface to tokyocabinet dbm library.
-Tested-With:    ghc
+Tested-With:    GHC
 Build-Type:     Simple
 
 Library
@@ -18,6 +18,4 @@ Library
   Exposed-modules:
     Database.TokyoCabinet
   Extensions:           CPP, ForeignFunctionInterface
-  Include-dirs:         /Users/tom/local/tc14/include
-  Extra-lib-dirs:       /Users/tom/local/tc14/lib
   Extra-libraries:      tokyocabinet
