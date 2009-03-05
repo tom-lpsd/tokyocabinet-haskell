@@ -11,7 +11,7 @@ Category:       Database
 Synopsis:       bindings to tokyocabinet (modern implementaion of DBM)
 Description:    interface to tokyocabinet dbm library.
 Tested-With:    GHC
-Build-Type:     Simple
+Build-Type:     Configure
 
 Library
   Build-Depends:        base

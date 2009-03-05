@@ -1,0 +1,3 @@
+Buildable: @BUILD_PACKAGE_BOOL@
+Extra-lib-dirs: @EXTRA_LIB_DIRS@
+Include-dirs: @INCLUDE_DIRS@
