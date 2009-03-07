@@ -1,6 +1,6 @@
 Name:           TokyoCabinet
 Version:        0.0.1
-Cabal-Version:  >= 1.6
+Cabal-Version:  >= 1.6.0.2
 License:        BSD3
 License-File:   LICENSE
 Author:         Tom Tsuruhara
@@ -15,9 +15,8 @@ Build-Type:     Simple
 
 Library
   Build-Depends:        base
-  Exposed-modules:
-    Database.TokyoCabinet
+  Exposed-modules:      Database.TokyoCabinet
   Extensions:           CPP, ForeignFunctionInterface
   Extra-libraries:      tokyocabinet
-  Extra-lib-dirs:       /usr/local/lib /opt/local/lib
-  Include-dirs:         /usr/local/include /opt/local/include
+  Extra-lib-dirs:       /usr/local/lib
+  Include-dirs:         /usr/local/include
