@@ -99,14 +99,16 @@ put (TCHDB fptr) key val =
         useAsCString val $ \val ->
             c_tchdbput2 p key val
 
-get :: TCHDB -> ByteString -> IO ByteString
+get :: TCHDB -> ByteString -> IO (Maybe ByteString)
 get (TCHDB fptr) key =
     withForeignPtr fptr $ \p ->
         useAsCString key $ \key -> do
           cstr <- c_tchdbget2 p key
-          val <- packCString cstr
-          free cstr
-          return val
+          if cstr == nullPtr
+            then return Nothing 
+            else do val <- packCString cstr
+                    free cstr
+                    return (Just val)
 
 data HDB
 
