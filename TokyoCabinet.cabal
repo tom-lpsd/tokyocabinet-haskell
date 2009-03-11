@@ -8,8 +8,8 @@ Maintainer:     tom.lpsd@gmail.com
 Stability:      experimental
 Homepage:       http://tom-lpsd.dyndns.org/tom/ (Japanese)
 Category:       Database
-Synopsis:       bindings to tokyocabinet (modern implementaion of DBM)
-Description:    interface to tokyocabinet dbm library.
+Synopsis:       bindings to Tokyo Cabinet (modern implementaion of DBM)
+Description:    interface to Tokyo Cabinet library.
 Tested-With:    GHC
 Build-Type:     Simple
 
