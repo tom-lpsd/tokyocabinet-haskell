@@ -14,9 +14,14 @@ Tested-With:    GHC
 Build-Type:     Simple
 
 Library
-  Build-Depends:        base
-  Exposed-modules:      Database.TokyoCabinet
-  Extensions:           CPP, ForeignFunctionInterface
+  Build-Depends:        base, bytestring
+  Exposed-modules:      Database.TokyoCabinet, Database.TokyoCabinet.HDB
+  Extensions:           CPP, ForeignFunctionInterface, EmptyDataDecls
   Extra-libraries:      tokyocabinet
   Extra-lib-dirs:       /usr/local/lib
   Include-dirs:         /usr/local/include
+
+-- Executable HDBTest
+--  Main-Is:              tests/HDB.hs
+--  Extra-libraries:      tokyocabinet
+--  Other-modules:        Database.TokyoCabinet.HDB
