@@ -72,6 +72,9 @@ module Database.TokyoCabinet.HDB
     , path
     , rnum
     , fsiz
+    , put'
+    , get'
+    , adddouble'
     )
     where
 
@@ -286,6 +289,35 @@ rnum (TCHDB fptr) = withForeignPtr fptr c_tchdbrnum
 
 fsiz :: TCHDB -> IO Int64
 fsiz (TCHDB fptr) = withForeignPtr fptr c_tchdbfsiz
+
+put' :: (Storable a, Storable b) => TCHDB -> a -> b -> IO Bool
+put' (TCHDB fptr) key val =
+    withForeignPtr fptr $ \p ->
+        with key $ \kp ->
+        with val $ \vp -> do
+          c_tchdbput p (castPtr kp) (fromIntegral $ sizeOf key)
+                       (castPtr vp) (fromIntegral $ sizeOf val)
+
+get' :: (Storable a, Storable b) => TCHDB -> a -> IO (Maybe b)
+get' (TCHDB fptr) key =
+    withForeignPtr fptr $ \p ->
+        with key $ \kp ->
+            alloca $ \sizbuf -> do
+                vp <- c_tchdbget p (castPtr kp) (fromIntegral $ sizeOf key) sizbuf
+                if vp == nullPtr
+                  then return Nothing 
+                  else do siz <- peek sizbuf
+                          val <- peek (castPtr vp)
+                          free vp
+                          return (Just val)
+
+adddouble' :: Storable a => TCHDB -> a -> Double -> IO Double
+adddouble' (TCHDB fptr) key num =
+    withForeignPtr fptr $ \p ->
+        with key $ \kp -> do
+            n <- c_tchdbadddouble p (castPtr kp)
+                 (fromIntegral $ sizeOf key) (realToFrac num)
+            return $ realToFrac n
 
 data HDB
 
