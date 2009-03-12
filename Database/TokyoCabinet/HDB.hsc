@@ -82,7 +82,7 @@ import Foreign.Marshal (free)
 
 import Data.Int
 import Data.Word
-import Data.ByteString (ByteString, useAsCString, packCString)
+import Data.ByteString (ByteString, useAsCString, useAsCStringLen, packCString)
 
 import Database.TokyoCabinet.Error
 
@@ -154,9 +154,9 @@ close (TCHDB fptr) = withForeignPtr fptr c_tchdbclose
 put :: TCHDB -> ByteString -> ByteString -> IO Bool
 put (TCHDB fptr) key val =
     withForeignPtr fptr $ \p ->
-        useAsCString key $ \key ->
-        useAsCString val $ \val ->
-            c_tchdbput2 p key val
+        useAsCStringLen key $ \(kbuf, ksiz) ->
+        useAsCStringLen val $ \(vbuf, vsiz) ->
+            c_tchdbput p kbuf (fromIntegral ksiz) vbuf (fromIntegral vsiz)
 
 putkeep :: TCHDB -> ByteString -> ByteString -> IO Bool
 putkeep (TCHDB fptr) key val =
@@ -212,40 +212,58 @@ fwmkeys :: TCHDB -> ByteString -> Int -> IO [ByteString]
 fwmkeys = undefined
 
 addint :: TCHDB -> ByteString -> Int -> IO Int
-addint = undefined
+addint (TCHDB fptr) key num =
+    withForeignPtr fptr $ \p ->
+        useAsCStringLen key $ \(kbuf, ksiz) -> do
+            n <- c_tchdbaddint p kbuf (fromIntegral ksiz) (fromIntegral num)
+            return $ fromIntegral n
 
 adddouble :: TCHDB -> ByteString -> Double -> IO Double
-adddouble = undefined
+adddouble (TCHDB fptr) key num =
+    withForeignPtr fptr $ \p ->
+        useAsCStringLen key $ \(kbuf, ksiz) -> do
+            n <- c_tchdbadddouble p kbuf (fromIntegral ksiz) (realToFrac num)
+            return $ realToFrac n
 
-sync :: TCHDB -> IO ()
-sync = undefined
+sync :: TCHDB -> IO Bool
+sync (TCHDB fptr) = withForeignPtr fptr c_tchdbsync
 
-optimize :: TCHDB -> Int64 -> Int8 -> Int8 -> Word8 -> IO Bool
-optimize = undefined
+optimize :: TCHDB -> Int64 -> Int8 -> Int8 -> [TuningOption] -> IO Bool
+optimize (TCHDB fptr) bnum apow fpow options = 
+    let option = unTuningOption $ combineTuningOption options
+    in withForeignPtr fptr $ \p -> c_tchdboptimize p bnum apow fpow option
 
 vanish :: TCHDB -> IO Bool
-vanish = undefined
+vanish (TCHDB fptr) = withForeignPtr fptr c_tchdbvanish
 
 copy :: TCHDB -> String -> IO Bool
-copy = undefined
+copy (TCHDB fptr) path =
+    withForeignPtr fptr $ \p ->
+        withCString path $ \path ->
+            c_tchdbcopy p path
 
 tranbegin :: TCHDB -> IO Bool
-tranbegin = undefined
+tranbegin (TCHDB fptr) = withForeignPtr fptr c_tchdbtranbegin
 
 trancommit :: TCHDB -> IO Bool
-trancommit = undefined
+trancommit (TCHDB fptr) = withForeignPtr fptr c_tchdbtrancommit
 
 tranabort :: TCHDB -> IO Bool
-tranabort = undefined
+tranabort (TCHDB fptr) = withForeignPtr fptr c_tchdbtranabort
 
 path :: TCHDB -> IO (Maybe String)
-path = undefined
+path (TCHDB fptr) =
+    withForeignPtr fptr $ \p -> do
+      cstr <- c_tchdbpath p
+      if cstr == nullPtr
+        then return Nothing
+        else peekCString cstr >>= return . Just
 
 rnum :: TCHDB -> IO Int64
-rnum = undefined
+rnum (TCHDB fptr) = withForeignPtr fptr c_tchdbrnum
 
 fsiz :: TCHDB -> IO Int64
-fsiz = undefined
+fsiz (TCHDB fptr) = withForeignPtr fptr c_tchdbfsiz
 
 data HDB
 
@@ -264,8 +282,14 @@ foreign import ccall unsafe "tchdbopen"
 foreign import ccall unsafe "tchdbclose"
   c_tchdbclose :: Ptr HDB -> IO Bool
 
+foreign import ccall unsafe "tchdbput"
+  c_tchdbput :: Ptr HDB -> CString -> CInt -> CString -> CInt -> IO Bool
+
 foreign import ccall unsafe "tchdbput2"
   c_tchdbput2 :: Ptr HDB -> CString -> CString -> IO Bool
+
+foreign import ccall unsafe "tchdbget"
+  c_tchdbget :: Ptr HDB -> CString -> CInt -> Ptr CInt -> IO (Ptr CChar)
 
 foreign import ccall unsafe "tchdbget2"
   c_tchdbget2 :: Ptr HDB -> CString -> IO (Ptr CChar)
@@ -296,3 +320,39 @@ foreign import ccall unsafe "tchdbputkeep2"
 
 foreign import ccall unsafe "tchdbputcat2"
   c_tchdbputcat2 :: Ptr HDB -> CString -> CString -> IO Bool
+
+foreign import ccall unsafe "tchdbaddint"
+  c_tchdbaddint :: Ptr HDB -> CString -> CInt -> CInt -> IO CInt
+
+foreign import ccall unsafe "tchdbadddouble"
+  c_tchdbadddouble :: Ptr HDB -> CString -> CInt -> CDouble -> IO CDouble
+
+foreign import ccall unsafe "tchdbsync"
+  c_tchdbsync :: Ptr HDB -> IO Bool
+
+foreign import ccall unsafe "tchdboptimize"
+  c_tchdboptimize :: Ptr HDB -> Int64 -> Int8 -> Int8 -> Word8 -> IO Bool
+
+foreign import ccall unsafe "tchdbvanish"
+  c_tchdbvanish :: Ptr HDB -> IO Bool
+
+foreign import ccall unsafe "tchdbcopy"
+  c_tchdbcopy :: Ptr HDB -> CString -> IO Bool
+
+foreign import ccall unsafe "tchdbtranbegin"
+  c_tchdbtranbegin :: Ptr HDB -> IO Bool
+
+foreign import ccall unsafe "tchdbtrancommit"
+  c_tchdbtrancommit :: Ptr HDB -> IO Bool
+
+foreign import ccall unsafe "tchdbtranabort"
+  c_tchdbtranabort :: Ptr HDB -> IO Bool
+
+foreign import ccall unsafe "tchdbpath"
+  c_tchdbpath :: Ptr HDB -> IO (Ptr CChar)
+
+foreign import ccall unsafe "tchdbrnum"
+  c_tchdbrnum :: Ptr HDB -> IO Int64
+
+foreign import ccall unsafe "tchdbfsiz"
+  c_tchdbfsiz :: Ptr HDB -> IO Int64
