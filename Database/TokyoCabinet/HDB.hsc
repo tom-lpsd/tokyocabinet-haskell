@@ -1,8 +1,35 @@
 {-# LANGUAGE CPP, ForeignFunctionInterface, EmptyDataDecls #-}
 module Database.TokyoCabinet.HDB
     (
+    -- * error type and utility
+      TCErrorCode
+    , errmsg
+    , eSUCCESS
+    , eTHREAD
+    , eINVALID
+    , eNOFILE
+    , eNOPERM
+    , eMETA
+    , eRHEAD
+    , eOPEN
+    , eCLOSE
+    , eTRUNC
+    , eSYNC
+    , eSTAT
+    , eSEEK
+    , eREAD
+    , eWRITE
+    , eMMAP
+    , eLOCK
+    , eUNLINK
+    , eRENAME
+    , eMKDIR
+    , eRMDIR
+    , eKEEP
+    , eNOREC
+    , eMISC
      -- * open mode
-      oREADER
+    , oREADER
     , oWRITER
     , oCREAT
     , oTRUNC
@@ -22,7 +49,6 @@ module Database.TokyoCabinet.HDB
     , put
     , get
     , ecode
-    , errmsg
     )
     where
 
@@ -32,6 +58,8 @@ import Foreign.C.String
 import Foreign.Marshal (free)
 
 import Data.ByteString (ByteString, useAsCString, packCString)
+
+import Database.TokyoCabinet.Error
 
 #include <tchdb.h>
 
@@ -80,14 +108,10 @@ open (TCHDB fptr) name modes =
             c_tchdbopen p name option
     where option = unOpenMode $ combineOpenMode modes
 
-ecode :: TCHDB -> IO Int
+ecode :: TCHDB -> IO TCErrorCode
 ecode (TCHDB fptr) = withForeignPtr fptr $ \p -> do
                        e <- c_tchdbecode p
-                       return $ fromIntegral e
-
-errmsg :: TCHDB -> IO String
-errmsg tchdb = do errno <- ecode tchdb
-                  peekCString $ c_tchdberrmsg (fromIntegral errno)
+                       return $ TCErrorCode e
 
 close :: TCHDB -> IO Bool
 close (TCHDB fptr) = withForeignPtr fptr c_tchdbclose
@@ -135,6 +159,3 @@ foreign import ccall unsafe "tchdbget2"
 
 foreign import ccall unsafe "tchdbecode"
   c_tchdbecode :: Ptr HDB -> IO CInt
-
-foreign import ccall unsafe "tchdberrmsg"
-  c_tchdberrmsg :: CInt -> CString

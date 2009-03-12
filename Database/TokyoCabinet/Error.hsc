@@ -2,7 +2,7 @@
 module Database.TokyoCabinet.Error
     (
     -- * error code type
-      TCErrorCode
+      TCErrorCode(..)
     -- * actual error code
     , eSUCCESS
     , eTHREAD
@@ -41,7 +41,7 @@ import Foreign.C.String
 newtype TCErrorCode = TCErrorCode { unTCErrorCode :: CInt } deriving Eq
 
 instance Show TCErrorCode where
-    show e = "code: " ++ show (unTCErrorCode e)
+    show e =  errmsg e ++ " (code:" ++ show (unTCErrorCode e) ++ ")"
 
 #{enum TCErrorCode, TCErrorCode
  , eSUCCESS = TCESUCCESS
@@ -70,10 +70,8 @@ instance Show TCErrorCode where
  , eMISC    = TCEMISC
 }
 
-
 errmsg :: TCErrorCode -> String
 errmsg = unsafePerformIO . peekCString . c_tcerrmsg . unTCErrorCode
 
 foreign import ccall "tcerrmsg"
   c_tcerrmsg :: CInt -> CString
-
