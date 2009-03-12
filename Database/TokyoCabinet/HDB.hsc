@@ -181,7 +181,11 @@ putcat (TCHDB fptr) key val =
             c_tchdbputcat p kbuf (fromIntegral ksiz) vbuf (fromIntegral vsiz)
 
 putasync :: TCHDB -> ByteString -> ByteString -> IO Bool
-putasync = undefined
+putasync (TCHDB fptr) key val =
+    withForeignPtr fptr $ \p ->
+        useAsCStringLen key $ \(kbuf, ksiz) ->
+        useAsCStringLen val $ \(vbuf, vsiz) ->
+            c_tchdbputasync p kbuf (fromIntegral ksiz) vbuf (fromIntegral vsiz)
 
 out :: TCHDB -> ByteString -> IO Bool
 out (TCHDB fptr) key =
@@ -203,7 +207,13 @@ get (TCHDB fptr) key =
                     return (Just val)
 
 vsiz :: TCHDB -> ByteString -> IO (Maybe Int)
-vsiz = undefined
+vsiz (TCHDB fptr) key =
+    withForeignPtr fptr $ \p ->
+        useAsCStringLen key $ \(kbuf, ksiz) -> do
+          vsiz <- c_tchdbvsiz p kbuf (fromIntegral ksiz)
+          return $ if vsiz == -1
+                     then Nothing
+                     else Just (fromIntegral vsiz)
 
 iterinit :: TCHDB -> IO Bool
 iterinit (TCHDB fptr) = withForeignPtr fptr $ \p -> c_tchdbiterinit p
@@ -312,6 +322,9 @@ foreign import ccall unsafe "tchdbputcat"
 foreign import ccall unsafe "tchdbputcat2"
   c_tchdbputcat2 :: Ptr HDB -> CString -> CString -> IO Bool
 
+foreign import ccall unsafe "tchdbputasync"
+  c_tchdbputasync :: Ptr HDB -> CString -> CInt -> CString -> CInt -> IO Bool
+
 foreign import ccall unsafe "tchdbout"
   c_tchdbout :: Ptr HDB -> CString -> CInt -> IO Bool
 
@@ -323,6 +336,9 @@ foreign import ccall unsafe "tchdbget"
 
 foreign import ccall unsafe "tchdbget2"
   c_tchdbget2 :: Ptr HDB -> CString -> IO (Ptr CChar)
+
+foreign import ccall unsafe "tchdbvsiz"
+  c_tchdbvsiz :: Ptr HDB -> CString -> CInt -> IO CInt
 
 foreign import ccall unsafe "tchdbiterinit"
   c_tchdbiterinit :: Ptr HDB -> IO Bool
