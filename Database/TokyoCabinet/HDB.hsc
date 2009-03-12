@@ -82,7 +82,15 @@ import Foreign.Marshal (free)
 
 import Data.Int
 import Data.Word
-import Data.ByteString (ByteString, useAsCString, useAsCStringLen, packCString)
+
+import Data.ByteString
+    (
+      ByteString
+    , useAsCString
+    , useAsCStringLen
+    , packCString
+    , packCStringLen
+    )
 
 import Database.TokyoCabinet.Error
 
@@ -184,11 +192,13 @@ out (TCHDB fptr) key =
 get :: TCHDB -> ByteString -> IO (Maybe ByteString)
 get (TCHDB fptr) key =
     withForeignPtr fptr $ \p ->
-        useAsCString key $ \key -> do
-          cstr <- c_tchdbget2 p key
+        useAsCStringLen key $ \(kbuf, ksiz) -> do
+          sizbuf <- malloc
+          cstr <- c_tchdbget p kbuf (fromIntegral ksiz) sizbuf
           if cstr == nullPtr
             then return Nothing 
-            else do val <- packCString cstr
+            else do siz <-  peek sizbuf
+                    val <- packCStringLen (cstr, fromIntegral siz)
                     free cstr
                     return (Just val)
 
