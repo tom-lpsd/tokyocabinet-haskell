@@ -169,16 +169,16 @@ put (TCHDB fptr) key val =
 putkeep :: TCHDB -> ByteString -> ByteString -> IO Bool
 putkeep (TCHDB fptr) key val =
     withForeignPtr fptr $ \p ->
-        useAsCString key $ \key ->
-        useAsCString val $ \val ->
-            c_tchdbputkeep2 p key val
+        useAsCStringLen key $ \(kbuf, ksiz) ->
+        useAsCStringLen val $ \(vbuf, vsiz) ->
+            c_tchdbputkeep p kbuf (fromIntegral ksiz) vbuf (fromIntegral vsiz)
 
 putcat :: TCHDB -> ByteString -> ByteString -> IO Bool
 putcat (TCHDB fptr) key val =
     withForeignPtr fptr $ \p ->
-        useAsCString key $ \key ->
-        useAsCString val $ \val ->
-            c_tchdbputcat2 p key val
+        useAsCStringLen key $ \(kbuf, ksiz) ->
+        useAsCStringLen val $ \(vbuf, vsiz) ->
+            c_tchdbputcat p kbuf (fromIntegral ksiz) vbuf (fromIntegral vsiz)
 
 putasync :: TCHDB -> ByteString -> ByteString -> IO Bool
 putasync = undefined
@@ -186,8 +186,8 @@ putasync = undefined
 out :: TCHDB -> ByteString -> IO Bool
 out (TCHDB fptr) key =
     withForeignPtr fptr $ \p ->
-        useAsCString key $ \key ->
-            c_tchdbout2 p key
+        useAsCStringLen key $ \(kbuf, ksiz) ->
+            c_tchdbout p kbuf (fromIntegral ksiz)
 
 get :: TCHDB -> ByteString -> IO (Maybe ByteString)
 get (TCHDB fptr) key =
@@ -211,10 +211,12 @@ iterinit (TCHDB fptr) = withForeignPtr fptr $ \p -> c_tchdbiterinit p
 iternext :: TCHDB -> IO (Maybe ByteString)
 iternext (TCHDB fptr) =
     withForeignPtr fptr $ \p -> do
-      cstr <- c_tchdbiternext2 p
+      sizbuf <- malloc
+      cstr <- c_tchdbiternext p sizbuf
       if cstr == nullPtr
         then return Nothing 
-        else do val <- packCString cstr
+        else do siz <- peek sizbuf
+                val <- packCStringLen (cstr, fromIntegral siz)
                 free cstr
                 return (Just val)
 
@@ -298,11 +300,38 @@ foreign import ccall unsafe "tchdbput"
 foreign import ccall unsafe "tchdbput2"
   c_tchdbput2 :: Ptr HDB -> CString -> CString -> IO Bool
 
+foreign import ccall unsafe "tchdbputkeep"
+  c_tchdbputkeep :: Ptr HDB -> CString -> CInt -> CString -> CInt -> IO Bool
+
+foreign import ccall unsafe "tchdbputkeep2"
+  c_tchdbputkeep2 :: Ptr HDB -> CString -> CString -> IO Bool
+
+foreign import ccall unsafe "tchdbputcat"
+  c_tchdbputcat :: Ptr HDB -> CString -> CInt -> CString -> CInt -> IO Bool
+
+foreign import ccall unsafe "tchdbputcat2"
+  c_tchdbputcat2 :: Ptr HDB -> CString -> CString -> IO Bool
+
+foreign import ccall unsafe "tchdbout"
+  c_tchdbout :: Ptr HDB -> CString -> CInt -> IO Bool
+
+foreign import ccall unsafe "tchdbout2"
+  c_tchdbout2 :: Ptr HDB -> CString -> IO Bool
+
 foreign import ccall unsafe "tchdbget"
   c_tchdbget :: Ptr HDB -> CString -> CInt -> Ptr CInt -> IO (Ptr CChar)
 
 foreign import ccall unsafe "tchdbget2"
   c_tchdbget2 :: Ptr HDB -> CString -> IO (Ptr CChar)
+
+foreign import ccall unsafe "tchdbiterinit"
+  c_tchdbiterinit :: Ptr HDB -> IO Bool
+
+foreign import ccall unsafe "tchdbiternext"
+  c_tchdbiternext :: Ptr HDB -> Ptr Int -> IO (Ptr CChar)
+
+foreign import ccall unsafe "tchdbiternext2"
+  c_tchdbiternext2 :: Ptr HDB -> IO CString
 
 foreign import ccall unsafe "tchdbecode"
   c_tchdbecode :: Ptr HDB -> IO CInt
@@ -315,21 +344,6 @@ foreign import ccall unsafe "tchdbsetcache"
 
 foreign import ccall unsafe "tchdbsetxmsiz"
   c_tchdbsetxmsiz :: Ptr HDB -> Int64 -> IO Bool
-
-foreign import ccall unsafe "tchdbout2"
-  c_tchdbout2 :: Ptr HDB -> CString -> IO Bool
-
-foreign import ccall unsafe "tchdbiterinit"
-  c_tchdbiterinit :: Ptr HDB -> IO Bool
-
-foreign import ccall unsafe "tchdbiternext2"
-  c_tchdbiternext2 :: Ptr HDB -> IO CString
-
-foreign import ccall unsafe "tchdbputkeep2"
-  c_tchdbputkeep2 :: Ptr HDB -> CString -> CString -> IO Bool
-
-foreign import ccall unsafe "tchdbputcat2"
-  c_tchdbputcat2 :: Ptr HDB -> CString -> CString -> IO Bool
 
 foreign import ccall unsafe "tchdbaddint"
   c_tchdbaddint :: Ptr HDB -> CString -> CInt -> CInt -> IO CInt
