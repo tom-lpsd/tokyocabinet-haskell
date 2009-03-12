@@ -16,6 +16,7 @@ Build-Type:     Simple
 Library
   Build-Depends:        base, bytestring
   Exposed-modules:      Database.TokyoCabinet, Database.TokyoCabinet.HDB
+                        Database.TokyoCabinet.Error
   Extensions:           CPP, ForeignFunctionInterface, EmptyDataDecls
   Extra-libraries:      tokyocabinet
   Extra-lib-dirs:       /usr/local/lib
