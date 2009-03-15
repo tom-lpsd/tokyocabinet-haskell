@@ -44,6 +44,7 @@ module Database.TokyoCabinet.HDB
     , tEXCODEC
     -- * basic API
     , new
+    , delete
     , ecode
     , tune
     , setcache
@@ -135,6 +136,9 @@ new :: IO TCHDB
 new = do ptr <- c_tchdbnew
          fptr <- newForeignPtr tchdbFinalizer ptr
          return $ TCHDB fptr
+
+delete :: TCHDB -> IO ()
+delete (TCHDB fptr) = finalizeForeignPtr fptr
 
 ecode :: TCHDB -> IO TCErrorCode
 ecode (TCHDB fptr) = withForeignPtr fptr $ \p -> do
