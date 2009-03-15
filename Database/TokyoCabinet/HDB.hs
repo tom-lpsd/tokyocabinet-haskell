@@ -81,19 +81,23 @@ module Database.TokyoCabinet.HDB
     )
     where
 
-import Foreign hiding (new)
 import Foreign.C.Types
 import Foreign.C.String
-import Foreign.Marshal (free)
+
+import Foreign.Ptr
+import Foreign.Storable
+import Foreign.ForeignPtr
+import Foreign.Marshal (alloca, free, with)
 
 import Data.Int
+import Data.Bits
 import Data.Word
 
-import Data.ByteString
+import Data.ByteString (ByteString)
+import Data.ByteString.Unsafe
     (
-      ByteString
-    , useAsCStringLen
-    , packCStringLen
+      unsafeUseAsCStringLen
+    , unsafePackCStringFinalizer
     )
 
 import Database.TokyoCabinet.HDB.C
@@ -144,73 +148,73 @@ close (TCHDB fptr) = withForeignPtr fptr c_tchdbclose
 put :: TCHDB -> ByteString -> ByteString -> IO Bool
 put (TCHDB fptr) key val =
     withForeignPtr fptr $ \p ->
-        useAsCStringLen key $ \(kbuf, ksiz) ->
-        useAsCStringLen val $ \(vbuf, vsiz) ->
+        unsafeUseAsCStringLen key $ \(kbuf, ksiz) ->
+        unsafeUseAsCStringLen val $ \(vbuf, vsiz) ->
             c_tchdbput p kbuf (fromIntegral ksiz) vbuf (fromIntegral vsiz)
 
 putkeep :: TCHDB -> ByteString -> ByteString -> IO Bool
 putkeep (TCHDB fptr) key val =
     withForeignPtr fptr $ \p ->
-        useAsCStringLen key $ \(kbuf, ksiz) ->
-        useAsCStringLen val $ \(vbuf, vsiz) ->
+        unsafeUseAsCStringLen key $ \(kbuf, ksiz) ->
+        unsafeUseAsCStringLen val $ \(vbuf, vsiz) ->
             c_tchdbputkeep p kbuf (fromIntegral ksiz) vbuf (fromIntegral vsiz)
 
 putcat :: TCHDB -> ByteString -> ByteString -> IO Bool
 putcat (TCHDB fptr) key val =
     withForeignPtr fptr $ \p ->
-        useAsCStringLen key $ \(kbuf, ksiz) ->
-        useAsCStringLen val $ \(vbuf, vsiz) ->
+        unsafeUseAsCStringLen key $ \(kbuf, ksiz) ->
+        unsafeUseAsCStringLen val $ \(vbuf, vsiz) ->
             c_tchdbputcat p kbuf (fromIntegral ksiz) vbuf (fromIntegral vsiz)
 
 putasync :: TCHDB -> ByteString -> ByteString -> IO Bool
 putasync (TCHDB fptr) key val =
     withForeignPtr fptr $ \p ->
-        useAsCStringLen key $ \(kbuf, ksiz) ->
-        useAsCStringLen val $ \(vbuf, vsiz) ->
+        unsafeUseAsCStringLen key $ \(kbuf, ksiz) ->
+        unsafeUseAsCStringLen val $ \(vbuf, vsiz) ->
             c_tchdbputasync p kbuf (fromIntegral ksiz) vbuf (fromIntegral vsiz)
 
 out :: TCHDB -> ByteString -> IO Bool
 out (TCHDB fptr) key =
     withForeignPtr fptr $ \p ->
-        useAsCStringLen key $ \(kbuf, ksiz) ->
+        unsafeUseAsCStringLen key $ \(kbuf, ksiz) ->
             c_tchdbout p kbuf (fromIntegral ksiz)
 
 get :: TCHDB -> ByteString -> IO (Maybe ByteString)
 get (TCHDB fptr) key =
     withForeignPtr fptr $ \p ->
-        useAsCStringLen key $ \(kbuf, ksiz) -> do
-          sizbuf <- malloc
-          cstr <- c_tchdbget p kbuf (fromIntegral ksiz) sizbuf
-          if cstr == nullPtr
-            then return Nothing 
-            else do siz <-  peek sizbuf
-                    val <- packCStringLen (cstr, fromIntegral siz)
-                    free cstr
-                    return (Just val)
+        unsafeUseAsCStringLen key $ \(kbuf, ksiz) ->
+            alloca $ \sizbuf -> do
+                vbuf <- c_tchdbget p kbuf (fromIntegral ksiz) sizbuf
+                if vbuf == nullPtr
+                  then return Nothing 
+                  else do siz <- peek sizbuf
+                          val <- unsafePackCStringFinalizer (castPtr vbuf)
+                                     (fromIntegral siz) (free vbuf)
+                          return $ Just val
 
 vsiz :: TCHDB -> ByteString -> IO (Maybe Int)
 vsiz (TCHDB fptr) key =
     withForeignPtr fptr $ \p ->
-        useAsCStringLen key $ \(kbuf, ksiz) -> do
+        unsafeUseAsCStringLen key $ \(kbuf, ksiz) -> do
           vsiz <- c_tchdbvsiz p kbuf (fromIntegral ksiz)
           return $ if vsiz == -1
                      then Nothing
                      else Just (fromIntegral vsiz)
 
 iterinit :: TCHDB -> IO Bool
-iterinit (TCHDB fptr) = withForeignPtr fptr $ \p -> c_tchdbiterinit p
+iterinit (TCHDB fptr) = withForeignPtr fptr c_tchdbiterinit
 
 iternext :: TCHDB -> IO (Maybe ByteString)
 iternext (TCHDB fptr) =
-    withForeignPtr fptr $ \p -> do
-      sizbuf <- malloc
-      cstr <- c_tchdbiternext p sizbuf
-      if cstr == nullPtr
-        then return Nothing 
-        else do siz <- peek sizbuf
-                val <- packCStringLen (cstr, fromIntegral siz)
-                free cstr
-                return (Just val)
+    withForeignPtr fptr $ \p ->
+        alloca $ \sizbuf -> do
+            vbuf <- c_tchdbiternext p sizbuf
+            if vbuf == nullPtr
+              then return Nothing 
+              else do siz <- peek sizbuf
+                      val <- unsafePackCStringFinalizer (castPtr vbuf)
+                                 (fromIntegral siz) (free vbuf)
+                      return $ Just val
 
 fwmkeys :: TCHDB -> ByteString -> Int -> IO [ByteString]
 fwmkeys = undefined
@@ -218,14 +222,14 @@ fwmkeys = undefined
 addint :: TCHDB -> ByteString -> Int -> IO Int
 addint (TCHDB fptr) key num =
     withForeignPtr fptr $ \p ->
-        useAsCStringLen key $ \(kbuf, ksiz) -> do
+        unsafeUseAsCStringLen key $ \(kbuf, ksiz) -> do
             n <- c_tchdbaddint p kbuf (fromIntegral ksiz) (fromIntegral num)
             return $ fromIntegral n
 
 adddouble :: TCHDB -> ByteString -> Double -> IO Double
 adddouble (TCHDB fptr) key num =
     withForeignPtr fptr $ \p ->
-        useAsCStringLen key $ \(kbuf, ksiz) -> do
+        unsafeUseAsCStringLen key $ \(kbuf, ksiz) -> do
             n <- c_tchdbadddouble p kbuf (fromIntegral ksiz) (realToFrac num)
             return $ realToFrac n
 
