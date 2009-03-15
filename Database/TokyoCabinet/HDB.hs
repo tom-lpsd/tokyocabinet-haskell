@@ -1,4 +1,3 @@
-{-# LANGUAGE CPP, ForeignFunctionInterface, EmptyDataDecls #-}
 module Database.TokyoCabinet.HDB
     (
     -- * error type and utility
@@ -36,12 +35,14 @@ module Database.TokyoCabinet.HDB
     , oNOLOCK
     , oLCKNB
     , oTSYNC
+    , OpenMode
     -- * tuning options
     , tLARGE
     , tDEFLATE
     , tBZIP
     , tTCBS
     , tEXCODEC
+    , TuningOption
     -- * basic API
     , new
     , delete
@@ -76,6 +77,7 @@ module Database.TokyoCabinet.HDB
     , put'
     , get'
     , adddouble'
+    , TCHDB
     )
     where
 
@@ -90,42 +92,15 @@ import Data.Word
 import Data.ByteString
     (
       ByteString
-    , useAsCString
     , useAsCStringLen
-    , packCString
     , packCStringLen
     )
 
+import Database.TokyoCabinet.HDB.C
 import Database.TokyoCabinet.Error
-
-#include <tchdb.h>
-
-newtype OpenMode = OpenMode { unOpenMode :: CInt }
-    deriving (Eq, Show)
-
-#{enum OpenMode, OpenMode
- , oREADER = HDBOREADER
- , oWRITER = HDBOWRITER
- , oCREAT  = HDBOCREAT
- , oTRUNC  = HDBOTRUNC
- , oNOLOCK = HDBONOLCK
- , oLCKNB  = HDBOLCKNB
- , oTSYNC  = HDBOTSYNC
-}
 
 combineOpenMode :: [OpenMode] -> OpenMode
 combineOpenMode = OpenMode . foldr ((.|.) . unOpenMode) 0
-
-newtype TuningOption = TuningOption { unTuningOption :: Word8 }
-    deriving (Eq, Show)
-
-#{enum TuningOption, TuningOption
- , tLARGE   = HDBTLARGE
- , tDEFLATE = HDBTDEFLATE
- , tBZIP    = HDBTBZIP
- , tTCBS    = HDBTTCBS
- , tEXCODEC = HDBTEXCODEC
-}
 
 combineTuningOption :: [TuningOption] -> TuningOption
 combineTuningOption = TuningOption . foldr ((.|.) . unTuningOption) 0
@@ -323,112 +298,3 @@ adddouble' (TCHDB fptr) key num =
                  (fromIntegral $ sizeOf key) (realToFrac num)
             return $ realToFrac n
 
-data HDB
-
-foreign import ccall "&tchdbdel"
-  tchdbFinalizer :: FunPtr (Ptr HDB -> IO ())
-
-foreign import ccall unsafe "tchdbnew"
-  c_tchdbnew :: IO (Ptr HDB)
-
-foreign import ccall unsafe "tchdbdel"
-  c_tchdbdel :: Ptr HDB -> IO ()
-
-foreign import ccall unsafe "tchdbopen"
-  c_tchdbopen :: Ptr HDB -> CString -> CInt -> IO Bool
-
-foreign import ccall unsafe "tchdbclose"
-  c_tchdbclose :: Ptr HDB -> IO Bool
-
-foreign import ccall unsafe "tchdbput"
-  c_tchdbput :: Ptr HDB -> CString -> CInt -> CString -> CInt -> IO Bool
-
-foreign import ccall unsafe "tchdbput2"
-  c_tchdbput2 :: Ptr HDB -> CString -> CString -> IO Bool
-
-foreign import ccall unsafe "tchdbputkeep"
-  c_tchdbputkeep :: Ptr HDB -> CString -> CInt -> CString -> CInt -> IO Bool
-
-foreign import ccall unsafe "tchdbputkeep2"
-  c_tchdbputkeep2 :: Ptr HDB -> CString -> CString -> IO Bool
-
-foreign import ccall unsafe "tchdbputcat"
-  c_tchdbputcat :: Ptr HDB -> CString -> CInt -> CString -> CInt -> IO Bool
-
-foreign import ccall unsafe "tchdbputcat2"
-  c_tchdbputcat2 :: Ptr HDB -> CString -> CString -> IO Bool
-
-foreign import ccall unsafe "tchdbputasync"
-  c_tchdbputasync :: Ptr HDB -> CString -> CInt -> CString -> CInt -> IO Bool
-
-foreign import ccall unsafe "tchdbout"
-  c_tchdbout :: Ptr HDB -> CString -> CInt -> IO Bool
-
-foreign import ccall unsafe "tchdbout2"
-  c_tchdbout2 :: Ptr HDB -> CString -> IO Bool
-
-foreign import ccall unsafe "tchdbget"
-  c_tchdbget :: Ptr HDB -> CString -> CInt -> Ptr CInt -> IO (Ptr CChar)
-
-foreign import ccall unsafe "tchdbget2"
-  c_tchdbget2 :: Ptr HDB -> CString -> IO (Ptr CChar)
-
-foreign import ccall unsafe "tchdbvsiz"
-  c_tchdbvsiz :: Ptr HDB -> CString -> CInt -> IO CInt
-
-foreign import ccall unsafe "tchdbiterinit"
-  c_tchdbiterinit :: Ptr HDB -> IO Bool
-
-foreign import ccall unsafe "tchdbiternext"
-  c_tchdbiternext :: Ptr HDB -> Ptr Int -> IO (Ptr CChar)
-
-foreign import ccall unsafe "tchdbiternext2"
-  c_tchdbiternext2 :: Ptr HDB -> IO CString
-
-foreign import ccall unsafe "tchdbecode"
-  c_tchdbecode :: Ptr HDB -> IO CInt
-
-foreign import ccall unsafe "tchdbtune"
-  c_tchdbtune :: Ptr HDB -> Int64 -> Int8 -> Int8 -> Word8 -> IO Bool
-
-foreign import ccall unsafe "tchdbsetcache"
-  c_tchdbsetcache :: Ptr HDB -> Int32 -> IO Bool
-
-foreign import ccall unsafe "tchdbsetxmsiz"
-  c_tchdbsetxmsiz :: Ptr HDB -> Int64 -> IO Bool
-
-foreign import ccall unsafe "tchdbaddint"
-  c_tchdbaddint :: Ptr HDB -> CString -> CInt -> CInt -> IO CInt
-
-foreign import ccall unsafe "tchdbadddouble"
-  c_tchdbadddouble :: Ptr HDB -> CString -> CInt -> CDouble -> IO CDouble
-
-foreign import ccall unsafe "tchdbsync"
-  c_tchdbsync :: Ptr HDB -> IO Bool
-
-foreign import ccall unsafe "tchdboptimize"
-  c_tchdboptimize :: Ptr HDB -> Int64 -> Int8 -> Int8 -> Word8 -> IO Bool
-
-foreign import ccall unsafe "tchdbvanish"
-  c_tchdbvanish :: Ptr HDB -> IO Bool
-
-foreign import ccall unsafe "tchdbcopy"
-  c_tchdbcopy :: Ptr HDB -> CString -> IO Bool
-
-foreign import ccall unsafe "tchdbtranbegin"
-  c_tchdbtranbegin :: Ptr HDB -> IO Bool
-
-foreign import ccall unsafe "tchdbtrancommit"
-  c_tchdbtrancommit :: Ptr HDB -> IO Bool
-
-foreign import ccall unsafe "tchdbtranabort"
-  c_tchdbtranabort :: Ptr HDB -> IO Bool
-
-foreign import ccall unsafe "tchdbpath"
-  c_tchdbpath :: Ptr HDB -> IO (Ptr CChar)
-
-foreign import ccall unsafe "tchdbrnum"
-  c_tchdbrnum :: Ptr HDB -> IO Int64
-
-foreign import ccall unsafe "tchdbfsiz"
-  c_tchdbfsiz :: Ptr HDB -> IO Int64
