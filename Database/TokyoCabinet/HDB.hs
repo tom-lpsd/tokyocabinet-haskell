@@ -145,33 +145,26 @@ open (TCHDB fptr) name modes =
 close :: TCHDB -> IO Bool
 close (TCHDB fptr) = withForeignPtr fptr c_tchdbclose
 
-put :: TCHDB -> ByteString -> ByteString -> IO Bool
-put (TCHDB fptr) key val =
+type PutFunc = Ptr HDB -> CString -> CInt -> CString -> CInt -> IO Bool
+
+liftPutFunc :: PutFunc -> TCHDB -> ByteString -> ByteString -> IO Bool
+liftPutFunc func (TCHDB fptr) key val =
     withForeignPtr fptr $ \p ->
         unsafeUseAsCStringLen key $ \(kbuf, ksiz) ->
         unsafeUseAsCStringLen val $ \(vbuf, vsiz) ->
-            c_tchdbput p kbuf (fromIntegral ksiz) vbuf (fromIntegral vsiz)
+            func p kbuf (fromIntegral ksiz) vbuf (fromIntegral vsiz)
+
+put :: TCHDB -> ByteString -> ByteString -> IO Bool
+put = liftPutFunc c_tchdbput
 
 putkeep :: TCHDB -> ByteString -> ByteString -> IO Bool
-putkeep (TCHDB fptr) key val =
-    withForeignPtr fptr $ \p ->
-        unsafeUseAsCStringLen key $ \(kbuf, ksiz) ->
-        unsafeUseAsCStringLen val $ \(vbuf, vsiz) ->
-            c_tchdbputkeep p kbuf (fromIntegral ksiz) vbuf (fromIntegral vsiz)
+putkeep = liftPutFunc c_tchdbputkeep
 
 putcat :: TCHDB -> ByteString -> ByteString -> IO Bool
-putcat (TCHDB fptr) key val =
-    withForeignPtr fptr $ \p ->
-        unsafeUseAsCStringLen key $ \(kbuf, ksiz) ->
-        unsafeUseAsCStringLen val $ \(vbuf, vsiz) ->
-            c_tchdbputcat p kbuf (fromIntegral ksiz) vbuf (fromIntegral vsiz)
+putcat = liftPutFunc c_tchdbputcat
 
 putasync :: TCHDB -> ByteString -> ByteString -> IO Bool
-putasync (TCHDB fptr) key val =
-    withForeignPtr fptr $ \p ->
-        unsafeUseAsCStringLen key $ \(kbuf, ksiz) ->
-        unsafeUseAsCStringLen val $ \(vbuf, vsiz) ->
-            c_tchdbputasync p kbuf (fromIntegral ksiz) vbuf (fromIntegral vsiz)
+putasync = liftPutFunc c_tchdbputasync
 
 out :: TCHDB -> ByteString -> IO Bool
 out (TCHDB fptr) key =
