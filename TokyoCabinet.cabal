@@ -20,6 +20,7 @@ Library
     Database.TokyoCabinet.HDB
     Database.TokyoCabinet.HDB.C
     Database.TokyoCabinet.Error
+    Data.TCList
   Extensions:           CPP, ForeignFunctionInterface, EmptyDataDecls
   Extra-libraries:      tokyocabinet
   Extra-lib-dirs:       /usr/local/lib
