@@ -81,7 +81,7 @@ module Database.TokyoCabinet.HDB
     )
     where
 
-import Foreign.C.Types
+import Foreign.C.Types (CInt)
 import Foreign.C.String
 
 import Foreign.Ptr
@@ -91,7 +91,6 @@ import Foreign.Marshal (alloca, free, with)
 
 import Data.Int
 import Data.Bits
-import Data.Word
 
 import Data.ByteString (ByteString)
 import Data.ByteString.Unsafe
@@ -130,7 +129,7 @@ tune (TCHDB fptr) bnum apow fpow options =
     in withForeignPtr fptr $ \p -> c_tchdbtune p bnum apow fpow option
 
 setcache :: TCHDB -> Int32 -> IO Bool
-setcache (TCHDB fptr) rnum = withForeignPtr fptr $ \p -> c_tchdbsetcache p rnum
+setcache (TCHDB fptr) rcnum = withForeignPtr fptr $ \p -> c_tchdbsetcache p rcnum
 
 setxmsiz :: TCHDB -> Int64 -> IO Bool
 setxmsiz (TCHDB fptr) xmsiz = withForeignPtr fptr $ \p -> c_tchdbsetxmsiz p xmsiz
@@ -138,8 +137,8 @@ setxmsiz (TCHDB fptr) xmsiz = withForeignPtr fptr $ \p -> c_tchdbsetxmsiz p xmsi
 open :: TCHDB -> String -> [OpenMode] -> IO Bool
 open (TCHDB fptr) name modes = 
     withForeignPtr fptr $ \p ->
-        withCString name $ \name ->
-            c_tchdbopen p name option
+        withCString name $ \c_name ->
+            c_tchdbopen p c_name option
     where option = unOpenMode $ combineOpenMode modes
 
 close :: TCHDB -> IO Bool
@@ -150,9 +149,9 @@ type PutFunc = Ptr HDB -> CString -> CInt -> CString -> CInt -> IO Bool
 liftPutFunc :: PutFunc -> TCHDB -> ByteString -> ByteString -> IO Bool
 liftPutFunc func (TCHDB fptr) key val =
     withForeignPtr fptr $ \p ->
-        unsafeUseAsCStringLen key $ \(kbuf, ksiz) ->
-        unsafeUseAsCStringLen val $ \(vbuf, vsiz) ->
-            func p kbuf (fromIntegral ksiz) vbuf (fromIntegral vsiz)
+        unsafeUseAsCStringLen key $ \(kbuf, ksize) ->
+        unsafeUseAsCStringLen val $ \(vbuf, vsize) ->
+            func p kbuf (fromIntegral ksize) vbuf (fromIntegral vsize)
 
 put :: TCHDB -> ByteString -> ByteString -> IO Bool
 put = liftPutFunc c_tchdbput
@@ -189,10 +188,10 @@ vsiz :: TCHDB -> ByteString -> IO (Maybe Int)
 vsiz (TCHDB fptr) key =
     withForeignPtr fptr $ \p ->
         unsafeUseAsCStringLen key $ \(kbuf, ksiz) -> do
-          vsiz <- c_tchdbvsiz p kbuf (fromIntegral ksiz)
-          return $ if vsiz == -1
+          vsize <- c_tchdbvsiz p kbuf (fromIntegral ksiz)
+          return $ if vsize == -1
                      then Nothing
-                     else Just (fromIntegral vsiz)
+                     else Just (fromIntegral vsize)
 
 iterinit :: TCHDB -> IO Bool
 iterinit (TCHDB fptr) = withForeignPtr fptr c_tchdbiterinit
@@ -238,10 +237,10 @@ vanish :: TCHDB -> IO Bool
 vanish (TCHDB fptr) = withForeignPtr fptr c_tchdbvanish
 
 copy :: TCHDB -> String -> IO Bool
-copy (TCHDB fptr) path =
+copy (TCHDB fptr) pathname =
     withForeignPtr fptr $ \p ->
-        withCString path $ \path ->
-            c_tchdbcopy p path
+        withCString pathname $ \c_pathname ->
+            c_tchdbcopy p c_pathname
 
 tranbegin :: TCHDB -> IO Bool
 tranbegin (TCHDB fptr) = withForeignPtr fptr c_tchdbtranbegin
@@ -282,8 +281,7 @@ get' (TCHDB fptr) key =
                 vp <- c_tchdbget p (castPtr kp) (fromIntegral $ sizeOf key) sizbuf
                 if vp == nullPtr
                   then return Nothing 
-                  else do siz <- peek sizbuf
-                          val <- peek (castPtr vp)
+                  else do val <- peek (castPtr vp)
                           free vp
                           return (Just val)
 

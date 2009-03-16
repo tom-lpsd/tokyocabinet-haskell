@@ -25,8 +25,14 @@ Library
   Extra-libraries:      tokyocabinet
   Extra-lib-dirs:       /usr/local/lib
   Include-dirs:         /usr/local/include
+  ghc-options:          -Wall
 
--- Executable HDBTest
---  Main-Is:              tests/HDB.hs
---  Extra-libraries:      tokyocabinet
---  Other-modules:        Database.TokyoCabinet.HDB
+Executable HDBTest
+  Buildable:            False
+  Main-Is:              tests/HDB.hs
+  Extra-libraries:      tokyocabinet
+  Other-modules:
+    Database.TokyoCabinet.HDB
+    Database.TokyoCabinet.HDB.C
+    Database.TokyoCabinet.Error
+    Data.TCList

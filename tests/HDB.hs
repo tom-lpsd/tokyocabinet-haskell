@@ -6,6 +6,4 @@ main = do
   h <- new
   open h "foo.tch" [oWRITER, oCREAT]
   put h (pack "foo") (pack "bar")
-  v <- get h (pack "foo")
-  putStrLn v
   close h

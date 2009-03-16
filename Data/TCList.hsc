@@ -22,8 +22,8 @@ new :: IO TCList
 new = c_tclistnew >>= newForeignPtr tclistFinalizer >>= return . TCList
 
 new2 :: Int -> IO TCList
-new2 num = do
-  l <- c_tclistnew2 (fromIntegral num)
+new2 n = do
+  l <- c_tclistnew2 (fromIntegral n)
   p <- newForeignPtr tclistFinalizer l
   return $ TCList p
 
