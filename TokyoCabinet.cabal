@@ -13,6 +13,10 @@ Description:    interface to Tokyo Cabinet library.
 Tested-With:    GHC
 Build-Type:     Simple
 
+Flag BuildTest
+  Description:  make tests and install it if True
+  Default:      False
+
 Library
   Build-Depends:        base, bytestring
   Exposed-modules:
@@ -27,10 +31,25 @@ Library
   Include-dirs:         /usr/local/include
   ghc-options:          -Wall
 
+Executable TCListTest
+  if flag(BuildTest)
+    Buildable:            True
+  else
+    Buildable:            False
+  Main-Is:              tests/TCListTest.hs
+  Extra-libraries:      tokyocabinet
+  Build-depends:        HUnit >= 1.2
+  Other-modules:
+    Data.TCList
+
 Executable HDBTest
-  Buildable:            False
+  if flag(BuildTest)
+    Buildable:            True
+  else
+    Buildable:            False
   Main-Is:              tests/HDB.hs
   Extra-libraries:      tokyocabinet
+  Build-depends:        HUnit >= 1.2
   Other-modules:
     Database.TokyoCabinet.HDB
     Database.TokyoCabinet.HDB.C
