@@ -92,6 +92,7 @@ import Data.Bits
 
 import Database.TokyoCabinet.HDB.C
 import Database.TokyoCabinet.Error
+import Database.TokyoCabinet.List.C (c_tclistpop)
 import qualified Database.TokyoCabinet.Storable as S
 
 combineOpenMode :: [OpenMode] -> OpenMode
@@ -196,7 +197,20 @@ iternext (TCHDB fptr) =
                    S.peekPtrLen (vp, fromIntegral siz)
 
 fwmkeys :: (S.Storable a, S.Storable b) => TCHDB -> a -> Int -> IO [b]
-fwmkeys = undefined
+fwmkeys (TCHDB fptr) key maxn = 
+    withForeignPtr fptr $ \p ->
+        S.withPtrLen key $ \(kbuf, ksiz) -> do
+            lp <- c_tchdbfwmkeys p kbuf (fromIntegral ksiz) (fromIntegral maxn)
+            mkList lp []
+    where
+      mkList tclist acc =
+          alloca $ \sizbuf -> do
+              val <- c_tclistpop tclist sizbuf
+              if val == nullPtr
+                then return acc
+                else do siz <- fromIntegral `fmap` peek sizbuf
+                        elm <- S.peekPtrLen (val, siz)
+                        mkList tclist (elm:acc)
 
 addint :: (S.Storable a) => TCHDB -> a -> Int -> IO Int
 addint (TCHDB fptr) key num =

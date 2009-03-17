@@ -7,6 +7,8 @@ import Foreign.C.String
 import Data.Int
 import Data.Word
 
+import Database.TokyoCabinet.List.C (LIST)
+
 #include <tchdb.h>
 
 newtype OpenMode = OpenMode { unOpenMode :: CInt }
@@ -43,6 +45,18 @@ foreign import ccall safe "tchdbnew"
 
 foreign import ccall safe "tchdbdel"
   c_tchdbdel :: Ptr HDB -> IO ()
+
+foreign import ccall safe "tchdbecode"
+  c_tchdbecode :: Ptr HDB -> IO CInt
+
+foreign import ccall safe "tchdbtune"
+  c_tchdbtune :: Ptr HDB -> Int64 -> Int8 -> Int8 -> Word8 -> IO Bool
+
+foreign import ccall safe "tchdbsetcache"
+  c_tchdbsetcache :: Ptr HDB -> Int32 -> IO Bool
+
+foreign import ccall safe "tchdbsetxmsiz"
+  c_tchdbsetxmsiz :: Ptr HDB -> Int64 -> IO Bool
 
 foreign import ccall safe "tchdbopen"
   c_tchdbopen :: Ptr HDB -> CString -> CInt -> IO Bool
@@ -95,17 +109,8 @@ foreign import ccall safe "tchdbiternext"
 foreign import ccall safe "tchdbiternext2"
   c_tchdbiternext2 :: Ptr HDB -> IO CString
 
-foreign import ccall safe "tchdbecode"
-  c_tchdbecode :: Ptr HDB -> IO CInt
-
-foreign import ccall safe "tchdbtune"
-  c_tchdbtune :: Ptr HDB -> Int64 -> Int8 -> Int8 -> Word8 -> IO Bool
-
-foreign import ccall safe "tchdbsetcache"
-  c_tchdbsetcache :: Ptr HDB -> Int32 -> IO Bool
-
-foreign import ccall safe "tchdbsetxmsiz"
-  c_tchdbsetxmsiz :: Ptr HDB -> Int64 -> IO Bool
+foreign import ccall safe "tchdbfwmkeys"
+  c_tchdbfwmkeys :: Ptr HDB -> CString -> CInt -> CInt -> IO (Ptr LIST)
 
 foreign import ccall safe "tchdbaddint"
   c_tchdbaddint :: Ptr HDB -> CString -> CInt -> CInt -> IO CInt
