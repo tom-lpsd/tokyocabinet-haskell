@@ -25,6 +25,7 @@ Library
     Database.TokyoCabinet.HDB.C
     Database.TokyoCabinet.Error
     Database.TokyoCabinet.List
+    Database.TokyoCabinet.Storable
   Extensions:           CPP, ForeignFunctionInterface, EmptyDataDecls
   Extra-libraries:      tokyocabinet
   Extra-lib-dirs:       /usr/local/lib
@@ -55,3 +56,4 @@ Executable HDBTest
     Database.TokyoCabinet.HDB.C
     Database.TokyoCabinet.Error
     Database.TokyoCabinet.List
+    Database.TokyoCabinet.Storable
