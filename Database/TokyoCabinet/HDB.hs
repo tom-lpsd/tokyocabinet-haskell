@@ -85,6 +85,7 @@ import Foreign.Ptr
 import Foreign.Storable (peek)
 import Foreign.ForeignPtr
 import Foreign.Marshal (alloca)
+import Foreign.Marshal.Utils (maybePeek)
 
 import Data.Int
 import Data.Bits
@@ -169,11 +170,9 @@ get (TCHDB fptr) key =
         S.withPtrLen key $ \(kbuf, ksiz) ->
             alloca $ \sizbuf -> do
                 vbuf <- c_tchdbget p kbuf (fromIntegral ksiz) sizbuf
-                if vbuf == nullPtr
-                  then return Nothing 
-                  else do siz <- peek sizbuf
-                          val <- S.peekPtrLen (vbuf, fromIntegral siz)
-                          return $ Just val
+                flip maybePeek vbuf $ \vp ->
+                    do siz <- peek sizbuf
+                       S.peekPtrLen (vp, fromIntegral siz)
 
 vsiz :: (S.Storable a) => TCHDB -> a -> IO (Maybe Int)
 vsiz (TCHDB fptr) key =
@@ -192,11 +191,9 @@ iternext (TCHDB fptr) =
     withForeignPtr fptr $ \p ->
         alloca $ \sizbuf -> do
             vbuf <- c_tchdbiternext p sizbuf
-            if vbuf == nullPtr
-              then return Nothing 
-              else do siz <- peek sizbuf
-                      val <- S.peekPtrLen (vbuf, fromIntegral siz)
-                      return $ Just val
+            flip maybePeek vbuf $ \vp ->
+                do siz <- peek sizbuf
+                   S.peekPtrLen (vp, fromIntegral siz)
 
 fwmkeys :: (S.Storable a, S.Storable b) => TCHDB -> a -> Int -> IO [b]
 fwmkeys = undefined
@@ -245,9 +242,7 @@ path :: TCHDB -> IO (Maybe String)
 path (TCHDB fptr) =
     withForeignPtr fptr $ \p -> do
       cstr <- c_tchdbpath p
-      if cstr == nullPtr
-        then return Nothing
-        else peekCString cstr >>= return . Just
+      maybePeek peekCString cstr
 
 rnum :: TCHDB -> IO Int64
 rnum (TCHDB fptr) = withForeignPtr fptr c_tchdbrnum

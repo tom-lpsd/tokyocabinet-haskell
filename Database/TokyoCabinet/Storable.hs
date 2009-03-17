@@ -20,7 +20,6 @@ type PtrLen = (Ptr CChar, Int)
 class Storable a where
     withPtrLen :: a -> (PtrLen -> IO b) -> IO b
     peekPtrLen :: PtrLen -> IO a
-    peekPtrLen = undefined
 
 instance Storable S.ByteString where
     withPtrLen = unsafeUseAsCStringLen
