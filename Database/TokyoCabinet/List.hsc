@@ -14,6 +14,9 @@ import Data.Word
 
 import qualified Database.TokyoCabinet.Storable as S
 
+import qualified Data.ByteString as B
+import Data.ByteString.Unsafe
+
 #include <tcutil.h>
 
 data TCList = TCList !(ForeignPtr LIST)
@@ -110,14 +113,14 @@ sort :: TCList -> IO ()
 sort (TCList fptr) = withForeignPtr fptr c_tclistsort
 
 lsearch :: (S.Storable a) => TCList -> a -> IO Int
-lsearch  (TCList fptr) key =
+lsearch (TCList fptr) key =
     withForeignPtr fptr $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) ->
             fmap fromIntegral $
                  c_tclistlsearch p (castPtr kbuf) (fromIntegral ksiz)
 
 bsearch :: (S.Storable a) => TCList -> a -> IO Int
-bsearch  (TCList fptr) key =
+bsearch (TCList fptr) key =
     withForeignPtr fptr $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) ->
             fmap fromIntegral $
@@ -126,8 +129,19 @@ bsearch  (TCList fptr) key =
 clear :: TCList -> IO ()
 clear (TCList fptr) = withForeignPtr fptr c_tclistclear
 
---  c_tclistdump :: Ptr LIST -> Ptr CInt -> IO CString
---  c_tclistload :: Ptr Word8 -> CInt -> IO (Ptr LIST)
+dump :: TCList -> IO B.ByteString
+dump (TCList fptr) =
+    withForeignPtr fptr $ \p ->
+        alloca $ \sizbuf -> do
+            c_str <- c_tclistdump p sizbuf
+            size <- fromIntegral `fmap` peek sizbuf
+            unsafePackCStringFinalizer (castPtr c_str) size (free c_str)
+
+load :: B.ByteString -> IO TCList
+load bytes =
+    unsafeUseAsCStringLen bytes $ \(buf, siz) -> do
+      tclis <- c_tclistload (castPtr buf) (fromIntegral siz)
+      TCList `fmap` newForeignPtr tclistFinalizer tclis
 
 data LIST
 
