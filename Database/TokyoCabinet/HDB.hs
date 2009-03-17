@@ -92,7 +92,7 @@ import Data.Bits
 
 import Database.TokyoCabinet.HDB.C
 import Database.TokyoCabinet.Error
-import Database.TokyoCabinet.List.C (c_tclistpop)
+import Database.TokyoCabinet.List.C (c_tclistpop, c_tclistdel)
 import qualified Database.TokyoCabinet.Storable as S
 
 combineOpenMode :: [OpenMode] -> OpenMode
@@ -201,7 +201,9 @@ fwmkeys (TCHDB fptr) key maxn =
     withForeignPtr fptr $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) -> do
             lp <- c_tchdbfwmkeys p kbuf (fromIntegral ksiz) (fromIntegral maxn)
-            mkList lp []
+            results <- mkList lp []
+            c_tclistdel lp
+            return results
     where
       mkList tclist acc =
           alloca $ \sizbuf -> do
