@@ -23,6 +23,8 @@ Library
     Database.TokyoCabinet,
     Database.TokyoCabinet.HDB
     Database.TokyoCabinet.HDB.C
+    Database.TokyoCabinet.FDB
+    Database.TokyoCabinet.FDB.C
     Database.TokyoCabinet.Error
     Database.TokyoCabinet.List
     Database.TokyoCabinet.List.C
