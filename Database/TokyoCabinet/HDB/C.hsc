@@ -19,7 +19,7 @@ newtype OpenMode = OpenMode { unOpenMode :: CInt }
  , oWRITER = HDBOWRITER
  , oCREAT  = HDBOCREAT
  , oTRUNC  = HDBOTRUNC
- , oNOLOCK = HDBONOLCK
+ , oNOLCK  = HDBONOLCK
  , oLCKNB  = HDBOLCKNB
  , oTSYNC  = HDBOTSYNC
 }

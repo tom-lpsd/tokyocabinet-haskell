@@ -32,7 +32,7 @@ module Database.TokyoCabinet.HDB
     , oWRITER
     , oCREAT
     , oTRUNC
-    , oNOLOCK
+    , oNOLCK
     , oLCKNB
     , oTSYNC
     , OpenMode
