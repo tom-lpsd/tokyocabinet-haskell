@@ -7,7 +7,7 @@ import Data.TCList
 tests = test [do { h <- new;
                    push h (pack "");
                    push h (pack "");
-                   (==2) `fmap` num h
+                   (==2) `fmap` len h
                  } ~? "num",
               do { h <- new;
                    push h (pack "foo");

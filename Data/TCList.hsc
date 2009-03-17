@@ -1,7 +1,6 @@
 {-# LANGUAGE ForeignFunctionInterface, EmptyDataDecls #-}
 module Data.TCList where
 
-import Prelude hiding ((!!))
 import Foreign.C.Types
 import Foreign.C.String
 
@@ -36,8 +35,8 @@ copy (TCList fptr) =
 delete :: TCList -> IO ()
 delete (TCList fptr) = finalizeForeignPtr fptr
 
-num :: TCList -> IO Int
-num (TCList fptr) =
+len :: TCList -> IO Int
+len (TCList fptr) =
     withForeignPtr fptr $ \p -> do
         n <- c_tclistnum p
         return $ fromIntegral n
