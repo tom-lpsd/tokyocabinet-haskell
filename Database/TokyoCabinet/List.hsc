@@ -1,5 +1,5 @@
 {-# LANGUAGE ForeignFunctionInterface, EmptyDataDecls #-}
-module Data.TCList where
+module Database.TokyoCabinet.List where
 
 import Foreign.C.Types
 import Foreign.C.String

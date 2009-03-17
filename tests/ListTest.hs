@@ -2,7 +2,7 @@ module Main where
 import Test.HUnit
 import Data.ByteString.Char8 (pack)
 
-import Data.TCList
+import Database.TokyoCabinet.List
 
 tests = test [do { h <- new;
                    push h (pack "");

@@ -24,23 +24,23 @@ Library
     Database.TokyoCabinet.HDB
     Database.TokyoCabinet.HDB.C
     Database.TokyoCabinet.Error
-    Data.TCList
+    Database.TokyoCabinet.List
   Extensions:           CPP, ForeignFunctionInterface, EmptyDataDecls
   Extra-libraries:      tokyocabinet
   Extra-lib-dirs:       /usr/local/lib
   Include-dirs:         /usr/local/include
   ghc-options:          -Wall
 
-Executable TCListTest
+Executable ListTest
   if flag(BuildTest)
     Buildable:            True
   else
     Buildable:            False
-  Main-Is:              tests/TCListTest.hs
+  Main-Is:              tests/ListTest.hs
   Extra-libraries:      tokyocabinet
   Build-depends:        HUnit >= 1.2
   Other-modules:
-    Data.TCList
+    Database.TokyoCabinet.List
 
 Executable HDBTest
   if flag(BuildTest)
@@ -54,4 +54,4 @@ Executable HDBTest
     Database.TokyoCabinet.HDB
     Database.TokyoCabinet.HDB.C
     Database.TokyoCabinet.Error
-    Data.TCList
+    Database.TokyoCabinet.List
