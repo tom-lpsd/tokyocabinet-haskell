@@ -1,4 +1,25 @@
-module Database.TokyoCabinet.List where
+module Database.TokyoCabinet.List
+    (
+      new
+    , new2
+    , delete
+    , len
+    , get
+    , push
+    , pop
+    , unshift
+    , shift
+    , insert
+    , remove
+    , over
+    , sort
+    , lsearch
+    , bsearch
+    , clear
+    , dump
+    , load
+    , TCList
+    ) where
 
 import Foreign.Ptr
 import Foreign.ForeignPtr
