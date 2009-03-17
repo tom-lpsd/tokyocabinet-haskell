@@ -8,10 +8,11 @@ import Foreign.Ptr
 import Foreign.ForeignPtr
 import Foreign.Storable
 import Foreign.Marshal
+import Foreign.Marshal.Utils (maybePeek, copyBytes)
 
 import Data.Word
-import Data.ByteString (ByteString)
-import Data.ByteString.Unsafe
+
+import qualified Database.TokyoCabinet.Storable as S
 
 #include <tcutil.h>
 
@@ -41,32 +42,31 @@ len (TCList fptr) =
         n <- c_tclistnum p
         return $ fromIntegral n
 
-get :: TCList -> Int -> IO (Maybe ByteString)
+get :: (S.Storable a) => TCList -> Int -> IO (Maybe a)
 get (TCList fptr) index =
     withForeignPtr fptr $ \p ->
         alloca $ \sizbuf -> do
             vbuf <- c_tclistval p (fromIntegral index) sizbuf
-            if vbuf == nullPtr
-              then return Nothing
-              else do siz  <- peek sizbuf
-                      Just `fmap` unsafePackCStringLen (vbuf, fromIntegral siz)
+            flip maybePeek vbuf $ \vp ->
+              do siz <- peek sizbuf
+                 buf <- mallocBytes (fromIntegral siz)
+                 copyBytes buf vp (fromIntegral siz)
+                 S.peekPtrLen (buf, fromIntegral siz)
 
-push :: TCList -> ByteString -> IO ()
+push :: (S.Storable a) => TCList -> a -> IO ()
 push (TCList fptr) val =
     withForeignPtr fptr $ \p ->
-        unsafeUseAsCStringLen val $ \(vbuf, vsiz) ->
+        S.withPtrLen val $ \(vbuf, vsiz) ->
             c_tclistpush p (castPtr vbuf) (fromIntegral vsiz)
 
-pop :: TCList -> IO (Maybe ByteString)
+pop :: (S.Storable a) => TCList -> IO (Maybe a)
 pop (TCList fptr) =
     withForeignPtr fptr $ \p ->
         alloca $ \sizbuf -> do
           vbuf <- c_tclistpop p sizbuf
-          if vbuf == nullPtr
-            then return Nothing
-            else do siz <- peek sizbuf
-                    Just `fmap` unsafePackCStringFinalizer (castPtr vbuf)
-                                    (fromIntegral siz) (free vbuf)
+          flip maybePeek vbuf $ \vp ->
+            do siz <- peek sizbuf
+               S.peekPtrLen (vp, fromIntegral siz)
 
 data LIST
 
