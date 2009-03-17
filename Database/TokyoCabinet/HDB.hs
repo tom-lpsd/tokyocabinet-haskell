@@ -74,9 +74,6 @@ module Database.TokyoCabinet.HDB
     , path
     , rnum
     , fsiz
-    , put'
-    , get'
-    , adddouble'
     , TCHDB
     )
     where
@@ -85,22 +82,16 @@ import Foreign.C.Types (CInt)
 import Foreign.C.String
 
 import Foreign.Ptr
-import Foreign.Storable
+import Foreign.Storable (peek)
 import Foreign.ForeignPtr
-import Foreign.Marshal (alloca, free, with)
+import Foreign.Marshal (alloca)
 
 import Data.Int
 import Data.Bits
 
-import Data.ByteString (ByteString)
-import Data.ByteString.Unsafe
-    (
-      unsafeUseAsCStringLen
-    , unsafePackCStringFinalizer
-    )
-
 import Database.TokyoCabinet.HDB.C
 import Database.TokyoCabinet.Error
+import qualified Database.TokyoCabinet.Storable as S
 
 combineOpenMode :: [OpenMode] -> OpenMode
 combineOpenMode = OpenMode . foldr ((.|.) . unOpenMode) 0
@@ -146,48 +137,48 @@ close (TCHDB fptr) = withForeignPtr fptr c_tchdbclose
 
 type PutFunc = Ptr HDB -> CString -> CInt -> CString -> CInt -> IO Bool
 
-liftPutFunc :: PutFunc -> TCHDB -> ByteString -> ByteString -> IO Bool
+liftPutFunc ::
+    (S.Storable a, S.Storable b) => PutFunc -> TCHDB -> a -> b -> IO Bool
 liftPutFunc func (TCHDB fptr) key val =
     withForeignPtr fptr $ \p ->
-        unsafeUseAsCStringLen key $ \(kbuf, ksize) ->
-        unsafeUseAsCStringLen val $ \(vbuf, vsize) ->
+        S.withPtrLen key $ \(kbuf, ksize) ->
+        S.withPtrLen val $ \(vbuf, vsize) ->
             func p kbuf (fromIntegral ksize) vbuf (fromIntegral vsize)
 
-put :: TCHDB -> ByteString -> ByteString -> IO Bool
+put :: (S.Storable a, S.Storable b) => TCHDB -> a -> b -> IO Bool
 put = liftPutFunc c_tchdbput
 
-putkeep :: TCHDB -> ByteString -> ByteString -> IO Bool
+putkeep :: (S.Storable a, S.Storable b) => TCHDB -> a -> b -> IO Bool
 putkeep = liftPutFunc c_tchdbputkeep
 
-putcat :: TCHDB -> ByteString -> ByteString -> IO Bool
+putcat :: (S.Storable a, S.Storable b) => TCHDB -> a -> b -> IO Bool
 putcat = liftPutFunc c_tchdbputcat
 
-putasync :: TCHDB -> ByteString -> ByteString -> IO Bool
+putasync :: (S.Storable a, S.Storable b) => TCHDB -> a -> b -> IO Bool
 putasync = liftPutFunc c_tchdbputasync
 
-out :: TCHDB -> ByteString -> IO Bool
+out :: (S.Storable a) => TCHDB -> a -> IO Bool
 out (TCHDB fptr) key =
     withForeignPtr fptr $ \p ->
-        unsafeUseAsCStringLen key $ \(kbuf, ksiz) ->
+        S.withPtrLen key $ \(kbuf, ksiz) ->
             c_tchdbout p kbuf (fromIntegral ksiz)
 
-get :: TCHDB -> ByteString -> IO (Maybe ByteString)
+get :: (S.Storable a, S.Storable b) => TCHDB -> a -> IO (Maybe b)
 get (TCHDB fptr) key =
     withForeignPtr fptr $ \p ->
-        unsafeUseAsCStringLen key $ \(kbuf, ksiz) ->
+        S.withPtrLen key $ \(kbuf, ksiz) ->
             alloca $ \sizbuf -> do
                 vbuf <- c_tchdbget p kbuf (fromIntegral ksiz) sizbuf
                 if vbuf == nullPtr
                   then return Nothing 
                   else do siz <- peek sizbuf
-                          val <- unsafePackCStringFinalizer (castPtr vbuf)
-                                     (fromIntegral siz) (free vbuf)
+                          val <- S.peekPtrLen (vbuf, fromIntegral siz)
                           return $ Just val
 
-vsiz :: TCHDB -> ByteString -> IO (Maybe Int)
+vsiz :: (S.Storable a) => TCHDB -> a -> IO (Maybe Int)
 vsiz (TCHDB fptr) key =
     withForeignPtr fptr $ \p ->
-        unsafeUseAsCStringLen key $ \(kbuf, ksiz) -> do
+        S.withPtrLen key $ \(kbuf, ksiz) -> do
           vsize <- c_tchdbvsiz p kbuf (fromIntegral ksiz)
           return $ if vsize == -1
                      then Nothing
@@ -196,7 +187,7 @@ vsiz (TCHDB fptr) key =
 iterinit :: TCHDB -> IO Bool
 iterinit (TCHDB fptr) = withForeignPtr fptr c_tchdbiterinit
 
-iternext :: TCHDB -> IO (Maybe ByteString)
+iternext :: (S.Storable a) => TCHDB -> IO (Maybe a)
 iternext (TCHDB fptr) =
     withForeignPtr fptr $ \p ->
         alloca $ \sizbuf -> do
@@ -204,24 +195,23 @@ iternext (TCHDB fptr) =
             if vbuf == nullPtr
               then return Nothing 
               else do siz <- peek sizbuf
-                      val <- unsafePackCStringFinalizer (castPtr vbuf)
-                                 (fromIntegral siz) (free vbuf)
+                      val <- S.peekPtrLen (vbuf, fromIntegral siz)
                       return $ Just val
 
-fwmkeys :: TCHDB -> ByteString -> Int -> IO [ByteString]
+fwmkeys :: (S.Storable a, S.Storable b) => TCHDB -> a -> Int -> IO [b]
 fwmkeys = undefined
 
-addint :: TCHDB -> ByteString -> Int -> IO Int
+addint :: (S.Storable a) => TCHDB -> a -> Int -> IO Int
 addint (TCHDB fptr) key num =
     withForeignPtr fptr $ \p ->
-        unsafeUseAsCStringLen key $ \(kbuf, ksiz) -> do
+        S.withPtrLen key $ \(kbuf, ksiz) -> do
             n <- c_tchdbaddint p kbuf (fromIntegral ksiz) (fromIntegral num)
             return $ fromIntegral n
 
-adddouble :: TCHDB -> ByteString -> Double -> IO Double
+adddouble :: (S.Storable a) => TCHDB -> a -> Double -> IO Double
 adddouble (TCHDB fptr) key num =
     withForeignPtr fptr $ \p ->
-        unsafeUseAsCStringLen key $ \(kbuf, ksiz) -> do
+        S.withPtrLen key $ \(kbuf, ksiz) -> do
             n <- c_tchdbadddouble p kbuf (fromIntegral ksiz) (realToFrac num)
             return $ realToFrac n
 
@@ -264,32 +254,3 @@ rnum (TCHDB fptr) = withForeignPtr fptr c_tchdbrnum
 
 fsiz :: TCHDB -> IO Int64
 fsiz (TCHDB fptr) = withForeignPtr fptr c_tchdbfsiz
-
-put' :: (Storable a, Storable b) => TCHDB -> a -> b -> IO Bool
-put' (TCHDB fptr) key val =
-    withForeignPtr fptr $ \p ->
-        with key $ \kp ->
-        with val $ \vp -> do
-          c_tchdbput p (castPtr kp) (fromIntegral $ sizeOf key)
-                       (castPtr vp) (fromIntegral $ sizeOf val)
-
-get' :: (Storable a, Storable b) => TCHDB -> a -> IO (Maybe b)
-get' (TCHDB fptr) key =
-    withForeignPtr fptr $ \p ->
-        with key $ \kp ->
-            alloca $ \sizbuf -> do
-                vp <- c_tchdbget p (castPtr kp) (fromIntegral $ sizeOf key) sizbuf
-                if vp == nullPtr
-                  then return Nothing 
-                  else do val <- peek (castPtr vp)
-                          free vp
-                          return (Just val)
-
-adddouble' :: Storable a => TCHDB -> a -> Double -> IO Double
-adddouble' (TCHDB fptr) key num =
-    withForeignPtr fptr $ \p ->
-        with key $ \kp -> do
-            n <- c_tchdbadddouble p (castPtr kp)
-                 (fromIntegral $ sizeOf key) (realToFrac num)
-            return $ realToFrac n
-
