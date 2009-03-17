@@ -2,6 +2,7 @@ module Database.TokyoCabinet.List
     (
       new
     , new2
+    , copy
     , delete
     , len
     , get
