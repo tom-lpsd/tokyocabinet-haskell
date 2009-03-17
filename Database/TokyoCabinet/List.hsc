@@ -68,6 +68,67 @@ pop (TCList fptr) =
             do siz <- peek sizbuf
                S.peekPtrLen (vp, fromIntegral siz)
 
+unshift :: (S.Storable a) => TCList -> a -> IO ()
+unshift (TCList fptr) val =
+    withForeignPtr fptr $ \p ->
+        S.withPtrLen val $ \(vbuf, vsiz) ->
+            c_tclistunshift p (castPtr vbuf) (fromIntegral vsiz)
+
+shift :: (S.Storable a) => TCList -> IO (Maybe a)
+shift (TCList fptr) =
+    withForeignPtr fptr $ \p ->
+        alloca $ \sizbuf -> do
+          vbuf <- c_tclistshift p sizbuf
+          flip maybePeek vbuf $ \vp ->
+            do siz <- peek sizbuf
+               S.peekPtrLen (vp, fromIntegral siz)
+
+insert :: (S.Storable a) => TCList -> Int -> a -> IO ()
+insert (TCList fptr) index val =
+    withForeignPtr fptr $ \p ->
+        S.withPtrLen val $ \(vbuf, vsiz) ->
+            c_tclistinsert p (fromIntegral index) (castPtr vbuf)
+                             (fromIntegral vsiz)
+
+remove :: (S.Storable a) => TCList -> Int -> IO (Maybe a)
+remove (TCList fptr) index =
+    withForeignPtr fptr $ \p ->
+        alloca $ \sizbuf -> do
+          vbuf <- c_tclistremove p (fromIntegral index) sizbuf
+          flip maybePeek vbuf $ \vp ->
+            do siz <- peek sizbuf
+               S.peekPtrLen (vp, fromIntegral siz)
+
+over :: (S.Storable a) => TCList -> Int -> a -> IO ()
+over (TCList fptr) index val =
+    withForeignPtr fptr $ \p ->
+        S.withPtrLen val $ \(vbuf, vsiz) ->
+            c_tclistover p (fromIntegral index) (castPtr vbuf)
+                           (fromIntegral vsiz)
+
+sort :: TCList -> IO ()
+sort (TCList fptr) = withForeignPtr fptr c_tclistsort
+
+lsearch :: (S.Storable a) => TCList -> a -> IO Int
+lsearch  (TCList fptr) key =
+    withForeignPtr fptr $ \p ->
+        S.withPtrLen key $ \(kbuf, ksiz) ->
+            fmap fromIntegral $
+                 c_tclistlsearch p (castPtr kbuf) (fromIntegral ksiz)
+
+bsearch :: (S.Storable a) => TCList -> a -> IO Int
+bsearch  (TCList fptr) key =
+    withForeignPtr fptr $ \p ->
+        S.withPtrLen key $ \(kbuf, ksiz) ->
+            fmap fromIntegral $
+                 c_tclistbsearch p (castPtr kbuf) (fromIntegral ksiz)
+
+clear :: TCList -> IO ()
+clear (TCList fptr) = withForeignPtr fptr c_tclistclear
+
+--  c_tclistdump :: Ptr LIST -> Ptr CInt -> IO CString
+--  c_tclistload :: Ptr Word8 -> CInt -> IO (Ptr LIST)
+
 data LIST
 
 foreign import ccall safe "tclistnew"
@@ -106,146 +167,50 @@ foreign import ccall safe "tclistpop"
 foreign import ccall safe "tclistpop2"
   c_tclistpop2 :: Ptr LIST -> IO CString
 
-{-
+foreign import ccall safe "tclistunshift"
+  c_tclistunshift :: Ptr LIST -> Ptr Word8 -> CInt -> IO ()
 
-/* Add an element at the top of a list object.
-   `list' specifies the list object.
-   `ptr' specifies the pointer to the region of the new element.
-   `size' specifies the size of the region. */
-void tclistunshift(TCLIST *list, const void *ptr, int size);
+foreign import ccall safe "tclistunshift2"
+  c_tclistunshift2 :: Ptr LIST -> Ptr Word8 -> IO ()
 
+foreign import ccall safe "tclistshift"
+  c_tclistshift :: Ptr LIST -> Ptr CInt -> IO CString
 
-/* Add a string element at the top of a list object.
-   `list' specifies the list object.
-   `str' specifies the string of the new element. */
-void tclistunshift2(TCLIST *list, const char *str);
+foreign import ccall safe "tclistshift2"
+  c_tclistshift2 :: Ptr LIST -> IO CString
 
+foreign import ccall safe "tclistinsert"
+  c_tclistinsert :: Ptr LIST -> CInt -> Ptr Word8 -> CInt -> IO ()
 
-/* Remove an element of the top of a list object.
-   `list' specifies the list object.
-   `sp' specifies the pointer to the variable into which the size of the region of the return
-   value is assigned.
-   The return value is the pointer to the region of the removed element.
-   Because an additional zero code is appended at the end of the region of the return value,
-   the return value can be treated as a character string.  Because the region of the return
-   value is allocated with the `malloc' call, it should be released with the `free' call when it
-   is no longer in use.  If the list is empty, the return value is `NULL'. */
-void *tclistshift(TCLIST *list, int *sp);
+foreign import ccall safe "tclistinsert2"
+  c_tclistinsert2 :: Ptr LIST -> CInt -> Ptr Word8 -> IO ()
 
+foreign import ccall safe "tclistremove"
+  c_tclistremove :: Ptr LIST -> CInt -> Ptr CInt -> IO CString
 
-/* Remove a string element of the top of a list object.
-   `list' specifies the list object.
-   The return value is the string of the removed element.
-   Because the region of the return value is allocated with the `malloc' call, it should be
-   released with the `free' call when it is no longer in use.  If the list is empty, the return
-   value is `NULL'. */
-char *tclistshift2(TCLIST *list);
+foreign import ccall safe "tclistremove2"
+  c_tclistremove2 :: Ptr LIST -> CInt -> IO CString
 
+foreign import ccall safe "tclistover"
+  c_tclistover :: Ptr LIST -> CInt -> Ptr Word8 -> CInt -> IO ()
 
-/* Add an element at the specified location of a list object.
-   `list' specifies the list object.
-   `index' specifies the index of the new element.
-   `ptr' specifies the pointer to the region of the new element.
-   `size' specifies the size of the region.
-   If `index' is equal to or more than the number of elements, this function has no effect. */
-void tclistinsert(TCLIST *list, int index, const void *ptr, int size);
+foreign import ccall safe "tclistover2"
+  c_tclistover2 :: Ptr LIST -> CInt -> Ptr Word8 -> IO ()
 
+foreign import ccall safe "tclistsort"
+  c_tclistsort :: Ptr LIST -> IO ()
 
-/* Add a string element at the specified location of a list object.
-   `list' specifies the list object.
-   `index' specifies the index of the new element.
-   `str' specifies the string of the new element.
-   If `index' is equal to or more than the number of elements, this function has no effect. */
-void tclistinsert2(TCLIST *list, int index, const char *str);
+foreign import ccall safe "tclistlsearch"
+  c_tclistlsearch :: Ptr LIST -> Ptr Word8 -> CInt -> IO CInt
 
+foreign import ccall safe "tclistbsearch"
+  c_tclistbsearch :: Ptr LIST -> Ptr Word8 -> CInt -> IO CInt
 
-/* Remove an element at the specified location of a list object.
-   `list' specifies the list object.
-   `index' specifies the index of the element to be removed.
-   `sp' specifies the pointer to the variable into which the size of the region of the return
-   value is assigned.
-   The return value is the pointer to the region of the removed element.
-   Because an additional zero code is appended at the end of the region of the return value,
-   the return value can be treated as a character string.  Because the region of the return
-   value is allocated with the `malloc' call, it should be released with the `free' call when it
-   is no longer in use.  If `index' is equal to or more than the number of elements, no element
-   is removed and the return value is `NULL'. */
-void *tclistremove(TCLIST *list, int index, int *sp);
+foreign import ccall safe "tclistclear"
+  c_tclistclear :: Ptr LIST -> IO ()
 
+foreign import ccall safe "tclistdump"
+  c_tclistdump :: Ptr LIST -> Ptr CInt -> IO CString
 
-/* Remove a string element at the specified location of a list object.
-   `list' specifies the list object.
-   `index' specifies the index of the element to be removed.
-   The return value is the string of the removed element.
-   Because the region of the return value is allocated with the `malloc' call, it should be
-   released with the `free' call when it is no longer in use.  If `index' is equal to or more
-   than the number of elements, no element is removed and the return value is `NULL'. */
-char *tclistremove2(TCLIST *list, int index);
-
-
-/* Overwrite an element at the specified location of a list object.
-   `list' specifies the list object.
-   `index' specifies the index of the element to be overwritten.
-   `ptr' specifies the pointer to the region of the new content.
-   `size' specifies the size of the new content.
-   If `index' is equal to or more than the number of elements, this function has no effect. */
-void tclistover(TCLIST *list, int index, const void *ptr, int size);
-
-
-/* Overwrite a string element at the specified location of a list object.
-   `list' specifies the list object.
-   `index' specifies the index of the element to be overwritten.
-   `str' specifies the string of the new content.
-   If `index' is equal to or more than the number of elements, this function has no effect. */
-void tclistover2(TCLIST *list, int index, const char *str);
-
-
-/* Sort elements of a list object in lexical order.
-   `list' specifies the list object. */
-void tclistsort(TCLIST *list);
-
-
-/* Search a list object for an element using liner search.
-   `list' specifies the list object.
-   `ptr' specifies the pointer to the region of the key.
-   `size' specifies the size of the region.
-   The return value is the index of a corresponding element or -1 if there is no corresponding
-   element.
-   If two or more elements correspond, the former returns. */
-int tclistlsearch(const TCLIST *list, const void *ptr, int size);
-
-
-/* Search a list object for an element using binary search.
-   `list' specifies the list object.  It should be sorted in lexical order.
-   `ptr' specifies the pointer to the region of the key.
-   `size' specifies the size of the region.
-   The return value is the index of a corresponding element or -1 if there is no corresponding
-   element.
-   If two or more elements correspond, which returns is not defined. */
-int tclistbsearch(const TCLIST *list, const void *ptr, int size);
-
-
-/* Clear a list object.
-   `list' specifies the list object.
-   All elements are removed. */
-void tclistclear(TCLIST *list);
-
-
-/* Serialize a list object into a byte array.
-   `list' specifies the list object.
-   `sp' specifies the pointer to the variable into which the size of the region of the return
-   value is assigned.
-   The return value is the pointer to the region of the result serial region.
-   Because the region of the return value is allocated with the `malloc' call, it should be
-   released with the `free' call when it is no longer in use. */
-void *tclistdump(const TCLIST *list, int *sp);
-
-
-/* Create a list object from a serialized byte array.
-   `ptr' specifies the pointer to the region of serialized byte array.
-   `size' specifies the size of the region.
-   The return value is a new list object.
-   Because the object of the return value is created with the function `tclistnew', it should
-   be deleted with the function `tclistdel' when it is no longer in use. */
-TCLIST *tclistload(const void *ptr, int size);
--}
+foreign import ccall safe "tclistload"
+  c_tclistload :: Ptr Word8 -> CInt -> IO (Ptr LIST)
