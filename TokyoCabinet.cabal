@@ -26,7 +26,8 @@ Library
     Database.TokyoCabinet.Error
     Database.TokyoCabinet.List
     Database.TokyoCabinet.Storable
-  Extensions:           CPP, ForeignFunctionInterface, EmptyDataDecls
+  Extensions:           CPP, ForeignFunctionInterface,
+                        EmptyDataDecls, TypeSynonymInstances
   Extra-libraries:      tokyocabinet
   Extra-lib-dirs:       /usr/local/lib
   Include-dirs:         /usr/local/include

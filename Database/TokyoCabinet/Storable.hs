@@ -7,7 +7,7 @@ import Data.Word
 import Foreign.Ptr
 import Foreign.C.Types
 import Foreign.C.String
-import Foreign.Marshal (free)
+import Foreign.Marshal (peekArray, free)
 import Data.ByteString.Unsafe
 
 import qualified Foreign.Storable as F
@@ -28,6 +28,9 @@ instance Storable S.ByteString where
 
 instance Storable L.ByteString where
     withPtrLen = unsafeUseAsCStringLen . S.concat . L.toChunks
+    peekPtrLen (p, len) = do xs <- peekArray len (castPtr p)
+                             free p
+                             return $ L.pack xs
 
 instance Storable String where
     withPtrLen = withCStringLen
@@ -84,6 +87,12 @@ instance Storable Int32 where
                            free p
                            return val
 
+instance Storable Int64 where
+    withPtrLen n f = U.with n $ \p -> f (castPtr p, F.sizeOf n)
+    peekPtrLen (p, _) = do val <- F.peek (castPtr p)
+                           free p
+                           return val
+
 instance Storable Word8 where
     withPtrLen n f = U.with n $ \p -> f (castPtr p, F.sizeOf n)
     peekPtrLen (p, _) = do val <- F.peek (castPtr p)
@@ -97,6 +106,12 @@ instance Storable Word16 where
                            return val
 
 instance Storable Word32 where
+    withPtrLen n f = U.with n $ \p -> f (castPtr p, F.sizeOf n)
+    peekPtrLen (p, _) = do val <- F.peek (castPtr p)
+                           free p
+                           return val
+
+instance Storable Word64 where
     withPtrLen n f = U.with n $ \p -> f (castPtr p, F.sizeOf n)
     peekPtrLen (p, _) = do val <- F.peek (castPtr p)
                            free p
