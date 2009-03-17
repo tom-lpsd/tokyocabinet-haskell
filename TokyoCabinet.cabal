@@ -25,6 +25,7 @@ Library
     Database.TokyoCabinet.HDB.C
     Database.TokyoCabinet.Error
     Database.TokyoCabinet.List
+    Database.TokyoCabinet.List.C
     Database.TokyoCabinet.Storable
   Extensions:           CPP, ForeignFunctionInterface,
                         EmptyDataDecls, TypeSynonymInstances
@@ -43,6 +44,7 @@ Executable ListTest
   Build-depends:        HUnit >= 1.2
   Other-modules:
     Database.TokyoCabinet.List
+    Database.TokyoCabinet.List.C
 
 Executable HDBTest
   if flag(BuildTest)
@@ -57,4 +59,5 @@ Executable HDBTest
     Database.TokyoCabinet.HDB.C
     Database.TokyoCabinet.Error
     Database.TokyoCabinet.List
+    Database.TokyoCabinet.List.C
     Database.TokyoCabinet.Storable
