@@ -34,11 +34,13 @@ module Database.TokyoCabinet.FDB
     , oTRUNC
     , oNOLCK
     , oLCKNB
+    , OpenMode
     -- * id
     , iDMIN
     , iDPREV
     , iDMAX
     , iDNEXT
+    , ID
     -- * basic api
     , new
     , delete
@@ -64,6 +66,7 @@ module Database.TokyoCabinet.FDB
     , path
     , rnum
     , fsiz
+    , TCFDB
     ) where
 
 import Database.TokyoCabinet.Error
