@@ -23,13 +23,13 @@ newtype OpenMode = OpenMode { unOpenMode :: CInt }
  , oLCKNB  = FDBOLCKNB
 }
 
-newtype ID = ID { unID :: CInt }
+newtype ID = ID { unID :: Int64 } deriving (Eq, Ord, Show)
 
 #{enum ID, ID
- , idMIN  = FDBIDMIN
- , idPREV = FDBIDPREV
- , idMAX  = FDBIDMAX
- , idNEXT = FDBIDNEXT
+ , iDMIN  = FDBIDMIN
+ , iDPREV = FDBIDPREV
+ , iDMAX  = FDBIDMAX
+ , iDNEXT = FDBIDNEXT
 };
 
 data FDB
