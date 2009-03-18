@@ -45,6 +45,7 @@ module Database.TokyoCabinet.BDB
     , TuningOption
     , new
     , delete
+    , ecode
     , tune
     , setcache
     , setxmsiz
@@ -107,6 +108,9 @@ new = do
 
 delete :: TCBDB -> IO ()
 delete (TCBDB bdb) = finalizeForeignPtr bdb
+
+ecode :: TCBDB -> IO TCErrorCode
+ecode (TCBDB bdb) = TCErrorCode `fmap` withForeignPtr bdb c_tcbdbecode
 
 tune :: TCBDB -> Int32 -> Int32
      -> Int64 -> Int8 -> Int8 -> [TuningOption] -> IO Bool
