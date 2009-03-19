@@ -30,6 +30,8 @@ module Database.TokyoCabinet.Error
     , eMISC
     -- * utility function
     , errmsg
+    -- * other constants
+    , cINT_MIN
     ) where
 
 import Foreign
@@ -69,6 +71,9 @@ instance Show TCErrorCode where
  , eNOREC   = TCENOREC
  , eMISC    = TCEMISC
 }
+
+cINT_MIN :: CInt
+cINT_MIN = #const INT_MIN
 
 errmsg :: TCErrorCode -> String
 errmsg = unsafePerformIO . peekCString . c_tcerrmsg . unTCErrorCode

@@ -237,19 +237,25 @@ fwmkeys (TCBDB bdb) prefix maxn =
             c_tcbdbfwmkeys bdb' (castPtr pbuf) (fromIntegral psiz)
                            (fromIntegral maxn) >>= peekTCListAndFree
 
-addint :: (S.Storable a) => TCBDB -> a -> Int -> IO Int
+addint :: (S.Storable a) => TCBDB -> a -> Int -> IO (Maybe Int)
 addint (TCBDB bdb) key num =
     withForeignPtr bdb $ \bdb' ->
-        S.withPtrLen key $ \(kbuf, ksiz) ->
-            fromIntegral `fmap` c_tcbdbaddint bdb' (castPtr kbuf)
-                                    (fromIntegral ksiz) (fromIntegral num)
+        S.withPtrLen key $ \(kbuf, ksiz) -> do
+            sumval <- c_tcbdbaddint bdb' (castPtr kbuf)
+                          (fromIntegral ksiz) (fromIntegral num)
+            return $ if sumval == cINT_MIN
+                       then Nothing
+                       else Just $ fromIntegral sumval
 
-adddouble :: (S.Storable a) => TCBDB -> a -> Double -> IO Double
+adddouble :: (S.Storable a) => TCBDB -> a -> Double -> IO (Maybe Double)
 adddouble (TCBDB bdb) key num =
     withForeignPtr bdb $ \bdb' ->
-        S.withPtrLen key $ \(kbuf, ksiz) ->
-            realToFrac `fmap` c_tcbdbadddouble bdb' (castPtr kbuf)
-                                  (fromIntegral ksiz) (realToFrac num)
+        S.withPtrLen key $ \(kbuf, ksiz) -> do
+            sumval <- c_tcbdbadddouble bdb' (castPtr kbuf)
+                          (fromIntegral ksiz) (realToFrac num)
+            return $ if isNaN sumval
+                       then Nothing
+                       else Just $ realToFrac sumval
 
 sync :: TCBDB -> IO Bool
 sync (TCBDB bdb) = withForeignPtr bdb c_tcbdbsync

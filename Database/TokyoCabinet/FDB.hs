@@ -174,17 +174,21 @@ range (TCFDB fdb) lower upper maxn =
           free rp
           return $ map (fromID . ID) keys
 
-addint :: (Key a) => TCFDB -> a -> Int -> IO Int
+addint :: (Key a) => TCFDB -> a -> Int -> IO (Maybe Int)
 addint (TCFDB fdb) key num =
     withForeignPtr fdb $ \fdb' -> do
-        res <- c_tcfdbaddint fdb' (unID . toID $ key) (fromIntegral num)
-        return $ fromIntegral res
+        sumval <- c_tcfdbaddint fdb' (unID . toID $ key) (fromIntegral num)
+        return $ if sumval == cINT_MIN
+                   then Nothing
+                   else Just $ fromIntegral sumval
 
-adddouble :: (Key a) => TCFDB -> a -> Double -> IO Double
+adddouble :: (Key a) => TCFDB -> a -> Double -> IO (Maybe Double)
 adddouble (TCFDB fdb) key num =
     withForeignPtr fdb $ \fdb' -> do
-        res <- c_tcfdbadddouble fdb' (unID . toID $ key) (realToFrac num)
-        return $ realToFrac res
+        sumval <- c_tcfdbadddouble fdb' (unID . toID $ key) (realToFrac num)
+        return $ if isNaN sumval
+                   then Nothing
+                   else Just $ realToFrac sumval
 
 sync :: TCFDB -> IO Bool
 sync (TCFDB fdb) = withForeignPtr fdb c_tcfdbsync

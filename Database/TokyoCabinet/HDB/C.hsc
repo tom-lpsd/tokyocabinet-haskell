@@ -113,10 +113,10 @@ foreign import ccall safe "tchdbfwmkeys"
   c_tchdbfwmkeys :: Ptr HDB -> CString -> CInt -> CInt -> IO (Ptr LIST)
 
 foreign import ccall safe "tchdbaddint"
-  c_tchdbaddint :: Ptr HDB -> CString -> CInt -> CInt -> IO CInt
+  c_tchdbaddint :: Ptr HDB -> Ptr Word8 -> CInt -> CInt -> IO CInt
 
 foreign import ccall safe "tchdbadddouble"
-  c_tchdbadddouble :: Ptr HDB -> CString -> CInt -> CDouble -> IO CDouble
+  c_tchdbadddouble :: Ptr HDB -> Ptr Word8 -> CInt -> CDouble -> IO CDouble
 
 foreign import ccall safe "tchdbsync"
   c_tchdbsync :: Ptr HDB -> IO Bool

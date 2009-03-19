@@ -214,19 +214,25 @@ fwmkeys (TCHDB fptr) key maxn =
                         elm <- S.peekPtrLen (val, siz)
                         mkList tclist (elm:acc)
 
-addint :: (S.Storable a) => TCHDB -> a -> Int -> IO Int
+addint :: (S.Storable a) => TCHDB -> a -> Int -> IO (Maybe Int)
 addint (TCHDB fptr) key num =
     withForeignPtr fptr $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) -> do
-            n <- c_tchdbaddint p kbuf (fromIntegral ksiz) (fromIntegral num)
-            return $ fromIntegral n
+            sumval <- c_tchdbaddint p (castPtr kbuf)
+                          (fromIntegral ksiz) (fromIntegral num)
+            return $ if sumval == cINT_MIN
+                       then Nothing
+                       else Just $ fromIntegral sumval
 
-adddouble :: (S.Storable a) => TCHDB -> a -> Double -> IO Double
+adddouble :: (S.Storable a) => TCHDB -> a -> Double -> IO (Maybe Double)
 adddouble (TCHDB fptr) key num =
     withForeignPtr fptr $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) -> do
-            n <- c_tchdbadddouble p kbuf (fromIntegral ksiz) (realToFrac num)
-            return $ realToFrac n
+            sumval <- c_tchdbadddouble p (castPtr kbuf)
+                          (fromIntegral ksiz) (realToFrac num)
+            return $ if isNaN sumval
+                       then Nothing
+                       else Just $ realToFrac sumval
 
 sync :: TCHDB -> IO Bool
 sync (TCHDB fptr) = withForeignPtr fptr c_tchdbsync
