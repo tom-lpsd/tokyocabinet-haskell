@@ -146,8 +146,7 @@ liftPutFunc func (TCHDB fptr) key val =
     withForeignPtr fptr $ \p ->
         S.withPtrLen key $ \(kbuf, ksize) ->
         S.withPtrLen val $ \(vbuf, vsize) ->
-            func p (castPtr kbuf) (fromIntegral ksize)
-                   (castPtr vbuf) (fromIntegral vsize)
+            func p kbuf ksize vbuf vsize
 
 put :: (S.Storable a, S.Storable b) => TCHDB -> a -> b -> IO Bool
 put = liftPutFunc c_tchdbput

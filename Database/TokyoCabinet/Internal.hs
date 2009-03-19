@@ -16,7 +16,7 @@ peekTCListAndFree list = do
    peekTCList' tclist acc = 
        alloca $ \sizbuf ->
            do val <- c_tclistpop tclist sizbuf
-              siz <- fromIntegral `fmap` peek sizbuf
+              siz <- peek sizbuf
               if val == nullPtr
                 then return acc
                 else do elm <- peekPtrLen (val, siz)

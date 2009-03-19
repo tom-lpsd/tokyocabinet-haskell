@@ -15,104 +15,93 @@ import qualified Data.ByteString as S
 import qualified Data.ByteString.Lazy as L
 import qualified Foreign.Marshal.Utils as U
 
-type PtrLen = (Ptr CChar, Int)
+type PtrLen = (Ptr Word8, CInt)
+
+liftPL :: (a -> (CStringLen -> IO b) -> IO b) -> a -> (PtrLen -> IO b) -> IO b
+liftPL f val action =
+    f val $ \(buf, siz) ->
+        action (castPtr buf, fromIntegral siz)
 
 class Storable a where
     withPtrLen :: a -> (PtrLen -> IO b) -> IO b
     peekPtrLen :: PtrLen -> IO a
 
 instance Storable S.ByteString where
-    withPtrLen = unsafeUseAsCStringLen
-    peekPtrLen (p, len) = unsafePackCStringFinalizer (castPtr p) len (free p)
+    withPtrLen = liftPL unsafeUseAsCStringLen
+    peekPtrLen (p, len) =
+        unsafePackCStringFinalizer p (fromIntegral len) (free p)
 
 instance Storable L.ByteString where
-    withPtrLen = unsafeUseAsCStringLen . S.concat . L.toChunks
-    peekPtrLen (p, len) = do xs <- peekArray len (castPtr p)
+    withPtrLen = liftPL unsafeUseAsCStringLen . S.concat . L.toChunks
+    peekPtrLen (p, len) = do xs <- peekArray (fromIntegral len) p
                              free p
                              return $ L.pack xs
 
 instance Storable String where
-    withPtrLen = withCStringLen
-    peekPtrLen str@(p, _) = do
-      val <- peekCStringLen str
-      free p
+    withPtrLen = liftPL withCStringLen
+    peekPtrLen (buf, siz) = do
+      val <- peekCStringLen (castPtr buf, fromIntegral siz)
+      free buf
       return val
 
+withPtrLenForFStorable :: (F.Storable a) => a -> (PtrLen -> IO b) -> IO b
+withPtrLenForFStorable n f =
+    U.with n $ \p -> f (castPtr p, fromIntegral $ F.sizeOf n)
+
+peekPtrLenForFStorable :: (F.Storable a) => PtrLen -> IO a
+peekPtrLenForFStorable (p, _) = do val <- F.peek (castPtr p)
+                                   free p
+                                   return val
+
 instance Storable CInt where
-    withPtrLen n f = U.with n $ \p -> f (castPtr p, F.sizeOf n)
-    peekPtrLen (p, _) = do val <- F.peek (castPtr p)
-                           free p
-                           return val
+    withPtrLen = withPtrLenForFStorable
+    peekPtrLen = peekPtrLenForFStorable
 
 instance Storable Int where
-    withPtrLen n = withPtrLen (fromIntegral n :: CInt)
-    peekPtrLen (p, _) = do val <- F.peek (castPtr p)
-                           free p
-                           return val
+    withPtrLen = withPtrLenForFStorable
+    peekPtrLen = peekPtrLenForFStorable
 
 instance Storable CDouble where
-    withPtrLen n f = U.with n $ \p -> f (castPtr p, F.sizeOf n)
-    peekPtrLen (p, _) = do val <- F.peek (castPtr p)
-                           free p
-                           return val
+    withPtrLen = withPtrLenForFStorable
+    peekPtrLen = peekPtrLenForFStorable
 
 instance Storable Double where
-    withPtrLen n = withPtrLen (realToFrac n :: CDouble)
-    peekPtrLen (p, _) = do val <- F.peek (castPtr p)
-                           free p
-                           return val
+    withPtrLen = withPtrLenForFStorable
+    peekPtrLen = peekPtrLenForFStorable
 
 instance Storable CFloat where
-    withPtrLen n f = U.with n $ \p -> f (castPtr p, F.sizeOf n)
-    peekPtrLen (p, _) = do val <- F.peek (castPtr p)
-                           free p
-                           return val
+    withPtrLen = withPtrLenForFStorable
+    peekPtrLen = peekPtrLenForFStorable
 
 instance Storable Int8 where
-    withPtrLen n f = U.with n $ \p -> f (castPtr p, F.sizeOf n)
-    peekPtrLen (p, _) = do val <- F.peek (castPtr p)
-                           free p
-                           return val
+    withPtrLen = withPtrLenForFStorable
+    peekPtrLen = peekPtrLenForFStorable
 
 instance Storable Int16 where
-    withPtrLen n f = U.with n $ \p -> f (castPtr p, F.sizeOf n)
-    peekPtrLen (p, _) = do val <- F.peek (castPtr p)
-                           free p
-                           return val
+    withPtrLen = withPtrLenForFStorable
+    peekPtrLen = peekPtrLenForFStorable
 
 instance Storable Int32 where
-    withPtrLen n f = U.with n $ \p -> f (castPtr p, F.sizeOf n)
-    peekPtrLen (p, _) = do val <- F.peek (castPtr p)
-                           free p
-                           return val
+    withPtrLen = withPtrLenForFStorable
+    peekPtrLen = peekPtrLenForFStorable
 
 instance Storable Int64 where
-    withPtrLen n f = U.with n $ \p -> f (castPtr p, F.sizeOf n)
-    peekPtrLen (p, _) = do val <- F.peek (castPtr p)
-                           free p
-                           return val
+    withPtrLen = withPtrLenForFStorable
+    peekPtrLen = peekPtrLenForFStorable
 
 instance Storable Word8 where
-    withPtrLen n f = U.with n $ \p -> f (castPtr p, F.sizeOf n)
-    peekPtrLen (p, _) = do val <- F.peek (castPtr p)
-                           free p
-                           return val
+    withPtrLen = withPtrLenForFStorable
+    peekPtrLen = peekPtrLenForFStorable
 
 instance Storable Word16 where
-    withPtrLen n f = U.with n $ \p -> f (castPtr p, F.sizeOf n)
-    peekPtrLen (p, _) = do val <- F.peek (castPtr p)
-                           free p
-                           return val
+    withPtrLen = withPtrLenForFStorable
+    peekPtrLen = peekPtrLenForFStorable
 
 instance Storable Word32 where
-    withPtrLen n f = U.with n $ \p -> f (castPtr p, F.sizeOf n)
-    peekPtrLen (p, _) = do val <- F.peek (castPtr p)
-                           free p
-                           return val
+    withPtrLen = withPtrLenForFStorable
+    peekPtrLen = peekPtrLenForFStorable
 
 instance Storable Word64 where
-    withPtrLen n f = U.with n $ \p -> f (castPtr p, F.sizeOf n)
-    peekPtrLen (p, _) = do val <- F.peek (castPtr p)
-                           free p
-                           return val
+    withPtrLen = withPtrLenForFStorable
+    peekPtrLen = peekPtrLenForFStorable
 

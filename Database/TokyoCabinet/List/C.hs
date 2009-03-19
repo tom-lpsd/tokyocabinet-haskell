@@ -29,7 +29,7 @@ foreign import ccall safe "tclistnum"
   c_tclistnum :: Ptr LIST -> IO CInt
 
 foreign import ccall safe "tclistval"
-  c_tclistval :: Ptr LIST -> CInt -> Ptr CInt -> IO CString
+  c_tclistval :: Ptr LIST -> CInt -> Ptr CInt -> IO (Ptr Word8)
 
 foreign import ccall safe "tclistval2"
   c_tclistval2 :: Ptr LIST -> CInt -> IO CString
@@ -41,7 +41,7 @@ foreign import ccall safe "tclistpush2"
   c_tclistpush2 :: Ptr LIST -> CString -> IO ()
 
 foreign import ccall safe "tclistpop"
-  c_tclistpop :: Ptr LIST -> Ptr CInt -> IO CString
+  c_tclistpop :: Ptr LIST -> Ptr CInt -> IO (Ptr Word8)
 
 foreign import ccall safe "tclistpop2"
   c_tclistpop2 :: Ptr LIST -> IO CString
@@ -53,7 +53,7 @@ foreign import ccall safe "tclistunshift2"
   c_tclistunshift2 :: Ptr LIST -> Ptr Word8 -> IO ()
 
 foreign import ccall safe "tclistshift"
-  c_tclistshift :: Ptr LIST -> Ptr CInt -> IO CString
+  c_tclistshift :: Ptr LIST -> Ptr CInt -> IO (Ptr Word8)
 
 foreign import ccall safe "tclistshift2"
   c_tclistshift2 :: Ptr LIST -> IO CString
@@ -65,7 +65,7 @@ foreign import ccall safe "tclistinsert2"
   c_tclistinsert2 :: Ptr LIST -> CInt -> Ptr Word8 -> IO ()
 
 foreign import ccall safe "tclistremove"
-  c_tclistremove :: Ptr LIST -> CInt -> Ptr CInt -> IO CString
+  c_tclistremove :: Ptr LIST -> CInt -> Ptr CInt -> IO (Ptr Word8)
 
 foreign import ccall safe "tclistremove2"
   c_tclistremove2 :: Ptr LIST -> CInt -> IO CString
@@ -74,7 +74,7 @@ foreign import ccall safe "tclistover"
   c_tclistover :: Ptr LIST -> CInt -> Ptr Word8 -> CInt -> IO ()
 
 foreign import ccall safe "tclistover2"
-  c_tclistover2 :: Ptr LIST -> CInt -> Ptr Word8 -> IO ()
+  c_tclistover2 :: Ptr LIST -> CInt -> CString -> IO ()
 
 foreign import ccall safe "tclistsort"
   c_tclistsort :: Ptr LIST -> IO ()
@@ -89,7 +89,7 @@ foreign import ccall safe "tclistclear"
   c_tclistclear :: Ptr LIST -> IO ()
 
 foreign import ccall safe "tclistdump"
-  c_tclistdump :: Ptr LIST -> Ptr CInt -> IO CString
+  c_tclistdump :: Ptr LIST -> Ptr CInt -> IO (Ptr Word8)
 
 foreign import ccall safe "tclistload"
   c_tclistload :: Ptr Word8 -> CInt -> IO (Ptr LIST)
