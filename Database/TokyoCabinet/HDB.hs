@@ -93,7 +93,7 @@ import Data.Bits
 
 import Database.TokyoCabinet.HDB.C
 import Database.TokyoCabinet.Error
-import Database.TokyoCabinet.List.C (c_tclistpop, c_tclistdel)
+import Database.TokyoCabinet.Internal
 import qualified Database.TokyoCabinet.Storable as S
 
 combineOpenMode :: [OpenMode] -> OpenMode
@@ -123,10 +123,12 @@ tune (TCHDB fptr) bnum apow fpow options =
     in withForeignPtr fptr $ \p -> c_tchdbtune p bnum apow fpow option
 
 setcache :: TCHDB -> Int32 -> IO Bool
-setcache (TCHDB fptr) rcnum = withForeignPtr fptr $ \p -> c_tchdbsetcache p rcnum
+setcache (TCHDB fptr) rcnum =
+    withForeignPtr fptr $ \p -> c_tchdbsetcache p rcnum
 
 setxmsiz :: TCHDB -> Int64 -> IO Bool
-setxmsiz (TCHDB fptr) xmsiz = withForeignPtr fptr $ \p -> c_tchdbsetxmsiz p xmsiz
+setxmsiz (TCHDB fptr) xmsiz =
+    withForeignPtr fptr $ \p -> c_tchdbsetxmsiz p xmsiz
 
 open :: TCHDB -> String -> [OpenMode] -> IO Bool
 open (TCHDB fptr) name modes = 
@@ -145,8 +147,7 @@ liftPutFunc ::
 liftPutFunc func (TCHDB fptr) key val =
     withForeignPtr fptr $ \p ->
         S.withPtrLen key $ \(kbuf, ksize) ->
-        S.withPtrLen val $ \(vbuf, vsize) ->
-            func p kbuf ksize vbuf vsize
+        S.withPtrLen val $ \(vbuf, vsize) -> func p kbuf ksize vbuf vsize
 
 put :: (S.Storable a, S.Storable b) => TCHDB -> a -> b -> IO Bool
 put = liftPutFunc c_tchdbput
@@ -164,23 +165,23 @@ out :: (S.Storable a) => TCHDB -> a -> IO Bool
 out (TCHDB fptr) key =
     withForeignPtr fptr $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) ->
-            c_tchdbout p (castPtr kbuf) (fromIntegral ksiz)
+            c_tchdbout p kbuf ksiz
 
 get :: (S.Storable a, S.Storable b) => TCHDB -> a -> IO (Maybe b)
 get (TCHDB fptr) key =
     withForeignPtr fptr $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) ->
             alloca $ \sizbuf -> do
-                vbuf <- c_tchdbget p (castPtr kbuf) (fromIntegral ksiz) sizbuf
+                vbuf <- c_tchdbget p kbuf ksiz sizbuf
                 flip maybePeek vbuf $ \vp ->
                     do siz <- peek sizbuf
-                       S.peekPtrLen (castPtr vp, fromIntegral siz)
+                       S.peekPtrLen (vp, siz)
 
 vsiz :: (S.Storable a) => TCHDB -> a -> IO (Maybe Int)
 vsiz (TCHDB fptr) key =
     withForeignPtr fptr $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) -> do
-          vsize <- c_tchdbvsiz p (castPtr kbuf) (fromIntegral ksiz)
+          vsize <- c_tchdbvsiz p kbuf ksiz
           return $ if vsize == -1
                      then Nothing
                      else Just (fromIntegral vsize)
@@ -195,32 +196,20 @@ iternext (TCHDB fptr) =
             vbuf <- c_tchdbiternext p sizbuf
             flip maybePeek vbuf $ \vp ->
                 do siz <- peek sizbuf
-                   S.peekPtrLen (castPtr vp, fromIntegral siz)
+                   S.peekPtrLen (vp, siz)
 
 fwmkeys :: (S.Storable a, S.Storable b) => TCHDB -> a -> Int -> IO [b]
 fwmkeys (TCHDB fptr) key maxn = 
     withForeignPtr fptr $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) -> do
-            lp <- c_tchdbfwmkeys p (castPtr kbuf) (fromIntegral ksiz) (fromIntegral maxn)
-            results <- mkList lp []
-            c_tclistdel lp
-            return results
-    where
-      mkList tclist acc =
-          alloca $ \sizbuf -> do
-              val <- c_tclistpop tclist sizbuf
-              if val == nullPtr
-                then return acc
-                else do siz <- fromIntegral `fmap` peek sizbuf
-                        elm <- S.peekPtrLen (val, siz)
-                        mkList tclist (elm:acc)
+            lp <- c_tchdbfwmkeys p kbuf ksiz (fromIntegral maxn)
+            peekTCListAndFree lp
 
 addint :: (S.Storable a) => TCHDB -> a -> Int -> IO (Maybe Int)
 addint (TCHDB fptr) key num =
     withForeignPtr fptr $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) -> do
-            sumval <- c_tchdbaddint p (castPtr kbuf)
-                          (fromIntegral ksiz) (fromIntegral num)
+            sumval <- c_tchdbaddint p kbuf ksiz (fromIntegral num)
             return $ if sumval == cINT_MIN
                        then Nothing
                        else Just $ fromIntegral sumval
@@ -229,8 +218,7 @@ adddouble :: (S.Storable a) => TCHDB -> a -> Double -> IO (Maybe Double)
 adddouble (TCHDB fptr) key num =
     withForeignPtr fptr $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) -> do
-            sumval <- c_tchdbadddouble p (castPtr kbuf)
-                          (fromIntegral ksiz) (realToFrac num)
+            sumval <- c_tchdbadddouble p kbuf ksiz (realToFrac num)
             return $ if isNaN sumval
                        then Nothing
                        else Just $ realToFrac sumval

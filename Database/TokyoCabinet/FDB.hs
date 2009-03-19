@@ -121,7 +121,7 @@ liftPutFunc :: (Key a, S.Storable b) => PutFunc -> TCFDB -> a -> b -> IO Bool
 liftPutFunc func (TCFDB fdb) key val =
     withForeignPtr fdb $ \fdb' ->
         S.withPtrLen val $ \(vbuf, vsize) -> do
-          func fdb' (unID (toID key)) (castPtr vbuf) (fromIntegral vsize)
+          func fdb' (unID . toID $ key) vbuf vsize
         
 put :: (Key a, S.Storable b) => TCFDB -> a -> b -> IO Bool
 put = liftPutFunc c_tcfdbput
@@ -134,14 +134,14 @@ putcat =  liftPutFunc c_tcfdbputcat
 
 out :: (Key a) => TCFDB -> a -> IO Bool
 out (TCFDB fdb) key =
-    withForeignPtr fdb $ \fdb' -> c_tcfdbout fdb' $ unID (toID key)
+    withForeignPtr fdb $ \fdb' -> c_tcfdbout fdb' $ unID . toID $ key
 
 get :: (Key a, S.Storable b) => TCFDB -> a -> IO (Maybe b)
 get (TCFDB fdb) key =
     withForeignPtr fdb $ \fdb' ->
         alloca $ \sizbuf -> do
-            vbuf  <- castPtr `fmap` c_tcfdbget fdb' (unID (toID key)) sizbuf
-            vsize <- fromIntegral `fmap` peek sizbuf
+            vbuf  <- c_tcfdbget fdb' (unID . toID $ key) sizbuf
+            vsize <- peek sizbuf
             flip maybePeek vbuf $ \vbuf' -> S.peekPtrLen (vbuf', vsize)
 
 vsiz :: (Key a) => TCFDB -> a -> IO (Maybe Int)

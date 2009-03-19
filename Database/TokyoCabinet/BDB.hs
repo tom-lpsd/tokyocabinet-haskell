@@ -145,9 +145,7 @@ liftPutFunc ::
 liftPutFunc func (TCBDB bdb) key val =
     withForeignPtr bdb $ \bdb' ->
         S.withPtrLen key $ \(kbuf, ksize) ->
-        S.withPtrLen val $ \(vbuf, vsize) ->
-            func bdb' (castPtr kbuf) (fromIntegral ksize)
-                      (castPtr vbuf) (fromIntegral vsize)
+        S.withPtrLen val $ \(vbuf, vsize) -> func bdb' kbuf ksize vbuf vsize
 
 put :: (S.Storable a, S.Storable b) => TCBDB -> a -> b -> IO Bool
 put = liftPutFunc c_tcbdbput
@@ -168,31 +166,27 @@ putlist bdb key vals = do
 out :: (S.Storable a) => TCBDB -> a -> IO Bool
 out (TCBDB bdb) key =
     withForeignPtr bdb $ \bdb' ->
-        S.withPtrLen key $ \(kbuf, ksize) ->
-            c_tcbdbout bdb' (castPtr kbuf) (fromIntegral ksize)
+        S.withPtrLen key $ \(kbuf, ksize) -> c_tcbdbout bdb' kbuf ksize
 
 outlist :: (S.Storable a) => TCBDB -> a -> IO Bool
 outlist (TCBDB bdb) key =
     withForeignPtr bdb $ \bdb' ->
-        S.withPtrLen key $ \(kbuf, ksize) ->
-            c_tcbdbout3 bdb' (castPtr kbuf) (fromIntegral ksize)
+        S.withPtrLen key $ \(kbuf, ksize) -> c_tcbdbout3 bdb' kbuf ksize
 
 get :: (S.Storable a, S.Storable b) => TCBDB -> a -> IO (Maybe b)
 get (TCBDB bdb) key =
     withForeignPtr bdb $ \bdb' ->
         S.withPtrLen key $ \(kbuf, ksize) ->
             alloca $ \sizbuf -> do
-                ptr <- c_tcbdbget bdb' (castPtr kbuf)
-                           (fromIntegral ksize) sizbuf
+                ptr <- c_tcbdbget bdb' kbuf ksize sizbuf
                 siz <- peek sizbuf
-                flip maybePeek ptr $ \p ->
-                    S.peekPtrLen (castPtr p, fromIntegral siz)
+                flip maybePeek ptr $ \p -> S.peekPtrLen (p, siz)
 
 getlist :: (S.Storable a, S.Storable b) => TCBDB -> a -> IO [b]
 getlist (TCBDB bdb) key =
     withForeignPtr bdb $ \bdb' ->
         S.withPtrLen key $ \(kbuf, ksize) -> do
-          ptr <- c_tcbdbget4 bdb' (castPtr kbuf) (fromIntegral ksize)
+          ptr <- c_tcbdbget4 bdb' kbuf ksize
           if ptr == nullPtr
             then return []
             else peekTCListAndFree ptr
@@ -201,7 +195,7 @@ vnum :: (S.Storable a) => TCBDB -> a -> IO (Maybe Int)
 vnum (TCBDB bdb) key =
     withForeignPtr bdb $ \bdb' ->
         S.withPtrLen key $ \(kbuf, ksize) -> do
-            res <- c_tcbdbvnum bdb' (castPtr kbuf) (fromIntegral ksize)
+            res <- c_tcbdbvnum bdb' kbuf ksize
             return $ if res == 0
                        then Nothing
                        else Just $ fromIntegral res
@@ -210,7 +204,7 @@ vsiz :: (S.Storable a) => TCBDB -> a -> IO (Maybe Int)
 vsiz (TCBDB bdb) key =
     withForeignPtr bdb $ \bdb' ->
         S.withPtrLen key $ \(kbuf, ksize) -> do
-            res <- c_tcbdbvsiz bdb' (castPtr kbuf) (fromIntegral ksize)
+            res <- c_tcbdbvsiz bdb' kbuf ksize
             return $ if res == -1
                        then Nothing
                        else Just $ fromIntegral res
@@ -222,10 +216,8 @@ range (TCBDB bdb) bkey binc ekey einc maxn =
     withForeignPtr bdb $ \bdb' ->
         withPtrLen' bkey $ \(bkbuf, bksiz) ->
         withPtrLen' ekey $ \(ekbuf, eksiz) ->
-            c_tcbdbrange bdb' (castPtr bkbuf) (fromIntegral bksiz) binc
-                              (castPtr ekbuf) (fromIntegral eksiz) einc
-                                              (fromIntegral maxn)
-                                                  >>= peekTCListAndFree
+            c_tcbdbrange bdb' bkbuf bksiz binc ekbuf eksiz einc
+                             (fromIntegral maxn) >>= peekTCListAndFree
     where
       withPtrLen' (Just key) action = S.withPtrLen key action
       withPtrLen' Nothing action = action (nullPtr, 0)
@@ -234,15 +226,14 @@ fwmkeys :: (S.Storable a) => TCBDB -> a -> Int -> IO [a]
 fwmkeys (TCBDB bdb) prefix maxn =
     withForeignPtr bdb $ \bdb' ->
         S.withPtrLen prefix $ \(pbuf, psiz) ->
-            c_tcbdbfwmkeys bdb' (castPtr pbuf) (fromIntegral psiz)
-                           (fromIntegral maxn) >>= peekTCListAndFree
+            c_tcbdbfwmkeys bdb' pbuf psiz (fromIntegral maxn)
+                               >>= peekTCListAndFree
 
 addint :: (S.Storable a) => TCBDB -> a -> Int -> IO (Maybe Int)
 addint (TCBDB bdb) key num =
     withForeignPtr bdb $ \bdb' ->
         S.withPtrLen key $ \(kbuf, ksiz) -> do
-            sumval <- c_tcbdbaddint bdb' (castPtr kbuf)
-                          (fromIntegral ksiz) (fromIntegral num)
+            sumval <- c_tcbdbaddint bdb' kbuf ksiz (fromIntegral num)
             return $ if sumval == cINT_MIN
                        then Nothing
                        else Just $ fromIntegral sumval
@@ -251,8 +242,7 @@ adddouble :: (S.Storable a) => TCBDB -> a -> Double -> IO (Maybe Double)
 adddouble (TCBDB bdb) key num =
     withForeignPtr bdb $ \bdb' ->
         S.withPtrLen key $ \(kbuf, ksiz) -> do
-            sumval <- c_tcbdbadddouble bdb' (castPtr kbuf)
-                          (fromIntegral ksiz) (realToFrac num)
+            sumval <- c_tcbdbadddouble bdb' kbuf ksiz (realToFrac num)
             return $ if isNaN sumval
                        then Nothing
                        else Just $ realToFrac sumval
