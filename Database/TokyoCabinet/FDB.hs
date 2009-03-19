@@ -1,13 +1,14 @@
 module Database.TokyoCabinet.FDB
     (
     -- * constants
-      TCErrorCode(..)
+      TCECODE(..)
     , OpenMode(..)
     , ID(..)
     -- * basic api
     , new
     , delete
     , ecode
+    , errmsg
     , tune
     , open
     , close
@@ -58,7 +59,7 @@ new = do fdb <- c_tcfdbnew
 delete :: TCFDB -> IO ()
 delete fdb = finalizeForeignPtr $ unTCFDB fdb
 
-ecode :: TCFDB -> IO TCErrorCode
+ecode :: TCFDB -> IO TCECODE
 ecode fdb =
     withForeignPtr (unTCFDB fdb) $ \fdb' ->
         cintToError `fmap` c_tcfdbecode fdb'

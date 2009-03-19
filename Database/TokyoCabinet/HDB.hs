@@ -1,13 +1,14 @@
 module Database.TokyoCabinet.HDB
     (
     -- * constants
-      TCErrorCode(..)
+      TCECODE(..)
     , OpenMode(..)
     , TuningOption(..)
     -- * basic API
     , new
     , delete
     , ecode
+    , errmsg
     , tune
     , setcache
     , setxmsiz
@@ -66,7 +67,7 @@ new = do ptr <- c_tchdbnew
 delete :: TCHDB -> IO ()
 delete (TCHDB fptr) = finalizeForeignPtr fptr
 
-ecode :: TCHDB -> IO TCErrorCode
+ecode :: TCHDB -> IO TCECODE
 ecode (TCHDB fptr) = cintToError `fmap` withForeignPtr fptr c_tchdbecode
 
 tune :: TCHDB -> Int64 -> Int8 -> Int8 -> [TuningOption] -> IO Bool

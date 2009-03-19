@@ -1,13 +1,14 @@
 module Database.TokyoCabinet.BDB
     (
     -- * constants
-      TCErrorCode(..)
+      TCECODE(..)
     , OpenMode(..)
     , TuningOption(..)
     -- * basic api
     , new
     , delete
     , ecode
+    , errmsg
     , tune
     , setcache
     , setxmsiz
@@ -67,7 +68,7 @@ new = do
 delete :: TCBDB -> IO ()
 delete (TCBDB bdb) = finalizeForeignPtr bdb
 
-ecode :: TCBDB -> IO TCErrorCode
+ecode :: TCBDB -> IO TCECODE
 ecode (TCBDB bdb) = cintToError `fmap` withForeignPtr bdb c_tcbdbecode
 
 tune :: TCBDB -> Int32 -> Int32
