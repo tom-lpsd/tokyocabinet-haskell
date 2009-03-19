@@ -1,21 +1,9 @@
 module Database.TokyoCabinet.FDB
     (
-    -- * error type and utility
+    -- * constants
       TCErrorCode(..)
-    -- * open mode
-    , oREADER
-    , oWRITER
-    , oCREAT
-    , oTRUNC
-    , oNOLCK
-    , oLCKNB
-    , OpenMode
-    -- * id
-    , iDMIN
-    , iDPREV
-    , iDMAX
-    , iDNEXT
-    , ID
+    , OpenMode(..)
+    , ID(..)
     -- * basic api
     , new
     , delete
@@ -59,7 +47,6 @@ import Foreign.Marshal.Array (peekArray)
 import Foreign.Marshal.Utils (maybePeek)
 
 import Data.Int
-import Data.Bits
 import Data.Word
 
 data TCFDB = TCFDB { unTCFDB :: !(ForeignPtr FDB) }
@@ -84,10 +71,7 @@ open :: TCFDB -> String -> [OpenMode] -> IO Bool
 open (TCFDB fdb) fpath modes =
     withForeignPtr fdb $ \fdb' ->
         withCString fpath $ \fpath' ->
-            c_tcfdbopen fdb' fpath' (unOpenMode mode)
-    where
-      combineOpenMode = OpenMode . foldr ((.|.) . unOpenMode) 0
-      mode = combineOpenMode modes
+            c_tcfdbopen fdb' fpath' (combineOpenMode modes)
 
 close :: TCFDB -> IO Bool
 close (TCFDB fdb) = withForeignPtr fdb c_tcfdbclose
@@ -134,10 +118,10 @@ iterinit (TCFDB fdb) = withForeignPtr fdb c_tcfdbiterinit
 iternext :: (Key a) => TCFDB -> IO (Maybe a)
 iternext (TCFDB fdb) = 
     withForeignPtr fdb $ \fdb' -> do
-      i <- ID `fmap` c_tcfdbiternext fdb'
-      return $ if i == ID 0
+      i <-  c_tcfdbiternext fdb'
+      return $ if i == 0
                  then Nothing
-                 else Just (fromID i)
+                 else Just (fromID $ ID i)
 
 range :: (Key a, Key b) => TCFDB -> a -> a -> Int -> IO [b]
 range (TCFDB fdb) lower upper maxn =

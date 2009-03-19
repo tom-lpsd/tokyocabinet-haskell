@@ -1,6 +1,6 @@
 module Database.TokyoCabinet.FDB.Key where
 
-import Database.TokyoCabinet.FDB.C (ID(..), iDMIN, iDMAX, iDPREV, iDNEXT)
+import Database.TokyoCabinet.FDB.C (ID(..), unID)
 
 import Data.Int
 import Data.Word
@@ -50,9 +50,9 @@ instance Key ID where
     fromID = id
 
 instance Key String where
-    toID "min"  = iDMIN
-    toID "max"  = iDMAX
-    toID "prev" = iDPREV
-    toID "next" = iDNEXT
+    toID "min"  = IDMIN
+    toID "max"  = IDMAX
+    toID "prev" = IDPREV
+    toID "next" = IDNEXT
     toID idstr  = ID (read idstr)
     fromID = show . unID

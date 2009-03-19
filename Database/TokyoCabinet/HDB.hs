@@ -1,23 +1,9 @@
 module Database.TokyoCabinet.HDB
     (
-    -- * error type and utility
+    -- * constants
       TCErrorCode(..)
-     -- * open mode
-    , oREADER
-    , oWRITER
-    , oCREAT
-    , oTRUNC
-    , oNOLCK
-    , oLCKNB
-    , oTSYNC
-    , OpenMode
-    -- * tuning options
-    , tLARGE
-    , tDEFLATE
-    , tBZIP
-    , tTCBS
-    , tEXCODEC
-    , TuningOption
+    , OpenMode(..)
+    , TuningOption(..)
     -- * basic API
     , new
     , delete
@@ -64,18 +50,11 @@ import Foreign.Marshal.Utils (maybePeek)
 
 import Data.Int
 import Data.Word
-import Data.Bits
 
 import Database.TokyoCabinet.HDB.C
 import Database.TokyoCabinet.Error
 import Database.TokyoCabinet.Internal
 import qualified Database.TokyoCabinet.Storable as S
-
-combineOpenMode :: [OpenMode] -> OpenMode
-combineOpenMode = OpenMode . foldr ((.|.) . unOpenMode) 0
-
-combineTuningOption :: [TuningOption] -> TuningOption
-combineTuningOption = TuningOption . foldr ((.|.) . unTuningOption) 0
 
 data TCHDB = TCHDB !(ForeignPtr HDB)
 
@@ -92,8 +71,8 @@ ecode (TCHDB fptr) = cintToError `fmap` withForeignPtr fptr c_tchdbecode
 
 tune :: TCHDB -> Int64 -> Int8 -> Int8 -> [TuningOption] -> IO Bool
 tune (TCHDB fptr) bnum apow fpow options =
-    let option = unTuningOption $ combineTuningOption options
-    in withForeignPtr fptr $ \p -> c_tchdbtune p bnum apow fpow option
+    withForeignPtr fptr $ \p ->
+        c_tchdbtune p bnum apow fpow (combineTuningOption options)
 
 setcache :: TCHDB -> Int32 -> IO Bool
 setcache (TCHDB fptr) rcnum =
@@ -107,8 +86,7 @@ open :: TCHDB -> String -> [OpenMode] -> IO Bool
 open (TCHDB fptr) name modes = 
     withForeignPtr fptr $ \p ->
         withCString name $ \c_name ->
-            c_tchdbopen p c_name option
-    where option = unOpenMode $ combineOpenMode modes
+            c_tchdbopen p c_name (combineOpenMode modes)
 
 close :: TCHDB -> IO Bool
 close (TCHDB fptr) = withForeignPtr fptr c_tchdbclose
@@ -201,8 +179,8 @@ sync (TCHDB fptr) = withForeignPtr fptr c_tchdbsync
 
 optimize :: TCHDB -> Int64 -> Int8 -> Int8 -> [TuningOption] -> IO Bool
 optimize (TCHDB fptr) bnum apow fpow options = 
-    let option = unTuningOption $ combineTuningOption options
-    in withForeignPtr fptr $ \p -> c_tchdboptimize p bnum apow fpow option
+    withForeignPtr fptr $ \p ->
+        c_tchdboptimize p bnum apow fpow (combineTuningOption options)
 
 vanish :: TCHDB -> IO Bool
 vanish (TCHDB fptr) = withForeignPtr fptr c_tchdbvanish

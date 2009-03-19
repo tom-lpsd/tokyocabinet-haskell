@@ -9,32 +9,49 @@ import Foreign.C.String
 
 import Data.Int
 import Data.Word
+import Data.Bits
 
 import Database.TokyoCabinet.List.C (LIST)
 
-newtype OpenMode = OpenMode { unOpenMode :: CInt }
-    deriving (Eq, Show)
+data OpenMode =
+    OREADER |
+    OWRITER |
+    OCREAT  |
+    OTRUNC  |
+    ONOLCK  |
+    OLCKNB  |
+    OTSYNC
+    deriving (Eq, Ord, Show)
 
-#{enum OpenMode, OpenMode
- , oREADER = BDBOREADER
- , oWRITER = BDBOWRITER
- , oCREAT  = BDBOCREAT
- , oTRUNC  = BDBOTRUNC
- , oNOLCK  = BDBONOLCK
- , oLCKNB  = BDBOLCKNB
- , oTSYNC  = BDBOTSYNC
-}
+openModeToCInt :: OpenMode -> CInt
+openModeToCInt OREADER = #const BDBOREADER
+openModeToCInt OWRITER = #const BDBOWRITER
+openModeToCInt OCREAT  = #const BDBOCREAT
+openModeToCInt OTRUNC  = #const BDBOTRUNC
+openModeToCInt ONOLCK  = #const BDBONOLCK
+openModeToCInt OLCKNB  = #const BDBOLCKNB
+openModeToCInt OTSYNC  = #const BDBOTSYNC
 
-newtype TuningOption = TuningOption { unTuningOption :: Word8 }
-    deriving (Eq, Show)
+combineOpenMode :: [OpenMode] -> CInt
+combineOpenMode = foldr ((.|.) . openModeToCInt) 0
 
-#{enum TuningOption, TuningOption
- , tLARGE   = BDBTLARGE
- , tDEFLATE = BDBTDEFLATE
- , tBZIP    = BDBTBZIP
- , tTCBS    = BDBTTCBS
- , tEXCODEC = BDBTEXCODEC
-}
+data TuningOption =
+    TLARGE   |
+    TDEFLATE |
+    TBZIP    |
+    TTCBS    |
+    TEXCODEC
+    deriving (Eq, Ord, Show)
+
+tuningOptionToWord8 :: TuningOption -> Word8
+tuningOptionToWord8 TLARGE   = #const BDBTLARGE
+tuningOptionToWord8 TDEFLATE = #const BDBTDEFLATE
+tuningOptionToWord8 TBZIP    = #const BDBTBZIP
+tuningOptionToWord8 TTCBS    = #const BDBTTCBS
+tuningOptionToWord8 TEXCODEC = #const BDBTEXCODEC
+
+combineTuningOption :: [TuningOption] -> Word8
+combineTuningOption = foldr ((.|.) . tuningOptionToWord8) 0
 
 type TCCMP = Ptr CChar -> CInt -> Ptr CChar -> CInt -> Ptr Word8 -> CInt
 

@@ -4,36 +4,54 @@ module Database.TokyoCabinet.HDB.C where
 import Foreign.Ptr
 import Foreign.C.Types
 import Foreign.C.String
+
 import Data.Int
 import Data.Word
+import Data.Bits
 
 import Database.TokyoCabinet.List.C (LIST)
 
 #include <tchdb.h>
 
-newtype OpenMode = OpenMode { unOpenMode :: CInt }
-    deriving (Eq, Show)
+data OpenMode =
+    OREADER |
+    OWRITER |
+    OCREAT  |
+    OTRUNC  |
+    ONOLCK  |
+    OLCKNB  |
+    OTSYNC
+    deriving (Eq, Ord, Show)
 
-#{enum OpenMode, OpenMode
- , oREADER = HDBOREADER
- , oWRITER = HDBOWRITER
- , oCREAT  = HDBOCREAT
- , oTRUNC  = HDBOTRUNC
- , oNOLCK  = HDBONOLCK
- , oLCKNB  = HDBOLCKNB
- , oTSYNC  = HDBOTSYNC
-}
+openModeToCInt :: OpenMode -> CInt
+openModeToCInt OREADER = #const HDBOREADER
+openModeToCInt OWRITER = #const HDBOWRITER
+openModeToCInt OCREAT  = #const HDBOCREAT
+openModeToCInt OTRUNC  = #const HDBOTRUNC
+openModeToCInt ONOLCK  = #const HDBONOLCK
+openModeToCInt OLCKNB  = #const HDBOLCKNB
+openModeToCInt OTSYNC  = #const HDBOTSYNC
 
-newtype TuningOption = TuningOption { unTuningOption :: Word8 }
-    deriving (Eq, Show)
+combineOpenMode :: [OpenMode] -> CInt
+combineOpenMode = foldr ((.|.) . openModeToCInt) 0
 
-#{enum TuningOption, TuningOption
- , tLARGE   = HDBTLARGE
- , tDEFLATE = HDBTDEFLATE
- , tBZIP    = HDBTBZIP
- , tTCBS    = HDBTTCBS
- , tEXCODEC = HDBTEXCODEC
-}
+data TuningOption =
+    TLARGE   |
+    TDEFLATE |
+    TBZIP    |
+    TTCBS    |
+    TEXCODEC
+    deriving (Eq, Ord, Show)
+
+tuningOptionToWord8 :: TuningOption -> Word8
+tuningOptionToWord8 TLARGE   = #const HDBTLARGE
+tuningOptionToWord8 TDEFLATE = #const HDBTDEFLATE
+tuningOptionToWord8 TBZIP    = #const HDBTBZIP
+tuningOptionToWord8 TTCBS    = #const HDBTTCBS
+tuningOptionToWord8 TEXCODEC = #const HDBTEXCODEC
+
+combineTuningOption :: [TuningOption] -> Word8
+combineTuningOption = foldr ((.|.) . tuningOptionToWord8) 0
 
 data HDB
 

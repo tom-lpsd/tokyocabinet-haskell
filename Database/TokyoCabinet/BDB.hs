@@ -1,23 +1,10 @@
 module Database.TokyoCabinet.BDB
     (
-    -- * error type and utility
+    -- * constants
       TCErrorCode(..)
-    -- * open mode
-    , oREADER
-    , oWRITER
-    , oCREAT
-    , oTRUNC
-    , oNOLCK
-    , oLCKNB
-    , oTSYNC
-    , OpenMode
-    -- * tuning option
-    , tLARGE
-    , tDEFLATE
-    , tBZIP
-    , tTCBS
-    , tEXCODEC
-    , TuningOption
+    , OpenMode(..)
+    , TuningOption(..)
+    -- * basic api
     , new
     , delete
     , ecode
@@ -56,7 +43,6 @@ module Database.TokyoCabinet.BDB
 
 import Data.Int
 import Data.Word
-import Data.Bits
 
 import Foreign.C.Types
 import Foreign.C.String
@@ -70,9 +56,6 @@ import Database.TokyoCabinet.Error
 import Database.TokyoCabinet.BDB.C
 import Database.TokyoCabinet.Internal
 import qualified Database.TokyoCabinet.Storable as S
-
-combineTuningOption :: [TuningOption] -> TuningOption
-combineTuningOption = TuningOption . foldr ((.|.) . unTuningOption) 0
 
 data TCBDB = TCBDB !(ForeignPtr BDB)
 
@@ -91,9 +74,7 @@ tune :: TCBDB -> Int32 -> Int32
      -> Int64 -> Int8 -> Int8 -> [TuningOption] -> IO Bool
 tune (TCBDB bdb) lmemb nmemb bnum apow fpow opts =
     withForeignPtr bdb $ \bdb' ->
-        c_tcbdbtune bdb' lmemb nmemb bnum apow fpow opt
-    where
-      opt = unTuningOption $ combineTuningOption opts
+        c_tcbdbtune bdb' lmemb nmemb bnum apow fpow (combineTuningOption opts)
 
 setcache :: TCBDB -> Int32 -> Int32 -> IO Bool
 setcache (TCBDB bdb) lcnum ncnum =
@@ -106,10 +87,8 @@ setxmsiz (TCBDB bdb) xmsiz =
 open :: TCBDB -> String -> [OpenMode] -> IO Bool
 open (TCBDB bdb) fpath modes =
     withForeignPtr bdb $ \bdb' ->
-        withCString fpath $ \fpath' -> c_tcbdbopen bdb' fpath' mode
-    where
-      combineOpenMode = OpenMode . foldr ((.|.) . unOpenMode) 0
-      mode = unOpenMode $ combineOpenMode modes
+        withCString fpath $ \fpath' ->
+            c_tcbdbopen bdb' fpath' (combineOpenMode modes)
 
 close :: TCBDB -> IO Bool
 close (TCBDB bdb) = withForeignPtr bdb c_tcbdbclose
@@ -229,9 +208,8 @@ optimize :: TCBDB -> Int32 -> Int32
          -> Int64 -> Int8 -> Int8 -> [TuningOption] -> IO Bool
 optimize (TCBDB bdb) lmemb nmemb bnum apow fpow opts =
     withForeignPtr bdb $ \bdb' ->
-        c_tcbdboptimize bdb' lmemb nmemb bnum apow fpow opt
-    where
-      opt = unTuningOption $ combineTuningOption opts
+        c_tcbdboptimize bdb' lmemb nmemb bnum apow fpow
+                        (combineTuningOption opts)
 
 vanish :: TCBDB -> IO Bool
 vanish (TCBDB bdb) = withForeignPtr bdb c_tcbdbvanish

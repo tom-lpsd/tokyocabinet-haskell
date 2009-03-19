@@ -4,33 +4,49 @@ module Database.TokyoCabinet.FDB.C where
 import Foreign.Ptr
 import Foreign.C.Types
 import Foreign.C.String
+
 import Data.Int
 import Data.Word
+import Data.Bits
 
 import Database.TokyoCabinet.List.C (LIST)
 
 #include <tcfdb.h>
 
-newtype OpenMode = OpenMode { unOpenMode :: CInt }
-    deriving (Eq, Show)
+data OpenMode =
+    OREADER |
+    OWRITER |
+    OCREAT  |
+    OTRUNC  |
+    ONOLCK  |
+    OLCKNB
+    deriving (Eq, Ord, Show)
 
-#{enum OpenMode, OpenMode
- , oREADER = FDBOREADER
- , oWRITER = FDBOWRITER
- , oCREAT  = FDBOCREAT
- , oTRUNC  = FDBOTRUNC
- , oNOLCK  = FDBONOLCK
- , oLCKNB  = FDBOLCKNB
-}
+openModeToCInt :: OpenMode -> CInt
+openModeToCInt OREADER = #const FDBOREADER
+openModeToCInt OWRITER = #const FDBOWRITER
+openModeToCInt OCREAT  = #const FDBOCREAT
+openModeToCInt OTRUNC  = #const FDBOTRUNC
+openModeToCInt ONOLCK  = #const FDBONOLCK
+openModeToCInt OLCKNB  = #const FDBOLCKNB
 
-newtype ID = ID { unID :: Int64 } deriving (Eq, Ord, Show)
+combineOpenMode :: [OpenMode] -> CInt
+combineOpenMode = foldr ((.|.) . openModeToCInt) 0
 
-#{enum ID, ID
- , iDMIN  = FDBIDMIN
- , iDPREV = FDBIDPREV
- , iDMAX  = FDBIDMAX
- , iDNEXT = FDBIDNEXT
-};
+data ID =
+    IDMIN  |
+    IDPREV |
+    IDMAX  |
+    IDNEXT |
+    ID Int64
+    deriving (Eq, Ord, Show)
+
+unID :: ID -> Int64
+unID IDMIN  = #const FDBIDMIN
+unID IDPREV = #const FDBIDPREV
+unID IDMAX  = #const FDBIDMAX
+unID IDNEXT = #const FDBIDNEXT
+unID (ID int) = int
 
 data FDB
 
