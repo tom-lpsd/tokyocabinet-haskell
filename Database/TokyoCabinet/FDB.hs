@@ -87,22 +87,23 @@ import Data.Int
 import Data.Bits
 import Data.Word
 
-data TCFDB = TCFDB !(ForeignPtr FDB)
+data TCFDB = TCFDB { unTCFDB :: !(ForeignPtr FDB) }
 
 new :: IO TCFDB
 new = do fdb <- c_tcfdbnew
          TCFDB `fmap` newForeignPtr tcfdbFinalizer fdb
 
 delete :: TCFDB -> IO ()
-delete (TCFDB fdb) = finalizeForeignPtr fdb
+delete fdb = finalizeForeignPtr $ unTCFDB fdb
 
 ecode :: TCFDB -> IO TCErrorCode
-ecode (TCFDB fdb) =
-    withForeignPtr fdb $ \fdb' -> TCErrorCode `fmap` c_tcfdbecode fdb'
+ecode fdb =
+    withForeignPtr (unTCFDB fdb) $ \fdb' ->
+        TCErrorCode `fmap` c_tcfdbecode fdb'
 
 tune :: TCFDB -> Int32 -> Int64 -> IO Bool
-tune (TCFDB fdb) width limsiz =
-    withForeignPtr fdb $ \fdb' -> c_tcfdbtune fdb' width limsiz
+tune fdb width limsiz =
+    withForeignPtr (unTCFDB fdb) $ \fdb' -> c_tcfdbtune fdb' width limsiz
 
 open :: TCFDB -> String -> [OpenMode] -> IO Bool
 open (TCFDB fdb) fpath modes =

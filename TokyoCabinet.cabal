@@ -49,6 +49,8 @@ Executable ListTest
   Main-Is:              tests/ListTest.hs
   Extra-libraries:      tokyocabinet
   Build-depends:        HUnit >= 1.2
+  Extensions:           CPP, ForeignFunctionInterface,
+                        EmptyDataDecls, TypeSynonymInstances
   Other-modules:
     Database.TokyoCabinet.List
     Database.TokyoCabinet.List.C
@@ -58,12 +60,32 @@ Executable HDBTest
     Buildable:            True
   else
     Buildable:            False
-  Main-Is:              tests/HDB.hs
+  Main-Is:              tests/HDBTest.hs
   Extra-libraries:      tokyocabinet
   Build-depends:        HUnit >= 1.2
+  Extensions:           CPP, ForeignFunctionInterface,
+                        EmptyDataDecls, TypeSynonymInstances
   Other-modules:
     Database.TokyoCabinet.HDB
     Database.TokyoCabinet.HDB.C
+    Database.TokyoCabinet.Error
+    Database.TokyoCabinet.List
+    Database.TokyoCabinet.List.C
+    Database.TokyoCabinet.Storable
+
+Executable FDBTest
+  if flag(BuildTest)
+    Buildable:            True
+  else
+    Buildable:            False
+  Main-Is:              tests/FDBTest.hs
+  Extra-libraries:      tokyocabinet
+  Build-depends:        HUnit >= 1.2
+  Extensions:           CPP, ForeignFunctionInterface,
+                        EmptyDataDecls, TypeSynonymInstances
+  Other-modules:
+    Database.TokyoCabinet.FDB
+    Database.TokyoCabinet.FDB.C
     Database.TokyoCabinet.Error
     Database.TokyoCabinet.List
     Database.TokyoCabinet.List.C
