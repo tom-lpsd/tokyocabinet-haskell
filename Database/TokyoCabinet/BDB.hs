@@ -1,32 +1,7 @@
 module Database.TokyoCabinet.BDB
     (
     -- * error type and utility
-      TCErrorCode
-    , errmsg
-    , eSUCCESS
-    , eTHREAD
-    , eINVALID
-    , eNOFILE
-    , eNOPERM
-    , eMETA
-    , eRHEAD
-    , eOPEN
-    , eCLOSE
-    , eTRUNC
-    , eSYNC
-    , eSTAT
-    , eSEEK
-    , eREAD
-    , eWRITE
-    , eMMAP
-    , eLOCK
-    , eUNLINK
-    , eRENAME
-    , eMKDIR
-    , eRMDIR
-    , eKEEP
-    , eNOREC
-    , eMISC
+      TCErrorCode(..)
     -- * open mode
     , oREADER
     , oWRITER
@@ -110,7 +85,7 @@ delete :: TCBDB -> IO ()
 delete (TCBDB bdb) = finalizeForeignPtr bdb
 
 ecode :: TCBDB -> IO TCErrorCode
-ecode (TCBDB bdb) = TCErrorCode `fmap` withForeignPtr bdb c_tcbdbecode
+ecode (TCBDB bdb) = cintToError `fmap` withForeignPtr bdb c_tcbdbecode
 
 tune :: TCBDB -> Int32 -> Int32
      -> Int64 -> Int8 -> Int8 -> [TuningOption] -> IO Bool

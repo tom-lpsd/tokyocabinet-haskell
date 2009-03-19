@@ -1,32 +1,7 @@
 module Database.TokyoCabinet.FDB
     (
     -- * error type and utility
-      TCErrorCode
-    , errmsg
-    , eSUCCESS
-    , eTHREAD
-    , eINVALID
-    , eNOFILE
-    , eNOPERM
-    , eMETA
-    , eRHEAD
-    , eOPEN
-    , eCLOSE
-    , eTRUNC
-    , eSYNC
-    , eSTAT
-    , eSEEK
-    , eREAD
-    , eWRITE
-    , eMMAP
-    , eLOCK
-    , eUNLINK
-    , eRENAME
-    , eMKDIR
-    , eRMDIR
-    , eKEEP
-    , eNOREC
-    , eMISC
+      TCErrorCode(..)
     -- * open mode
     , oREADER
     , oWRITER
@@ -99,7 +74,7 @@ delete fdb = finalizeForeignPtr $ unTCFDB fdb
 ecode :: TCFDB -> IO TCErrorCode
 ecode fdb =
     withForeignPtr (unTCFDB fdb) $ \fdb' ->
-        TCErrorCode `fmap` c_tcfdbecode fdb'
+        cintToError `fmap` c_tcfdbecode fdb'
 
 tune :: TCFDB -> Int32 -> Int64 -> IO Bool
 tune fdb width limsiz =

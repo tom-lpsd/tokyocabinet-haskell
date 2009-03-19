@@ -1,32 +1,7 @@
 module Database.TokyoCabinet.HDB
     (
     -- * error type and utility
-      TCErrorCode
-    , errmsg
-    , eSUCCESS
-    , eTHREAD
-    , eINVALID
-    , eNOFILE
-    , eNOPERM
-    , eMETA
-    , eRHEAD
-    , eOPEN
-    , eCLOSE
-    , eTRUNC
-    , eSYNC
-    , eSTAT
-    , eSEEK
-    , eREAD
-    , eWRITE
-    , eMMAP
-    , eLOCK
-    , eUNLINK
-    , eRENAME
-    , eMKDIR
-    , eRMDIR
-    , eKEEP
-    , eNOREC
-    , eMISC
+      TCErrorCode(..)
      -- * open mode
     , oREADER
     , oWRITER
@@ -113,9 +88,7 @@ delete :: TCHDB -> IO ()
 delete (TCHDB fptr) = finalizeForeignPtr fptr
 
 ecode :: TCHDB -> IO TCErrorCode
-ecode (TCHDB fptr) = withForeignPtr fptr $ \p -> do
-                       e <- c_tchdbecode p
-                       return $ TCErrorCode e
+ecode (TCHDB fptr) = cintToError `fmap` withForeignPtr fptr c_tchdbecode
 
 tune :: TCHDB -> Int64 -> Int8 -> Int8 -> [TuningOption] -> IO Bool
 tune (TCHDB fptr) bnum apow fpow options =
