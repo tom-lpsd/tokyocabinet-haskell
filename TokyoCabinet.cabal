@@ -62,10 +62,11 @@ Executable HDBTest
     Buildable:            False
   Main-Is:              tests/HDBTest.hs
   Extra-libraries:      tokyocabinet
-  Build-depends:        HUnit >= 1.2
+  Build-depends:        HUnit >= 1.2, base >= 4.0, directory >= 1.0
   Extensions:           CPP, ForeignFunctionInterface,
                         EmptyDataDecls, TypeSynonymInstances
   Other-modules:
+    TestUtil
     Database.TokyoCabinet.HDB
     Database.TokyoCabinet.HDB.C
     Database.TokyoCabinet.Error
