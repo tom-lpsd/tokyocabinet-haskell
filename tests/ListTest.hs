@@ -1,7 +1,7 @@
 module Main where
 import Test.HUnit
-import Control.Monad
 
+import Control.Monad
 import Data.Int
 import Data.Word
 import qualified Data.ByteString.Char8 as S
@@ -27,10 +27,10 @@ push_pop_test = do
   push xs "foo"
   push xs "bar"
   push xs "baz"
-  mapM_ join [(@?= (Just "baz")) `fmap` pop xs,
-              (@?= (Just "bar")) `fmap` pop xs,
-              (@?= (Just "foo")) `fmap` pop xs,
-              (@?= (Nothing :: Maybe String)) `fmap` pop xs]
+  (@?= (Just "baz")) =<< pop xs
+  (@?= (Just "bar")) =<< pop xs
+  (@?= (Just "foo")) =<< pop xs
+  (@?= (Nothing :: Maybe String)) =<< pop xs
   delete xs
 
 unshift_shift_test = do
@@ -38,10 +38,10 @@ unshift_shift_test = do
   unshift xs "foo"
   unshift xs "bar"
   unshift xs "baz"
-  mapM_ join [(@?= (Just "baz")) `fmap` shift xs,
-              (@?= (Just "bar")) `fmap` shift xs,
-              (@?= (Just "foo")) `fmap` shift xs,
-              (@?= (Nothing :: Maybe String)) `fmap` shift xs]
+  (@?= (Just "baz")) =<< shift xs
+  (@?= (Just "bar")) =<< shift xs
+  (@?= (Just "foo")) =<< shift xs
+  (@?= (Nothing :: Maybe String)) =<< shift xs
   delete xs
 
 clear_test = do
@@ -49,30 +49,30 @@ clear_test = do
   push xs ""
   push xs ""
   push xs ""
-  join $ (@?= 3) `fmap` len xs
+  (@?= 3) =<< len xs
   clear xs
-  join $ (@?= 0) `fmap` len xs
+  (@?= 0) =<< len xs
   delete xs
 
 insert_remove_test = do
   xs <- new
-  join $ (@?= (Nothing :: Maybe String)) `fmap` remove xs 0
+  (@?= (Nothing :: Maybe String)) =<< remove xs 0
   insert xs 0 "foo"
   insert xs 0 "bar"
   insert xs 1 "baz"
-  forM_ [ (@?= 3) `fmap` len xs
-        , (@?= (Just "bar")) `fmap` get xs 0
-        , (@?= (Just "baz")) `fmap` get xs 1
-        , (@?= (Just "foo")) `fmap` get xs 2
-        , (@?= (Nothing :: Maybe String)) `fmap` get xs 3 ] join
+  (@?= 3)            =<< len xs
+  (@?= (Just "bar")) =<< get xs 0
+  (@?= (Just "baz")) =<< get xs 1
+  (@?= (Just "foo")) =<< get xs 2
+  (@?= (Nothing :: Maybe String)) =<< get xs 3
   remove xs 0 :: IO (Maybe String)
-  forM_ [ (@?= 2) `fmap` len xs
-        , (@?= (Just "foo")) `fmap` get xs 1 ] join
+  (@?= 2) =<< len xs
+  (@?= (Just "foo")) =<< get xs 1
   remove xs 1 :: IO (Maybe String)
-  forM_ [ (@?= 1) `fmap` len xs
-        , (@?= (Just "baz")) `fmap` get xs 0
-        , (@?= (Nothing :: Maybe String)) `fmap` get xs 1
-        , (@?= (Nothing :: Maybe String)) `fmap` remove xs 1 ] join
+  (@?= 1)                         =<< len xs
+  (@?= (Just "baz"))              =<< get xs 0
+  (@?= (Nothing :: Maybe String)) =<< get xs 1
+  (@?= (Nothing :: Maybe String)) =<< remove xs 1
   delete xs
 
 sort_test = do
@@ -84,10 +84,10 @@ sort_test = do
   push xs y
   push xs z
   sort xs
-  forM_ [ (@?= 3) `fmap` len xs
-        , (@?= (Just z)) `fmap` get xs 0
-        , (@?= (Just x)) `fmap` get xs 1
-        , (@?= (Just y)) `fmap` get xs 2 ] join  
+  (@?= 3)        =<< len xs
+  (@?= (Just z)) =<< get xs 0
+  (@?= (Just x)) =<< get xs 1
+  (@?= (Just y)) =<< get xs 2
   delete xs
 
 lsearch_test = do
@@ -98,9 +98,9 @@ lsearch_test = do
   push xs x
   push xs y
   push xs z
-  forM_ [ (@?= 2) `fmap` lsearch xs z
-        , (@?= 0) `fmap` lsearch xs x
-        , (@?= 1) `fmap` lsearch xs y ] join  
+  (@?= 2) =<< lsearch xs z
+  (@?= 0) =<< lsearch xs x
+  (@?= 1) =<< lsearch xs y
   delete xs
 
 bsearch_test = do
@@ -111,9 +111,9 @@ bsearch_test = do
   push xs z
   push xs x
   push xs y
-  forM_ [ (@?= 0) `fmap` bsearch xs z
-        , (@?= 1) `fmap` bsearch xs x
-        , (@?= 2) `fmap` bsearch xs y ] join  
+  (@?= 0) =<< bsearch xs z
+  (@?= 1) =<< bsearch xs x
+  (@?= 2) =<< bsearch xs y
   delete xs
 
 int_test = do
@@ -128,16 +128,16 @@ int_test = do
   pushlist xs num_int16
   pushlist xs num_int32
   pushlist xs num_int64
-  join $ (@?= (Just (num_int   !! 0))) `fmap` get xs 0
-  join $ (@?= (Just (num_int   !! 9))) `fmap` get xs 9
-  join $ (@?= (Just (num_int8  !! 0))) `fmap` get xs 10
-  join $ (@?= (Just (num_int8  !! 9))) `fmap` get xs 19
-  join $ (@?= (Just (num_int16 !! 0))) `fmap` get xs 20
-  join $ (@?= (Just (num_int16 !! 9))) `fmap` get xs 29
-  join $ (@?= (Just (num_int32 !! 0))) `fmap` get xs 30
-  join $ (@?= (Just (num_int32 !! 9))) `fmap` get xs 39
-  join $ (@?= (Just (num_int64 !! 0))) `fmap` get xs 40
-  join $ (@?= (Just (num_int64 !! 9))) `fmap` get xs 49
+  get xs 0  >>= (@?= (Just (num_int   !! 0)))
+  get xs 9  >>= (@?= (Just (num_int   !! 9)))
+  get xs 10 >>= (@?= (Just (num_int8  !! 0)))
+  get xs 19 >>= (@?= (Just (num_int8  !! 9)))
+  get xs 20 >>= (@?= (Just (num_int16 !! 0)))
+  get xs 29 >>= (@?= (Just (num_int16 !! 9)))
+  get xs 30 >>= (@?= (Just (num_int32 !! 0)))
+  get xs 39 >>= (@?= (Just (num_int32 !! 9)))
+  get xs 40 >>= (@?= (Just (num_int64 !! 0)))
+  get xs 49 >>= (@?= (Just (num_int64 !! 9)))
     where
       pushlist xs ys = mapM_ (push xs) ys
 
@@ -151,12 +151,12 @@ word_test = do
   pushlist xs num_word16
   pushlist xs num_word32
   pushlist xs num_word64
-  join $ (@?= (Just (num_word8  !! 0))) `fmap` get xs 0
-  join $ (@?= (Just (num_word8  !! 9))) `fmap` get xs 9
-  join $ (@?= (Just (num_word16 !! 0))) `fmap` get xs 10
-  join $ (@?= (Just (num_word16 !! 9))) `fmap` get xs 19
-  join $ (@?= (Just (num_word32 !! 0))) `fmap` get xs 20
-  join $ (@?= (Just (num_word32 !! 9))) `fmap` get xs 29
+  get xs 0  >>= (@?= (Just (num_word8  !! 0)))
+  get xs 9  >>= (@?= (Just (num_word8  !! 9)))
+  get xs 10 >>= (@?= (Just (num_word16 !! 0)))
+  get xs 19 >>= (@?= (Just (num_word16 !! 9)))
+  get xs 20 >>= (@?= (Just (num_word32 !! 0)))
+  get xs 29 >>= (@?= (Just (num_word32 !! 9)))
     where
       pushlist xs ys = mapM_ (push xs) ys
 
@@ -164,17 +164,17 @@ strict_bytestring_test = do
   xs <- new
   let vals = map S.pack ["foo", "bar", "baz"]
   mapM_ (push xs) vals
-  join $ (@?= (Just (vals  !! 0))) `fmap` get xs 0
-  join $ (@?= (Just (vals  !! 1))) `fmap` get xs 1
-  join $ (@?= (Just (vals  !! 2))) `fmap` get xs 2  
+  get xs 0 >>= (@?= (Just (vals  !! 0)))
+  get xs 1 >>= (@?= (Just (vals  !! 1)))
+  get xs 2 >>= (@?= (Just (vals  !! 2)))
 
 lazy_bytestring_test = do
   xs <- new
   let vals = map L.pack ["foo", "bar", "baz"]
   mapM_ (push xs) vals
-  join $ (@?= (Just (vals  !! 0))) `fmap` get xs 0
-  join $ (@?= (Just (vals  !! 1))) `fmap` get xs 1
-  join $ (@?= (Just (vals  !! 2))) `fmap` get xs 2  
+  get xs 0 >>= (@?= (Just (vals  !! 0)))
+  get xs 1 >>= (@?= (Just (vals  !! 1)))
+  get xs 2 >>= (@?= (Just (vals  !! 2)))
 
 dump_load_test = do
   xs <- new
