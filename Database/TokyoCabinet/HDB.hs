@@ -88,6 +88,7 @@ import Foreign.Marshal (alloca)
 import Foreign.Marshal.Utils (maybePeek)
 
 import Data.Int
+import Data.Word
 import Data.Bits
 
 import Database.TokyoCabinet.HDB.C
@@ -137,7 +138,7 @@ open (TCHDB fptr) name modes =
 close :: TCHDB -> IO Bool
 close (TCHDB fptr) = withForeignPtr fptr c_tchdbclose
 
-type PutFunc = Ptr HDB -> CString -> CInt -> CString -> CInt -> IO Bool
+type PutFunc = Ptr HDB -> Ptr Word8 -> CInt -> Ptr Word8 -> CInt -> IO Bool
 
 liftPutFunc ::
     (S.Storable a, S.Storable b) => PutFunc -> TCHDB -> a -> b -> IO Bool
@@ -145,7 +146,8 @@ liftPutFunc func (TCHDB fptr) key val =
     withForeignPtr fptr $ \p ->
         S.withPtrLen key $ \(kbuf, ksize) ->
         S.withPtrLen val $ \(vbuf, vsize) ->
-            func p kbuf (fromIntegral ksize) vbuf (fromIntegral vsize)
+            func p (castPtr kbuf) (fromIntegral ksize)
+                   (castPtr vbuf) (fromIntegral vsize)
 
 put :: (S.Storable a, S.Storable b) => TCHDB -> a -> b -> IO Bool
 put = liftPutFunc c_tchdbput
@@ -163,23 +165,23 @@ out :: (S.Storable a) => TCHDB -> a -> IO Bool
 out (TCHDB fptr) key =
     withForeignPtr fptr $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) ->
-            c_tchdbout p kbuf (fromIntegral ksiz)
+            c_tchdbout p (castPtr kbuf) (fromIntegral ksiz)
 
 get :: (S.Storable a, S.Storable b) => TCHDB -> a -> IO (Maybe b)
 get (TCHDB fptr) key =
     withForeignPtr fptr $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) ->
             alloca $ \sizbuf -> do
-                vbuf <- c_tchdbget p kbuf (fromIntegral ksiz) sizbuf
+                vbuf <- c_tchdbget p (castPtr kbuf) (fromIntegral ksiz) sizbuf
                 flip maybePeek vbuf $ \vp ->
                     do siz <- peek sizbuf
-                       S.peekPtrLen (vp, fromIntegral siz)
+                       S.peekPtrLen (castPtr vp, fromIntegral siz)
 
 vsiz :: (S.Storable a) => TCHDB -> a -> IO (Maybe Int)
 vsiz (TCHDB fptr) key =
     withForeignPtr fptr $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) -> do
-          vsize <- c_tchdbvsiz p kbuf (fromIntegral ksiz)
+          vsize <- c_tchdbvsiz p (castPtr kbuf) (fromIntegral ksiz)
           return $ if vsize == -1
                      then Nothing
                      else Just (fromIntegral vsize)
@@ -194,13 +196,13 @@ iternext (TCHDB fptr) =
             vbuf <- c_tchdbiternext p sizbuf
             flip maybePeek vbuf $ \vp ->
                 do siz <- peek sizbuf
-                   S.peekPtrLen (vp, fromIntegral siz)
+                   S.peekPtrLen (castPtr vp, fromIntegral siz)
 
 fwmkeys :: (S.Storable a, S.Storable b) => TCHDB -> a -> Int -> IO [b]
 fwmkeys (TCHDB fptr) key maxn = 
     withForeignPtr fptr $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) -> do
-            lp <- c_tchdbfwmkeys p kbuf (fromIntegral ksiz) (fromIntegral maxn)
+            lp <- c_tchdbfwmkeys p (castPtr kbuf) (fromIntegral ksiz) (fromIntegral maxn)
             results <- mkList lp []
             c_tclistdel lp
             return results
