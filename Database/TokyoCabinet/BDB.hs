@@ -177,7 +177,7 @@ range (TCBDB bdb) bkey binc ekey einc maxn =
       withPtrLen' (Just key) action = S.withPtrLen key action
       withPtrLen' Nothing action = action (nullPtr, 0)
 
-fwmkeys :: (S.Storable a) => TCBDB -> a -> Int -> IO [a]
+fwmkeys :: (S.Storable a, S.Storable b) => TCBDB -> a -> Int -> IO [b]
 fwmkeys (TCBDB bdb) prefix maxn =
     withForeignPtr bdb $ \bdb' ->
         S.withPtrLen prefix $ \(pbuf, psiz) ->

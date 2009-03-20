@@ -153,9 +153,9 @@ iternext (TCHDB fptr) =
 fwmkeys :: (S.Storable a, S.Storable b) => TCHDB -> a -> Int -> IO [b]
 fwmkeys (TCHDB fptr) key maxn = 
     withForeignPtr fptr $ \p ->
-        S.withPtrLen key $ \(kbuf, ksiz) -> do
-            lp <- c_tchdbfwmkeys p kbuf ksiz (fromIntegral maxn)
-            peekTCListAndFree lp
+        S.withPtrLen key $ \(kbuf, ksiz) ->
+            c_tchdbfwmkeys p kbuf ksiz (fromIntegral maxn)
+                           >>= peekTCListAndFree
 
 addint :: (S.Storable a) => TCHDB -> a -> Int -> IO (Maybe Int)
 addint (TCHDB fptr) key num =
