@@ -1,4 +1,4 @@
-{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 module Database.TokyoCabinet where
 
 import Database.TokyoCabinet.Storable
@@ -141,3 +141,11 @@ instance TokyoCabinet F.TCFDB where
     path = F.path
     rnum = F.rnum
     size = F.fsiz
+
+withTokyoCabinet :: (TokyoCabinet a) => String -> (a -> TCM b) -> TCM b
+withTokyoCabinet fname action =
+    do tc <- new
+       open tc fname [OREADER, OWRITER, OCREAT]
+       result <- action tc
+       close tc
+       return result

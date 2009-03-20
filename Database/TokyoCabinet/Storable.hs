@@ -1,4 +1,3 @@
-{-# LANGUAGE TypeSynonymInstances #-}
 module Database.TokyoCabinet.Storable where
 
 import Data.Int

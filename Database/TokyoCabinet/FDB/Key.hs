@@ -1,3 +1,4 @@
+{-# LANGUAGE TypeSynonymInstances #-}
 module Database.TokyoCabinet.FDB.Key (Key(..), ID(..)) where
 
 import Database.TokyoCabinet.FDB.C (ID(..), unID)
