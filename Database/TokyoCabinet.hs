@@ -8,10 +8,13 @@ module Database.TokyoCabinet
     , H.TCHDB
     , F.TCFDB
     , B.TCBDB
+    , TCECODE(..)
+    , errmsg
     ) where
 
 import Control.Monad.Trans (MonadIO)
 
+import Database.TokyoCabinet.Error
 import Database.TokyoCabinet.Storable
 import Database.TokyoCabinet.FDB.Key
 import qualified Database.TokyoCabinet.HDB as H
@@ -52,6 +55,7 @@ class TCDB a where
     path      :: a -> TCM (Maybe String)
     rnum      :: a -> TCM Int64
     size      :: a -> TCM Int64
+    ecode     :: a -> TCM TCECODE
 
 openModeToHOpenMode :: OpenMode -> H.OpenMode
 openModeToHOpenMode OREADER = H.OREADER
@@ -83,6 +87,7 @@ instance TCDB H.TCHDB where
     path                   = TCM . H.path
     rnum                   = TCM . H.rnum
     size                   = TCM . H.fsiz
+    ecode                  = TCM . H.ecode
 
 openModeToBOpenMode :: OpenMode -> B.OpenMode
 openModeToBOpenMode OREADER = B.OREADER
@@ -114,6 +119,7 @@ instance TCDB B.TCBDB where
     path                   = TCM . B.path
     rnum                   = TCM . B.rnum
     size                   = TCM . B.fsiz
+    ecode                  = TCM . B.ecode
 
 openModeToFOpenMode :: OpenMode -> F.OpenMode
 openModeToFOpenMode OREADER = F.OREADER
@@ -151,3 +157,4 @@ instance TCDB F.TCFDB where
     path                   = TCM . F.path
     rnum                   = TCM . F.rnum
     size                   = TCM . F.fsiz
+    ecode                  = TCM . F.ecode
