@@ -42,12 +42,12 @@ put key val = do tc <- ask
 
 kvstore :: (Storable k, Storable v, TCDB tc) => [(k, v)] -> TCReader tc Bool
 kvstore kv = do open "abcd.tch" [OWRITER, OCREAT]
-                mapM_ (\(k, v) -> put k v) kv
+                mapM_ (uncurry put) kv
                 close
 
 main :: IO ()
 main = runTCM $ do h <- new :: TCM TCHDB
-                   let kv =[ ("foo", 111)
+                   let kv =[ ("foo", 112)
                            , ("bar", 200)
                            , ("baz", 300) ] :: [(String, Int)]
                    runTCReader (kvstore kv) h >> return ()
