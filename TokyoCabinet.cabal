@@ -35,7 +35,8 @@ Library
   other-modules:
     Database.TokyoCabinet.Internal
   Extensions:           CPP, ForeignFunctionInterface,
-                        EmptyDataDecls, TypeSynonymInstances
+                        EmptyDataDecls, TypeSynonymInstances,
+                        GeneralizedNewtypeDeriving
   Extra-libraries:      tokyocabinet
   Extra-lib-dirs:       /usr/local/lib
   Include-dirs:         /usr/local/include
