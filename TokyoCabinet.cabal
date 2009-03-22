@@ -18,7 +18,7 @@ Flag BuildTest
   Default:      False
 
 Library
-  Build-Depends:        base, bytestring
+  Build-Depends:        base, bytestring, mtl
   Exposed-modules:
     Database.TokyoCabinet,
     Database.TokyoCabinet.HDB
