@@ -1,6 +1,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 module Database.TokyoCabinet where
 
+import Control.Exception
 import Database.TokyoCabinet.Storable
 import Database.TokyoCabinet.FDB.Key
 import qualified Database.TokyoCabinet.HDB as H
@@ -9,39 +10,38 @@ import qualified Database.TokyoCabinet.BDB as B
 
 import Data.Int
 
-type TCM = IO
+newtype TCM a = TCM { runTCM :: IO a } deriving (Monad)
 
-data OpenMode =
-    OREADER |
-    OWRITER |
-    OCREAT  |
-    OTRUNC  |
-    ONOLCK  |
-    OLCKNB
-    deriving (Eq, Ord, Show)
+data OpenMode = OREADER |
+                OWRITER |
+                OCREAT  |
+                OTRUNC  |
+                ONOLCK  |
+                OLCKNB
+                deriving (Eq, Ord, Show)
 
-class TokyoCabinet a where
-    new     :: TCM a
-    delete  :: a -> TCM ()
-    open    :: a -> String -> [OpenMode] -> TCM Bool
-    close   :: a -> TCM Bool
-    put     :: (Storable k, Storable v) => a -> k -> v -> TCM Bool
-    putkeep :: (Storable k, Storable v) => a -> k -> v -> TCM Bool
-    putcat  :: (Storable k, Storable v) => a -> k -> v -> TCM Bool
-    get     :: (Storable k, Storable v) => a -> k -> TCM (Maybe v)
-    out     :: (Storable k) => a -> k -> TCM Bool
-    vsiz    :: (Storable k) => a -> k -> TCM (Maybe Int)
-    iterinit :: a -> TCM Bool
-    iternext :: (Storable v) => a -> TCM (Maybe v)
-    fwmkeys :: (Storable k, Storable v) => a -> k -> Int -> TCM [v]
-    addint :: (Storable k) => a -> k -> Int -> TCM (Maybe Int)
+class TCDB a where
+    new       :: TCM a
+    delete    :: a -> TCM ()
+    open      :: a -> String -> [OpenMode] -> TCM Bool
+    close     :: a -> TCM Bool
+    put       :: (Storable k, Storable v) => a -> k -> v -> TCM Bool
+    putkeep   :: (Storable k, Storable v) => a -> k -> v -> TCM Bool
+    putcat    :: (Storable k, Storable v) => a -> k -> v -> TCM Bool
+    get       :: (Storable k, Storable v) => a -> k -> TCM (Maybe v)
+    out       :: (Storable k) => a -> k -> TCM Bool
+    vsiz      :: (Storable k) => a -> k -> TCM (Maybe Int)
+    iterinit  :: a -> TCM Bool
+    iternext  :: (Storable v) => a -> TCM (Maybe v)
+    fwmkeys   :: (Storable k, Storable v) => a -> k -> Int -> TCM [v]
+    addint    :: (Storable k) => a -> k -> Int -> TCM (Maybe Int)
     adddouble :: (Storable k) => a -> k -> Double -> TCM (Maybe Double)
-    sync :: a -> TCM Bool
-    vanish :: a -> TCM Bool
-    copy :: a -> String -> TCM Bool
-    path :: a -> TCM (Maybe String)
-    rnum :: a -> TCM Int64
-    size :: a -> TCM Int64
+    sync      :: a -> TCM Bool
+    vanish    :: a -> TCM Bool
+    copy      :: a -> String -> TCM Bool
+    path      :: a -> TCM (Maybe String)
+    rnum      :: a -> TCM Int64
+    size      :: a -> TCM Int64
 
 hOpenModeToOpenMode :: OpenMode -> H.OpenMode
 hOpenModeToOpenMode OREADER = H.OREADER
@@ -51,28 +51,28 @@ hOpenModeToOpenMode OTRUNC  = H.OTRUNC
 hOpenModeToOpenMode ONOLCK  = H.ONOLCK
 hOpenModeToOpenMode OLCKNB  = H.OLCKNB
 
-instance TokyoCabinet H.TCHDB where
-    new = H.new
-    delete = H.delete
-    open tc name modes = H.open tc name (map hOpenModeToOpenMode modes)
-    close = H.close
-    put = H.put
-    putkeep = H.putkeep
-    putcat = H.putcat
-    get = H.get
-    out = H.out
-    vsiz = H.vsiz
-    iterinit = H.iterinit
-    iternext = H.iternext
-    fwmkeys = H.fwmkeys
-    addint = H.addint
-    adddouble = H.adddouble
-    sync = H.sync
-    vanish = H.vanish
-    copy = H.copy
-    path = H.path
-    rnum = H.rnum
-    size = H.fsiz
+instance TCDB H.TCHDB where
+    new = TCM $ H.new
+    delete = TCM . H.delete
+    open tc name modes = TCM $ H.open tc name (map hOpenModeToOpenMode modes)
+    close = TCM . H.close
+    put tc key val = TCM $ H.put tc key val
+    putkeep tc key val = TCM $ H.putkeep tc key val
+    putcat tc key val = TCM $ H.putcat tc key val
+    get tc key = TCM $ H.get tc key
+    out tc key = TCM $ H.out tc key
+    vsiz tc key = TCM $ H.vsiz tc key
+    iterinit = TCM . H.iterinit
+    iternext = TCM . H.iternext
+    fwmkeys tc prefix maxn = TCM $ H.fwmkeys tc prefix maxn
+    addint tc key num = TCM $ H.addint tc key num
+    adddouble tc key num = TCM $ H.adddouble tc key num
+    sync = TCM . H.sync
+    vanish = TCM . H.vanish
+    copy tc fpath = TCM $ H.copy tc fpath
+    path = TCM . H.path
+    rnum = TCM . H.rnum
+    size = TCM . H.fsiz
 
 bOpenModeToOpenMode :: OpenMode -> B.OpenMode
 bOpenModeToOpenMode OREADER = B.OREADER
@@ -82,7 +82,8 @@ bOpenModeToOpenMode OTRUNC  = B.OTRUNC
 bOpenModeToOpenMode ONOLCK  = B.ONOLCK
 bOpenModeToOpenMode OLCKNB  = B.OLCKNB
 
-instance TokyoCabinet B.TCBDB where
+{-
+instance TCDB B.TCBDB where
     new = B.new
     delete = B.delete
     open tc name modes = B.open tc name (map bOpenModeToOpenMode modes)
@@ -104,6 +105,7 @@ instance TokyoCabinet B.TCBDB where
     path = B.path
     rnum = B.rnum
     size = B.fsiz
+-}
 
 fOpenModeToOpenMode :: OpenMode -> F.OpenMode
 fOpenModeToOpenMode OREADER = F.OREADER
@@ -119,7 +121,8 @@ storableToKey = undefined
 keyToStorable :: (Key a, Storable b) => a -> b
 keyToStorable = undefined
 
-instance TokyoCabinet F.TCFDB where
+{-
+instance TCDB F.TCFDB where
     new = F.new
     delete = F.delete
     open tc name modes = F.open tc name (map fOpenModeToOpenMode modes)
@@ -141,11 +144,12 @@ instance TokyoCabinet F.TCFDB where
     path = F.path
     rnum = F.rnum
     size = F.fsiz
+-}
 
-withTokyoCabinet :: (TokyoCabinet a) => String -> (a -> TCM b) -> TCM b
+withTokyoCabinet :: (TCDB a) => String -> (a -> TCM b) -> TCM b
 withTokyoCabinet fname action =
-    do tc <- new
-       open tc fname [OREADER, OWRITER, OCREAT]
-       result <- action tc
-       close tc
-       return result
+    TCM $ bracket (runTCM open') (runTCM . close') (runTCM . action)
+    where  open' = do tc <- new
+                      open tc fname [OREADER, OWRITER, OCREAT]
+                      return tc
+           close' tc = close tc
