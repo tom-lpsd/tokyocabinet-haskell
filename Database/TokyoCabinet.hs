@@ -7,7 +7,7 @@ module Database.TokyoCabinet
     , TCDB(..)
     , H.TCHDB
     , F.TCFDB
-    , B.TCBDB
+    , TCBDB
     , E.TCECODE(..)
     , E.errmsg
     ) where
@@ -19,12 +19,14 @@ import Database.TokyoCabinet.FDB.Key
 import qualified Database.TokyoCabinet.HDB as H
 import qualified Database.TokyoCabinet.FDB as F
 import qualified Database.TokyoCabinet.BDB as B
+import qualified Database.TokyoCabinet.BDB.Cursor as C
 import qualified Database.TokyoCabinet.Error as E
 
 import Foreign.Ptr (castPtr)
 import Foreign.C.String (newCStringLen)
 
 import Data.Int
+import Data.IORef
 
 newtype TCM a = TCM { runTCM :: IO a } deriving (Monad, MonadIO)
 
@@ -60,6 +62,14 @@ class TCDB a where
     size      :: a -> TCM Int64
     ecode     :: a -> TCM E.TCECODE
 
+openModeToHOpenMode :: OpenMode -> H.OpenMode
+openModeToHOpenMode OREADER = H.OREADER
+openModeToHOpenMode OWRITER = H.OWRITER
+openModeToHOpenMode OCREAT  = H.OCREAT
+openModeToHOpenMode OTRUNC  = H.OTRUNC
+openModeToHOpenMode ONOLCK  = H.ONOLCK
+openModeToHOpenMode OLCKNB  = H.OLCKNB
+
 lift :: (a -> IO b) -> a -> TCM b
 lift = (TCM .)
 
@@ -68,20 +78,6 @@ lift2 f x y = TCM $ f x y
 
 lift3 :: (a -> b -> c -> IO d) -> a -> b -> c -> TCM d
 lift3 f x y z = TCM $ f x y z
-
-liftF2 :: (Storable b) => (a -> ID -> IO c) -> a -> b -> TCM c
-liftF2 f x y = TCM $ f x (storableToKey y)
-
-liftF3 :: (Storable b) => (a -> ID -> c -> IO d) -> a -> b -> c -> TCM d
-liftF3 f x y z = TCM $ f x (storableToKey y) z
-
-openModeToHOpenMode :: OpenMode -> H.OpenMode
-openModeToHOpenMode OREADER = H.OREADER
-openModeToHOpenMode OWRITER = H.OWRITER
-openModeToHOpenMode OCREAT  = H.OCREAT
-openModeToHOpenMode OTRUNC  = H.OTRUNC
-openModeToHOpenMode ONOLCK  = H.ONOLCK
-openModeToHOpenMode OLCKNB  = H.OLCKNB
 
 instance TCDB H.TCHDB where
     new               = TCM   H.new
@@ -115,6 +111,57 @@ openModeToBOpenMode OTRUNC  = B.OTRUNC
 openModeToBOpenMode ONOLCK  = B.ONOLCK
 openModeToBOpenMode OLCKNB  = B.OLCKNB
 
+data TCBDB = TCBDB { unTCBDB    :: B.TCBDB
+                   , unTCBDBCUR :: IORef (Maybe C.TCBDBCUR) }
+
+liftB :: (B.TCBDB -> IO a) -> TCBDB -> TCM a
+liftB f x = TCM $ f (unTCBDB x)
+
+liftB2 :: (B.TCBDB -> a -> IO b) -> TCBDB -> a -> TCM b
+liftB2 f x y = TCM $ f (unTCBDB x) y
+
+liftB3 :: (B.TCBDB -> a -> b -> IO c) -> TCBDB -> a -> b -> TCM c
+liftB3 f x y z = TCM $ f (unTCBDB x) y z
+
+instance TCDB TCBDB where
+    new               = TCM $ do bdb <- B.new
+                                 cur <- newIORef Nothing
+                                 return $ TCBDB bdb cur
+    delete            = liftB  B.delete
+    open tc name mode = TCM $  B.open (unTCBDB tc) name
+                                   (map openModeToBOpenMode mode)
+    close             = liftB  B.close
+    put               = liftB3 B.put
+    putkeep           = liftB3 B.putkeep
+    putcat            = liftB3 B.putcat
+    get               = liftB2 B.get
+    out               = liftB2 B.out
+    vsiz              = liftB2 B.vsiz
+    iterinit bdb      = TCM $ do
+                          cur <- C.new (unTCBDB bdb)
+                          res <- C.first cur
+                          if res
+                            then writeIORef (unTCBDBCUR bdb) (Just cur)
+                                     >> return True
+                            else return False
+    iternext bdb      = TCM $ do
+                          cur <- readIORef (unTCBDBCUR bdb)
+                          case cur of
+                            Just cur' -> do k <- C.key cur'
+                                            C.next cur'
+                                            return k
+                            _         -> return Nothing
+    fwmkeys           = liftB3 B.fwmkeys
+    addint            = liftB3 B.addint
+    adddouble         = liftB3 B.adddouble
+    sync              = liftB  B.sync
+    vanish            = liftB  B.vanish
+    copy              = liftB2 B.copy
+    path              = liftB  B.path
+    rnum              = liftB  B.rnum
+    size              = liftB  B.fsiz
+    ecode             = liftB  B.ecode
+
 instance TCDB B.TCBDB where
     new               = TCM   B.new
     delete            = lift  B.delete
@@ -146,6 +193,12 @@ openModeToFOpenMode OCREAT  = F.OCREAT
 openModeToFOpenMode OTRUNC  = F.OTRUNC
 openModeToFOpenMode ONOLCK  = F.ONOLCK
 openModeToFOpenMode OLCKNB  = F.OLCKNB
+
+liftF2 :: (Storable b) => (a -> ID -> IO c) -> a -> b -> TCM c
+liftF2 f x y = TCM $ f x (storableToKey y)
+
+liftF3 :: (Storable b) => (a -> ID -> c -> IO d) -> a -> b -> c -> TCM d
+liftF3 f x y z = TCM $ f x (storableToKey y) z
 
 storableToKey :: (Storable a) => a -> ID
 storableToKey s = toID . strip . show $ s
