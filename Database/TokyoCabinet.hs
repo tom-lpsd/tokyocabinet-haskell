@@ -14,12 +14,15 @@ module Database.TokyoCabinet
 
 import Control.Monad.Trans (MonadIO)
 
-import Database.TokyoCabinet.Error
+import Database.TokyoCabinet.Error (TCECODE(..), errmsg)
 import Database.TokyoCabinet.Storable
 import Database.TokyoCabinet.FDB.Key
 import qualified Database.TokyoCabinet.HDB as H
 import qualified Database.TokyoCabinet.FDB as F
 import qualified Database.TokyoCabinet.BDB as B
+
+import Foreign.Ptr (castPtr)
+import Foreign.C.String (newCStringLen)
 
 import Data.Int
 
@@ -130,27 +133,36 @@ openModeToFOpenMode ONOLCK  = F.ONOLCK
 openModeToFOpenMode OLCKNB  = F.OLCKNB
 
 storableToKey :: (Storable a) => a -> ID
-storableToKey = undefined
+storableToKey s = toID . strip . show $ s
+    where
+      strip "" = ""
+      strip ('"':[]) = ""
+      strip ('"':xs) = strip xs
+      strip (x:xs) = x:strip xs
 
-keyToStorable :: (Key a, Storable b) => a -> b
-keyToStorable = undefined
+keyToStorable :: (Storable a) => ID -> IO a
+keyToStorable k = newCStringLen (show k) >>= \(ptr, len) ->
+                  peekPtrLen (castPtr ptr, fromIntegral len)
 
 instance TCDB F.TCFDB where
     new                    = TCM $ F.new
     delete                 = TCM . F.delete
     open tc name mode      = TCM $ F.open tc name (map openModeToFOpenMode mode)
     close                  = TCM . F.close
-    put tc key val         = undefined
-    putkeep tc key val     = undefined
-    putcat tc key val      = undefined
-    get tc key             = undefined
-    out tc key             = undefined
-    vsiz tc key            = undefined
-    iterinit               = undefined
-    iternext               = undefined
+    put tc key val         = TCM $ F.put tc (storableToKey key) val
+    putkeep tc key val     = TCM $ F.putkeep tc (storableToKey key) val
+    putcat tc key val      = TCM $ F.putcat tc (storableToKey key) val
+    get tc key             = TCM $ F.get tc (storableToKey key)
+    out tc key             = TCM $ F.out tc (storableToKey key)
+    vsiz tc key            = TCM $ F.vsiz tc (storableToKey key)
+    iterinit               = TCM . F.iterinit
+    iternext tc            = TCM $ do key <- F.iternext tc
+                                      case key of
+                                        Nothing -> return Nothing
+                                        Just x  -> Just `fmap` keyToStorable x
     fwmkeys tc prefix maxn = undefined
-    addint tc key num      = undefined
-    adddouble tc key num   = undefined
+    addint tc key num      = TCM $ F.addint tc (storableToKey key) num
+    adddouble tc key num   = TCM $ F.adddouble tc (storableToKey key) num 
     sync                   = TCM . F.sync
     vanish                 = TCM . F.vanish
     copy tc fpath          = TCM $ F.copy tc fpath

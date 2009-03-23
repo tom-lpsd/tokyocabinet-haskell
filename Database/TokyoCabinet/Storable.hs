@@ -22,7 +22,7 @@ liftPL f val action =
     f val $ \(buf, siz) ->
         action (castPtr buf, fromIntegral siz)
 
-class Storable a where
+class (Show a) => Storable a where
     withPtrLen :: a -> (PtrLen -> IO b) -> IO b
     peekPtrLen :: PtrLen -> IO a
     withPtrLenL :: [a] -> (PtrLen -> IO b) -> IO b

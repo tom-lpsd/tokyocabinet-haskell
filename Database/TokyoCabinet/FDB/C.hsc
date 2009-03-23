@@ -39,7 +39,14 @@ data ID =
     IDMAX  |
     IDNEXT |
     ID Int64
-    deriving (Eq, Ord, Show)
+    deriving (Eq, Ord)
+
+instance Show ID where
+    show IDMIN  = "min"
+    show IDPREV = "prev"
+    show IDMAX  = "max"
+    show IDNEXT = "next"
+    show (ID i) = show i
 
 unID :: ID -> Int64
 unID IDMIN  = #const FDBIDMIN
