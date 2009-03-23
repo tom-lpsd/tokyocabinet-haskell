@@ -68,6 +68,7 @@ Executable HDBTest
   Build-depends:        HUnit >= 1.2, base >= 4.0, directory >= 1.0
   Extensions:           CPP, ForeignFunctionInterface,
                         EmptyDataDecls, TypeSynonymInstances
+  ghc-options:          -fhpc
   Other-modules:
     TestUtil
     Database.TokyoCabinet.HDB

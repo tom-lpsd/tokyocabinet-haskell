@@ -13,4 +13,6 @@ setupFile fn =
 teardownFile :: String -> IO ()
 teardownFile fn = doesFileExist fn >>= flip when (removeFile fn)
 
-withFile fn = bracket (setupFile fn) teardownFile
+withoutFile :: String -> (String -> IO a) -> IO a
+withoutFile fn = bracket (setupFile fn) teardownFile
+
