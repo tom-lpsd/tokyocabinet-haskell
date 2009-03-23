@@ -160,7 +160,7 @@ instance TCDB F.TCFDB where
                                       case key of
                                         Nothing -> return Nothing
                                         Just x  -> Just `fmap` keyToStorable x
-    fwmkeys tc prefix maxn = undefined
+    fwmkeys tc prefix maxn = TCM $ F.fwmkeys tc prefix maxn
     addint tc key num      = TCM $ F.addint tc (storableToKey key) num
     adddouble tc key num   = TCM $ F.adddouble tc (storableToKey key) num 
     sync                   = TCM . F.sync

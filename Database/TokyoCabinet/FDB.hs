@@ -21,6 +21,7 @@ module Database.TokyoCabinet.FDB
     , iterinit
     , iternext
     , range
+    , fwmkeys
     , addint
     , adddouble
     , sync
@@ -36,6 +37,7 @@ module Database.TokyoCabinet.FDB
 import Database.TokyoCabinet.Error
 import Database.TokyoCabinet.FDB.C
 import Database.TokyoCabinet.FDB.Key
+import Database.TokyoCabinet.Internal (peekTCListAndFree)
 import qualified Database.TokyoCabinet.Storable as S
 
 import Foreign.Ptr
@@ -134,6 +136,13 @@ range (TCFDB fdb) lower upper maxn =
           keys <- peekArray size rp
           free rp
           return $ map (fromID . ID) keys
+
+fwmkeys :: (S.Storable a, S.Storable b) => TCFDB -> a -> Int -> IO [b]
+fwmkeys (TCFDB fdb) spec maxn =
+    withForeignPtr fdb $ \fdb' ->
+        S.withPtrLen spec $ \(ptr, len) -> do
+          c_tcfdbrange4 fdb' ptr len (fromIntegral maxn)
+                            >>= peekTCListAndFree
 
 addint :: (Key a) => TCFDB -> a -> Int -> IO (Maybe Int)
 addint (TCFDB fdb) key num =
