@@ -8,18 +8,18 @@ module Database.TokyoCabinet
     , H.TCHDB
     , F.TCFDB
     , B.TCBDB
-    , TCECODE(..)
-    , errmsg
+    , E.TCECODE(..)
+    , E.errmsg
     ) where
 
 import Control.Monad.Trans (MonadIO)
 
-import Database.TokyoCabinet.Error (TCECODE(..), errmsg)
 import Database.TokyoCabinet.Storable
 import Database.TokyoCabinet.FDB.Key
 import qualified Database.TokyoCabinet.HDB as H
 import qualified Database.TokyoCabinet.FDB as F
 import qualified Database.TokyoCabinet.BDB as B
+import qualified Database.TokyoCabinet.Error as E
 
 import Foreign.Ptr (castPtr)
 import Foreign.C.String (newCStringLen)
@@ -58,7 +58,7 @@ class TCDB a where
     path      :: a -> TCM (Maybe String)
     rnum      :: a -> TCM Int64
     size      :: a -> TCM Int64
-    ecode     :: a -> TCM TCECODE
+    ecode     :: a -> TCM E.TCECODE
 
 lift :: (a -> IO b) -> a -> TCM b
 lift = (TCM .)
