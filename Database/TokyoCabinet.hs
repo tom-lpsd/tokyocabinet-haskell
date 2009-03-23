@@ -60,6 +60,21 @@ class TCDB a where
     size      :: a -> TCM Int64
     ecode     :: a -> TCM TCECODE
 
+lift :: (a -> IO b) -> a -> TCM b
+lift = (TCM .)
+
+lift2 :: (a -> b -> IO c) -> a -> b -> TCM c
+lift2 f x y = TCM $ f x y
+
+lift3 :: (a -> b -> c -> IO d) -> a -> b -> c -> TCM d
+lift3 f x y z = TCM $ f x y z
+
+liftF2 :: (Storable b) => (a -> ID -> IO c) -> a -> b -> TCM c
+liftF2 f x y = TCM $ f x (storableToKey y)
+
+liftF3 :: (Storable b) => (a -> ID -> c -> IO d) -> a -> b -> c -> TCM d
+liftF3 f x y z = TCM $ f x (storableToKey y) z
+
 openModeToHOpenMode :: OpenMode -> H.OpenMode
 openModeToHOpenMode OREADER = H.OREADER
 openModeToHOpenMode OWRITER = H.OWRITER
@@ -69,28 +84,28 @@ openModeToHOpenMode ONOLCK  = H.ONOLCK
 openModeToHOpenMode OLCKNB  = H.OLCKNB
 
 instance TCDB H.TCHDB where
-    new                    = TCM $ H.new
-    delete                 = TCM . H.delete
-    open tc name mode      = TCM $ H.open tc name (map openModeToHOpenMode mode)
-    close                  = TCM . H.close
-    put tc key val         = TCM $ H.put tc key val
-    putkeep tc key val     = TCM $ H.putkeep tc key val
-    putcat tc key val      = TCM $ H.putcat tc key val
-    get tc key             = TCM $ H.get tc key
-    out tc key             = TCM $ H.out tc key
-    vsiz tc key            = TCM $ H.vsiz tc key
-    iterinit               = TCM . H.iterinit
-    iternext               = TCM . H.iternext
-    fwmkeys tc prefix maxn = TCM $ H.fwmkeys tc prefix maxn
-    addint tc key num      = TCM $ H.addint tc key num
-    adddouble tc key num   = TCM $ H.adddouble tc key num
-    sync                   = TCM . H.sync
-    vanish                 = TCM . H.vanish
-    copy tc fpath          = TCM $ H.copy tc fpath
-    path                   = TCM . H.path
-    rnum                   = TCM . H.rnum
-    size                   = TCM . H.fsiz
-    ecode                  = TCM . H.ecode
+    new               = TCM   H.new
+    delete            = lift  H.delete
+    open tc name mode = TCM $ H.open tc name (map openModeToHOpenMode mode)
+    close             = lift  H.close
+    put               = lift3 H.put
+    putkeep           = lift3 H.putkeep
+    putcat            = lift3 H.putcat
+    get               = lift2 H.get
+    out               = lift2 H.out
+    vsiz              = lift2 H.vsiz
+    iterinit          = lift  H.iterinit
+    iternext          = lift  H.iternext
+    fwmkeys           = lift3 H.fwmkeys
+    addint            = lift3 H.addint
+    adddouble         = lift3 H.adddouble
+    sync              = lift  H.sync
+    vanish            = lift  H.vanish
+    copy              = lift2 H.copy
+    path              = lift  H.path
+    rnum              = lift  H.rnum
+    size              = lift  H.fsiz
+    ecode             = lift  H.ecode
 
 openModeToBOpenMode :: OpenMode -> B.OpenMode
 openModeToBOpenMode OREADER = B.OREADER
@@ -101,28 +116,28 @@ openModeToBOpenMode ONOLCK  = B.ONOLCK
 openModeToBOpenMode OLCKNB  = B.OLCKNB
 
 instance TCDB B.TCBDB where
-    new                    = TCM $ B.new
-    delete                 = TCM . B.delete
-    open tc name mode      = TCM $ B.open tc name (map openModeToBOpenMode mode)
-    close                  = TCM . B.close
-    put tc key val         = TCM $ B.put tc key val
-    putkeep tc key val     = TCM $ B.putkeep tc key val
-    putcat tc key val      = TCM $ B.putcat tc key val
-    get tc key             = TCM $ B.get tc key
-    out tc key             = TCM $ B.out tc key
-    vsiz tc key            = TCM $ B.vsiz tc key
-    iterinit               = undefined
-    iternext               = undefined
-    fwmkeys tc prefix maxn = TCM $ B.fwmkeys tc prefix maxn
-    addint tc key num      = TCM $ B.addint tc key num
-    adddouble tc key num   = TCM $ B.adddouble tc key num
-    sync                   = TCM . B.sync
-    vanish                 = TCM . B.vanish
-    copy tc fpath          = TCM $ B.copy tc fpath
-    path                   = TCM . B.path
-    rnum                   = TCM . B.rnum
-    size                   = TCM . B.fsiz
-    ecode                  = TCM . B.ecode
+    new               = TCM   B.new
+    delete            = lift  B.delete
+    open tc name mode = TCM $ B.open tc name (map openModeToBOpenMode mode)
+    close             = lift  B.close
+    put               = lift3 B.put
+    putkeep           = lift3 B.putkeep
+    putcat            = lift3 B.putcat
+    get               = lift2 B.get
+    out               = lift2 B.out
+    vsiz              = lift2 B.vsiz
+    iterinit          = undefined
+    iternext          = undefined
+    fwmkeys           = lift3 B.fwmkeys
+    addint            = lift3 B.addint
+    adddouble         = lift3 B.adddouble
+    sync              = lift  B.sync
+    vanish            = lift  B.vanish
+    copy              = lift2 B.copy
+    path              = lift  B.path
+    rnum              = lift  B.rnum
+    size              = lift  B.fsiz
+    ecode             = lift  B.ecode
 
 openModeToFOpenMode :: OpenMode -> F.OpenMode
 openModeToFOpenMode OREADER = F.OREADER
@@ -145,28 +160,28 @@ keyToStorable k = newCStringLen (show k) >>= \(ptr, len) ->
                   peekPtrLen (castPtr ptr, fromIntegral len)
 
 instance TCDB F.TCFDB where
-    new                    = TCM $ F.new
-    delete                 = TCM . F.delete
-    open tc name mode      = TCM $ F.open tc name (map openModeToFOpenMode mode)
-    close                  = TCM . F.close
-    put tc key val         = TCM $ F.put tc (storableToKey key) val
-    putkeep tc key val     = TCM $ F.putkeep tc (storableToKey key) val
-    putcat tc key val      = TCM $ F.putcat tc (storableToKey key) val
-    get tc key             = TCM $ F.get tc (storableToKey key)
-    out tc key             = TCM $ F.out tc (storableToKey key)
-    vsiz tc key            = TCM $ F.vsiz tc (storableToKey key)
-    iterinit               = TCM . F.iterinit
-    iternext tc            = TCM $ do key <- F.iternext tc
-                                      case key of
-                                        Nothing -> return Nothing
-                                        Just x  -> Just `fmap` keyToStorable x
-    fwmkeys tc prefix maxn = TCM $ F.fwmkeys tc prefix maxn
-    addint tc key num      = TCM $ F.addint tc (storableToKey key) num
-    adddouble tc key num   = TCM $ F.adddouble tc (storableToKey key) num 
-    sync                   = TCM . F.sync
-    vanish                 = TCM . F.vanish
-    copy tc fpath          = TCM $ F.copy tc fpath
-    path                   = TCM . F.path
-    rnum                   = TCM . F.rnum
-    size                   = TCM . F.fsiz
-    ecode                  = TCM . F.ecode
+    new               = TCM    F.new
+    delete            = lift   F.delete
+    open tc name mode = TCM $  F.open tc name (map openModeToFOpenMode mode)
+    close             = lift   F.close
+    put               = liftF3 F.put
+    putkeep           = liftF3 F.putkeep
+    putcat            = liftF3 F.putcat
+    get               = liftF2 F.get
+    out               = liftF2 F.out
+    vsiz              = liftF2 F.vsiz
+    iterinit          = lift   F.iterinit
+    iternext tc       = TCM    $ do key <- F.iternext tc
+                                    case key of
+                                      Nothing -> return Nothing
+                                      Just x  -> Just `fmap` keyToStorable x
+    fwmkeys           = lift3  F.fwmkeys
+    addint            = liftF3 F.addint
+    adddouble         = liftF3 F.adddouble
+    sync              = lift   F.sync
+    vanish            = lift   F.vanish
+    copy              = lift2  F.copy
+    path              = lift   F.path
+    rnum              = lift   F.rnum
+    size              = lift   F.fsiz
+    ecode             = lift   F.ecode
