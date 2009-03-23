@@ -78,6 +78,28 @@ Executable HDBTest
     Database.TokyoCabinet.List.C
     Database.TokyoCabinet.Storable
 
+Executable BDBTest
+  if flag(BuildTest)
+    Buildable:            True
+  else
+    Buildable:            False
+  Main-Is:              tests/BDBTest.hs
+  Extra-libraries:      tokyocabinet
+  Build-depends:        HUnit >= 1.2, base >= 4.0, directory >= 1.0
+  Extensions:           CPP, ForeignFunctionInterface,
+                        EmptyDataDecls, TypeSynonymInstances
+  ghc-options:          -fhpc
+  Other-modules:
+    TestUtil
+    Database.TokyoCabinet.BDB
+    Database.TokyoCabinet.BDB.C
+    Database.TokyoCabinet.BDB.Cursor
+    Database.TokyoCabinet.BDB.Cursor.C
+    Database.TokyoCabinet.Error
+    Database.TokyoCabinet.List
+    Database.TokyoCabinet.List.C
+    Database.TokyoCabinet.Storable
+
 Executable FDBTest
   if flag(BuildTest)
     Buildable:            True
