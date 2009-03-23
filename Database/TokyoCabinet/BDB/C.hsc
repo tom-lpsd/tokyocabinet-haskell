@@ -4,6 +4,8 @@ module Database.TokyoCabinet.BDB.C where
 #include <tcbdb.h>
 
 import Foreign.Ptr
+import Foreign.ForeignPtr
+
 import Foreign.C.Types
 import Foreign.C.String
 
@@ -12,6 +14,8 @@ import Data.Word
 import Data.Bits
 
 import Database.TokyoCabinet.List.C (LIST)
+
+data TCBDB = TCBDB { unTCBDB :: !(ForeignPtr BDB) }
 
 data OpenMode =
     OREADER |

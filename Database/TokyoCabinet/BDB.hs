@@ -58,8 +58,6 @@ import Database.TokyoCabinet.BDB.C
 import Database.TokyoCabinet.Internal
 import qualified Database.TokyoCabinet.Storable as S
 
-data TCBDB = TCBDB !(ForeignPtr BDB)
-
 new :: IO TCBDB
 new = do
   bdb <- c_tcbdbnew
