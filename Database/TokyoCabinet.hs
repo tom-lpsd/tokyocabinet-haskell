@@ -26,7 +26,6 @@ import Foreign.Ptr (castPtr)
 import Foreign.C.String (newCStringLen)
 
 import Data.Int
-import Data.IORef
 
 newtype TCM a = TCM { runTCM :: IO a } deriving (Monad, MonadIO)
 
@@ -112,7 +111,7 @@ openModeToBOpenMode ONOLCK  = B.ONOLCK
 openModeToBOpenMode OLCKNB  = B.OLCKNB
 
 data TCBDB = TCBDB { unTCBDB    :: B.TCBDB
-                   , unTCBDBCUR :: IORef (Maybe C.TCBDBCUR) }
+                   , unTCBDBCUR :: C.TCBDBCUR }
 
 liftB :: (B.TCBDB -> IO a) -> TCBDB -> TCM a
 liftB f x = TCM $ f (unTCBDB x)
@@ -125,7 +124,7 @@ liftB3 f x y z = TCM $ f (unTCBDB x) y z
 
 instance TCDB TCBDB where
     new               = TCM $ do bdb <- B.new
-                                 cur <- newIORef Nothing
+                                 cur <- C.new bdb
                                  return $ TCBDB bdb cur
     delete            = liftB  B.delete
     open tc name mode = TCM $  B.open (unTCBDB tc) name
@@ -137,20 +136,10 @@ instance TCDB TCBDB where
     get               = liftB2 B.get
     out               = liftB2 B.out
     vsiz              = liftB2 B.vsiz
-    iterinit bdb      = TCM $ do
-                          cur <- C.new (unTCBDB bdb)
-                          res <- C.first cur
-                          if res
-                            then writeIORef (unTCBDBCUR bdb) (Just cur)
-                                     >> return True
-                            else return False
-    iternext bdb      = TCM $ do
-                          cur <- readIORef (unTCBDBCUR bdb)
-                          case cur of
-                            Just cur' -> do k <- C.key cur'
-                                            C.next cur'
-                                            return k
-                            _         -> return Nothing
+    iterinit bdb      = TCM $ C.first (unTCBDBCUR bdb)
+    iternext bdb      = TCM $ do k <- C.key (unTCBDBCUR bdb)
+                                 C.next (unTCBDBCUR bdb)
+                                 return k
     fwmkeys           = liftB3 B.fwmkeys
     addint            = liftB3 B.addint
     adddouble         = liftB3 B.adddouble
