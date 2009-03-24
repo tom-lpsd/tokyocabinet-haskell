@@ -71,18 +71,18 @@ tune fdb width limsiz =
     withForeignPtr (unTCFDB fdb) $ \fdb' -> c_tcfdbtune fdb' width limsiz
 
 open :: TCFDB -> String -> [OpenMode] -> IO Bool
-open (TCFDB fdb) fpath modes =
-    withForeignPtr fdb $ \fdb' ->
+open fdb fpath modes =
+    withForeignPtr (unTCFDB fdb) $ \fdb' ->
         withCString fpath $ \fpath' ->
             c_tcfdbopen fdb' fpath' (combineOpenMode modes)
 
 close :: TCFDB -> IO Bool
-close (TCFDB fdb) = withForeignPtr fdb c_tcfdbclose
+close fdb = withForeignPtr (unTCFDB fdb) c_tcfdbclose
 
 type PutFunc = Ptr FDB -> Int64 -> Ptr Word8 -> CInt -> IO Bool
 liftPutFunc :: (Key a, S.Storable b) => PutFunc -> TCFDB -> a -> b -> IO Bool
-liftPutFunc func (TCFDB fdb) key val =
-    withForeignPtr fdb $ \fdb' ->
+liftPutFunc func fdb key val =
+    withForeignPtr (unTCFDB fdb) $ \fdb' ->
         S.withPtrLen val $ \(vbuf, vsize) -> do
           func fdb' (unID . toID $ key) vbuf vsize
         
@@ -96,39 +96,40 @@ putcat :: (Key a, S.Storable b) => TCFDB -> a -> b -> IO Bool
 putcat =  liftPutFunc c_tcfdbputcat
 
 out :: (Key a) => TCFDB -> a -> IO Bool
-out (TCFDB fdb) key =
-    withForeignPtr fdb $ \fdb' -> c_tcfdbout fdb' $ unID . toID $ key
+out fdb key =
+    withForeignPtr (unTCFDB fdb) $ \fdb' ->
+        c_tcfdbout fdb' $ unID . toID $ key
 
 get :: (Key a, S.Storable b) => TCFDB -> a -> IO (Maybe b)
-get (TCFDB fdb) key =
-    withForeignPtr fdb $ \fdb' ->
+get fdb key =
+    withForeignPtr (unTCFDB fdb) $ \fdb' ->
         alloca $ \sizbuf -> do
             vbuf  <- c_tcfdbget fdb' (unID . toID $ key) sizbuf
             vsize <- peek sizbuf
             flip maybePeek vbuf $ \vbuf' -> S.peekPtrLen (vbuf', vsize)
 
 vsiz :: (Key a) => TCFDB -> a -> IO (Maybe Int)
-vsiz (TCFDB fdb) key =
-    withForeignPtr fdb $ \fdb' -> do
+vsiz fdb key =
+    withForeignPtr (unTCFDB fdb) $ \fdb' -> do
       vsize <- c_tcfdbvsiz fdb' (unID . toID $ key)
       return $ if vsize == (-1)
                  then Nothing
                  else Just (fromIntegral vsize)
 
 iterinit :: TCFDB -> IO Bool
-iterinit (TCFDB fdb) = withForeignPtr fdb c_tcfdbiterinit
+iterinit fdb = withForeignPtr (unTCFDB fdb) c_tcfdbiterinit
 
 iternext :: (Key a) => TCFDB -> IO (Maybe a)
-iternext (TCFDB fdb) = 
-    withForeignPtr fdb $ \fdb' -> do
+iternext fdb = 
+    withForeignPtr (unTCFDB fdb) $ \fdb' -> do
       i <-  c_tcfdbiternext fdb'
       return $ if i == 0
                  then Nothing
                  else Just (fromID $ ID i)
 
 range :: (Key a, Key b) => TCFDB -> a -> a -> Int -> IO [b]
-range (TCFDB fdb) lower upper maxn =
-    withForeignPtr fdb $ \fdb' ->
+range fdb lower upper maxn =
+    withForeignPtr (unTCFDB fdb) $ \fdb' ->
         alloca $ \sizbuf -> do
           rp <- c_tcfdbrange fdb' (unID . toID $ lower) (unID . toID $ upper)
                                   (fromIntegral maxn) sizbuf
@@ -138,49 +139,50 @@ range (TCFDB fdb) lower upper maxn =
           return $ map (fromID . ID) keys
 
 fwmkeys :: (S.Storable a, S.Storable b) => TCFDB -> a -> Int -> IO [b]
-fwmkeys (TCFDB fdb) spec maxn =
-    withForeignPtr fdb $ \fdb' ->
+fwmkeys fdb spec maxn =
+    withForeignPtr (unTCFDB fdb) $ \fdb' ->
         S.withPtrLen spec $ \(ptr, len) -> do
           c_tcfdbrange4 fdb' ptr len (fromIntegral maxn)
                             >>= peekTCListAndFree
 
 addint :: (Key a) => TCFDB -> a -> Int -> IO (Maybe Int)
-addint (TCFDB fdb) key num =
-    withForeignPtr fdb $ \fdb' -> do
+addint fdb key num =
+    withForeignPtr (unTCFDB fdb) $ \fdb' -> do
         sumval <- c_tcfdbaddint fdb' (unID . toID $ key) (fromIntegral num)
         return $ if sumval == cINT_MIN
                    then Nothing
                    else Just $ fromIntegral sumval
 
 adddouble :: (Key a) => TCFDB -> a -> Double -> IO (Maybe Double)
-adddouble (TCFDB fdb) key num =
-    withForeignPtr fdb $ \fdb' -> do
+adddouble fdb key num =
+    withForeignPtr (unTCFDB fdb) $ \fdb' -> do
         sumval <- c_tcfdbadddouble fdb' (unID . toID $ key) (realToFrac num)
         return $ if isNaN sumval
                    then Nothing
                    else Just $ realToFrac sumval
 
 sync :: TCFDB -> IO Bool
-sync (TCFDB fdb) = withForeignPtr fdb c_tcfdbsync
+sync fdb = withForeignPtr (unTCFDB fdb) c_tcfdbsync
 
 optimize :: TCFDB -> Int32 -> Int64 -> IO Bool
-optimize (TCFDB fdb) width limsiz =
-    withForeignPtr fdb $ \fdb' -> c_tcfdboptimize fdb' width limsiz
+optimize fdb width limsiz =
+    withForeignPtr (unTCFDB fdb) $ \fdb' -> c_tcfdboptimize fdb' width limsiz
 
 vanish :: TCFDB -> IO Bool
-vanish (TCFDB fdb) = withForeignPtr fdb c_tcfdbvanish
+vanish fdb = withForeignPtr (unTCFDB fdb) c_tcfdbvanish
 
 copy :: TCFDB -> String -> IO Bool
-copy (TCFDB fdb) fpath =
-    withForeignPtr fdb $ \fdb' ->
+copy fdb fpath =
+    withForeignPtr (unTCFDB fdb) $ \fdb' ->
         withCString fpath (c_tcfdbcopy fdb')
 
 path :: TCFDB -> IO (Maybe String)
-path (TCFDB fdb) =
-    withForeignPtr fdb $ \fdb' -> c_tcfdbpath fdb' >>= (maybePeek peekCString)
+path fdb =
+    withForeignPtr (unTCFDB fdb) $ \fdb' ->
+        c_tcfdbpath fdb' >>= (maybePeek peekCString)
 
 rnum :: TCFDB -> IO Int64
-rnum (TCFDB fptr) = withForeignPtr fptr c_tcfdbrnum
+rnum fdb = withForeignPtr (unTCFDB fdb) c_tcfdbrnum
 
 fsiz :: TCFDB -> IO Int64
-fsiz (TCFDB fptr) = withForeignPtr fptr c_tcfdbfsiz
+fsiz fdb = withForeignPtr (unTCFDB fdb) c_tcfdbfsiz

@@ -64,39 +64,39 @@ new = do
   TCBDB `fmap` newForeignPtr tcbdbFinalizer bdb
 
 delete :: TCBDB -> IO ()
-delete (TCBDB bdb) = finalizeForeignPtr bdb
+delete bdb = finalizeForeignPtr (unTCBDB bdb)
 
 ecode :: TCBDB -> IO TCECODE
-ecode (TCBDB bdb) = cintToError `fmap` withForeignPtr bdb c_tcbdbecode
+ecode bdb = cintToError `fmap` withForeignPtr (unTCBDB bdb) c_tcbdbecode
 
 tune :: TCBDB -> Int32 -> Int32
      -> Int64 -> Int8 -> Int8 -> [TuningOption] -> IO Bool
-tune (TCBDB bdb) lmemb nmemb bnum apow fpow opts =
-    withForeignPtr bdb $ \bdb' ->
+tune bdb lmemb nmemb bnum apow fpow opts =
+    withForeignPtr (unTCBDB bdb) $ \bdb' ->
         c_tcbdbtune bdb' lmemb nmemb bnum apow fpow (combineTuningOption opts)
 
 setcache :: TCBDB -> Int32 -> Int32 -> IO Bool
-setcache (TCBDB bdb) lcnum ncnum =
-    withForeignPtr bdb $ \bdb' -> c_tcbdbsetcache bdb' lcnum ncnum
+setcache bdb lcnum ncnum =
+    withForeignPtr (unTCBDB bdb) $ \bdb' -> c_tcbdbsetcache bdb' lcnum ncnum
 
 setxmsiz :: TCBDB -> Int64 -> IO Bool
-setxmsiz (TCBDB bdb) xmsiz =
-    withForeignPtr bdb $ \bdb' -> c_tcbdbsetxmsiz bdb' xmsiz
+setxmsiz bdb xmsiz =
+    withForeignPtr (unTCBDB bdb) $ \bdb' -> c_tcbdbsetxmsiz bdb' xmsiz
 
 open :: TCBDB -> String -> [OpenMode] -> IO Bool
-open (TCBDB bdb) fpath modes =
-    withForeignPtr bdb $ \bdb' ->
+open bdb fpath modes =
+    withForeignPtr (unTCBDB bdb) $ \bdb' ->
         withCString fpath $ \fpath' ->
             c_tcbdbopen bdb' fpath' (combineOpenMode modes)
 
 close :: TCBDB -> IO Bool
-close (TCBDB bdb) = withForeignPtr bdb c_tcbdbclose
+close bdb = withForeignPtr (unTCBDB bdb) c_tcbdbclose
 
 type PutFunc = Ptr BDB -> Ptr Word8 -> CInt -> Ptr Word8 -> CInt -> IO Bool
 liftPutFunc ::
     (S.Storable a, S.Storable b) => PutFunc -> TCBDB -> a -> b -> IO Bool
-liftPutFunc func (TCBDB bdb) key val =
-    withForeignPtr bdb $ \bdb' ->
+liftPutFunc func bdb key val =
+    withForeignPtr (unTCBDB bdb) $ \bdb' ->
         S.withPtrLen key $ \(kbuf, ksize) ->
         S.withPtrLen val $ \(vbuf, vsize) -> func bdb' kbuf ksize vbuf vsize
 
@@ -117,18 +117,18 @@ putlist bdb key vals = do
   and `fmap` mapM (putdup bdb key) vals
 
 out :: (S.Storable a) => TCBDB -> a -> IO Bool
-out (TCBDB bdb) key =
-    withForeignPtr bdb $ \bdb' ->
+out bdb key =
+    withForeignPtr (unTCBDB bdb) $ \bdb' ->
         S.withPtrLen key $ \(kbuf, ksize) -> c_tcbdbout bdb' kbuf ksize
 
 outlist :: (S.Storable a) => TCBDB -> a -> IO Bool
-outlist (TCBDB bdb) key =
-    withForeignPtr bdb $ \bdb' ->
+outlist bdb key =
+    withForeignPtr (unTCBDB bdb) $ \bdb' ->
         S.withPtrLen key $ \(kbuf, ksize) -> c_tcbdbout3 bdb' kbuf ksize
 
 get :: (S.Storable a, S.Storable b) => TCBDB -> a -> IO (Maybe b)
-get (TCBDB bdb) key =
-    withForeignPtr bdb $ \bdb' ->
+get bdb key =
+    withForeignPtr (unTCBDB bdb) $ \bdb' ->
         S.withPtrLen key $ \(kbuf, ksize) ->
             alloca $ \sizbuf -> do
                 ptr <- c_tcbdbget bdb' kbuf ksize sizbuf
@@ -136,8 +136,8 @@ get (TCBDB bdb) key =
                 flip maybePeek ptr $ \p -> S.peekPtrLen (p, siz)
 
 getlist :: (S.Storable a, S.Storable b) => TCBDB -> a -> IO [b]
-getlist (TCBDB bdb) key =
-    withForeignPtr bdb $ \bdb' ->
+getlist bdb key =
+    withForeignPtr (unTCBDB bdb) $ \bdb' ->
         S.withPtrLen key $ \(kbuf, ksize) -> do
           ptr <- c_tcbdbget4 bdb' kbuf ksize
           if ptr == nullPtr
@@ -145,8 +145,8 @@ getlist (TCBDB bdb) key =
             else peekTCListAndFree ptr
 
 vnum :: (S.Storable a) => TCBDB -> a -> IO (Maybe Int)
-vnum (TCBDB bdb) key =
-    withForeignPtr bdb $ \bdb' ->
+vnum bdb key =
+    withForeignPtr (unTCBDB bdb) $ \bdb' ->
         S.withPtrLen key $ \(kbuf, ksize) -> do
             res <- c_tcbdbvnum bdb' kbuf ksize
             return $ if res == 0
@@ -154,8 +154,8 @@ vnum (TCBDB bdb) key =
                        else Just $ fromIntegral res
 
 vsiz :: (S.Storable a) => TCBDB -> a -> IO (Maybe Int)
-vsiz (TCBDB bdb) key =
-    withForeignPtr bdb $ \bdb' ->
+vsiz bdb key =
+    withForeignPtr (unTCBDB bdb) $ \bdb' ->
         S.withPtrLen key $ \(kbuf, ksize) -> do
             res <- c_tcbdbvsiz bdb' kbuf ksize
             return $ if res == -1
@@ -165,8 +165,8 @@ vsiz (TCBDB bdb) key =
 range :: (S.Storable a)
          => TCBDB -> Maybe a -> Bool
                   -> Maybe a -> Bool -> Int -> IO [a]
-range (TCBDB bdb) bkey binc ekey einc maxn =
-    withForeignPtr bdb $ \bdb' ->
+range bdb bkey binc ekey einc maxn =
+    withForeignPtr (unTCBDB bdb) $ \bdb' ->
         withPtrLen' bkey $ \(bkbuf, bksiz) ->
         withPtrLen' ekey $ \(ekbuf, eksiz) ->
             c_tcbdbrange bdb' bkbuf bksiz binc ekbuf eksiz einc
@@ -176,15 +176,15 @@ range (TCBDB bdb) bkey binc ekey einc maxn =
       withPtrLen' Nothing action = action (nullPtr, 0)
 
 fwmkeys :: (S.Storable a, S.Storable b) => TCBDB -> a -> Int -> IO [b]
-fwmkeys (TCBDB bdb) prefix maxn =
-    withForeignPtr bdb $ \bdb' ->
+fwmkeys bdb prefix maxn =
+    withForeignPtr (unTCBDB bdb) $ \bdb' ->
         S.withPtrLen prefix $ \(pbuf, psiz) ->
             c_tcbdbfwmkeys bdb' pbuf psiz (fromIntegral maxn)
                                >>= peekTCListAndFree
 
 addint :: (S.Storable a) => TCBDB -> a -> Int -> IO (Maybe Int)
-addint (TCBDB bdb) key num =
-    withForeignPtr bdb $ \bdb' ->
+addint bdb key num =
+    withForeignPtr (unTCBDB bdb) $ \bdb' ->
         S.withPtrLen key $ \(kbuf, ksiz) -> do
             sumval <- c_tcbdbaddint bdb' kbuf ksiz (fromIntegral num)
             return $ if sumval == cINT_MIN
@@ -192,8 +192,8 @@ addint (TCBDB bdb) key num =
                        else Just $ fromIntegral sumval
 
 adddouble :: (S.Storable a) => TCBDB -> a -> Double -> IO (Maybe Double)
-adddouble (TCBDB bdb) key num =
-    withForeignPtr bdb $ \bdb' ->
+adddouble bdb key num =
+    withForeignPtr (unTCBDB bdb) $ \bdb' ->
         S.withPtrLen key $ \(kbuf, ksiz) -> do
             sumval <- c_tcbdbadddouble bdb' kbuf ksiz (realToFrac num)
             return $ if isNaN sumval
@@ -201,39 +201,40 @@ adddouble (TCBDB bdb) key num =
                        else Just $ realToFrac sumval
 
 sync :: TCBDB -> IO Bool
-sync (TCBDB bdb) = withForeignPtr bdb c_tcbdbsync
+sync bdb = withForeignPtr (unTCBDB bdb) c_tcbdbsync
 
 optimize :: TCBDB -> Int32 -> Int32
          -> Int64 -> Int8 -> Int8 -> [TuningOption] -> IO Bool
-optimize (TCBDB bdb) lmemb nmemb bnum apow fpow opts =
-    withForeignPtr bdb $ \bdb' ->
+optimize bdb lmemb nmemb bnum apow fpow opts =
+    withForeignPtr (unTCBDB bdb) $ \bdb' ->
         c_tcbdboptimize bdb' lmemb nmemb bnum apow fpow
                         (combineTuningOption opts)
 
 vanish :: TCBDB -> IO Bool
-vanish (TCBDB bdb) = withForeignPtr bdb c_tcbdbvanish
+vanish bdb = withForeignPtr (unTCBDB bdb) c_tcbdbvanish
 
 copy :: TCBDB -> String -> IO Bool
-copy (TCBDB bdb) fpath =
-    withForeignPtr bdb $ \bdb' -> withCString fpath (c_tcbdbcopy bdb')
+copy bdb fpath =
+    withForeignPtr (unTCBDB bdb) $ \bdb' ->
+        withCString fpath (c_tcbdbcopy bdb')
 
 tranbegin :: TCBDB -> IO Bool
-tranbegin (TCBDB bdb) = withForeignPtr bdb c_tcbdbtranbegin
+tranbegin bdb = withForeignPtr (unTCBDB bdb) c_tcbdbtranbegin
 
 trancommit :: TCBDB -> IO Bool
-trancommit (TCBDB bdb) = withForeignPtr bdb c_tcbdbtrancommit
+trancommit bdb = withForeignPtr (unTCBDB bdb) c_tcbdbtrancommit
 
 tranabort :: TCBDB -> IO Bool
-tranabort (TCBDB bdb) = withForeignPtr bdb c_tcbdbtranabort
+tranabort bdb = withForeignPtr (unTCBDB bdb) c_tcbdbtranabort
 
 path :: TCBDB -> IO (Maybe String)
-path (TCBDB bdb) =
-    withForeignPtr bdb $ \bdb' -> do
+path bdb =
+    withForeignPtr (unTCBDB bdb) $ \bdb' -> do
         fpath <- c_tcbdbpath bdb'
         maybePeek peekCString fpath
 
 rnum :: TCBDB -> IO Int64
-rnum (TCBDB bdb) = withForeignPtr bdb c_tcbdbrnum
+rnum bdb = withForeignPtr (unTCBDB bdb) c_tcbdbrnum
 
 fsiz :: TCBDB -> IO Int64
-fsiz (TCBDB bdb) = withForeignPtr bdb c_tcbdbfsiz
+fsiz bdb = withForeignPtr (unTCBDB bdb) c_tcbdbfsiz

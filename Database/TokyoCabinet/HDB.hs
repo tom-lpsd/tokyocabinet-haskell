@@ -57,7 +57,7 @@ import Database.TokyoCabinet.Error
 import Database.TokyoCabinet.Internal
 import qualified Database.TokyoCabinet.Storable as S
 
-data TCHDB = TCHDB !(ForeignPtr HDB)
+data TCHDB = TCHDB { unTCHDB :: !(ForeignPtr HDB) }
 
 new :: IO TCHDB
 new = do ptr <- c_tchdbnew
@@ -65,39 +65,39 @@ new = do ptr <- c_tchdbnew
          return $ TCHDB fptr
 
 delete :: TCHDB -> IO ()
-delete (TCHDB fptr) = finalizeForeignPtr fptr
+delete hdb = finalizeForeignPtr (unTCHDB hdb)
 
 ecode :: TCHDB -> IO TCECODE
-ecode (TCHDB fptr) = cintToError `fmap` withForeignPtr fptr c_tchdbecode
+ecode hdb = cintToError `fmap` withForeignPtr (unTCHDB hdb) c_tchdbecode
 
 tune :: TCHDB -> Int64 -> Int8 -> Int8 -> [TuningOption] -> IO Bool
-tune (TCHDB fptr) bnum apow fpow options =
-    withForeignPtr fptr $ \p ->
+tune hdb bnum apow fpow options =
+    withForeignPtr (unTCHDB hdb) $ \p ->
         c_tchdbtune p bnum apow fpow (combineTuningOption options)
 
 setcache :: TCHDB -> Int32 -> IO Bool
-setcache (TCHDB fptr) rcnum =
-    withForeignPtr fptr $ \p -> c_tchdbsetcache p rcnum
+setcache hdb rcnum =
+    withForeignPtr (unTCHDB hdb) $ \p -> c_tchdbsetcache p rcnum
 
 setxmsiz :: TCHDB -> Int64 -> IO Bool
-setxmsiz (TCHDB fptr) xmsiz =
-    withForeignPtr fptr $ \p -> c_tchdbsetxmsiz p xmsiz
+setxmsiz hdb xmsiz =
+    withForeignPtr (unTCHDB hdb) $ \p -> c_tchdbsetxmsiz p xmsiz
 
 open :: TCHDB -> String -> [OpenMode] -> IO Bool
-open (TCHDB fptr) name modes = 
-    withForeignPtr fptr $ \p ->
+open hdb name modes = 
+    withForeignPtr (unTCHDB hdb) $ \p ->
         withCString name $ \c_name ->
             c_tchdbopen p c_name (combineOpenMode modes)
 
 close :: TCHDB -> IO Bool
-close (TCHDB fptr) = withForeignPtr fptr c_tchdbclose
+close hdb = withForeignPtr (unTCHDB hdb) c_tchdbclose
 
 type PutFunc = Ptr HDB -> Ptr Word8 -> CInt -> Ptr Word8 -> CInt -> IO Bool
 
 liftPutFunc ::
     (S.Storable a, S.Storable b) => PutFunc -> TCHDB -> a -> b -> IO Bool
-liftPutFunc func (TCHDB fptr) key val =
-    withForeignPtr fptr $ \p ->
+liftPutFunc func hdb key val =
+    withForeignPtr (unTCHDB hdb) $ \p ->
         S.withPtrLen key $ \(kbuf, ksize) ->
         S.withPtrLen val $ \(vbuf, vsize) -> func p kbuf ksize vbuf vsize
 
@@ -114,14 +114,14 @@ putasync :: (S.Storable a, S.Storable b) => TCHDB -> a -> b -> IO Bool
 putasync = liftPutFunc c_tchdbputasync
 
 out :: (S.Storable a) => TCHDB -> a -> IO Bool
-out (TCHDB fptr) key =
-    withForeignPtr fptr $ \p ->
+out hdb key =
+    withForeignPtr (unTCHDB hdb) $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) ->
             c_tchdbout p kbuf ksiz
 
 get :: (S.Storable a, S.Storable b) => TCHDB -> a -> IO (Maybe b)
-get (TCHDB fptr) key =
-    withForeignPtr fptr $ \p ->
+get hdb key =
+    withForeignPtr (unTCHDB hdb) $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) ->
             alloca $ \sizbuf -> do
                 vbuf <- c_tchdbget p kbuf ksiz sizbuf
@@ -130,8 +130,8 @@ get (TCHDB fptr) key =
                        S.peekPtrLen (vp, siz)
 
 vsiz :: (S.Storable a) => TCHDB -> a -> IO (Maybe Int)
-vsiz (TCHDB fptr) key =
-    withForeignPtr fptr $ \p ->
+vsiz hdb key =
+    withForeignPtr (unTCHDB hdb) $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) -> do
           vsize <- c_tchdbvsiz p kbuf ksiz
           return $ if vsize == -1
@@ -139,11 +139,11 @@ vsiz (TCHDB fptr) key =
                      else Just (fromIntegral vsize)
 
 iterinit :: TCHDB -> IO Bool
-iterinit (TCHDB fptr) = withForeignPtr fptr c_tchdbiterinit
+iterinit hdb = withForeignPtr (unTCHDB hdb) c_tchdbiterinit
 
 iternext :: (S.Storable a) => TCHDB -> IO (Maybe a)
-iternext (TCHDB fptr) =
-    withForeignPtr fptr $ \p ->
+iternext hdb =
+    withForeignPtr (unTCHDB hdb) $ \p ->
         alloca $ \sizbuf -> do
             vbuf <- c_tchdbiternext p sizbuf
             flip maybePeek vbuf $ \vp ->
@@ -151,15 +151,15 @@ iternext (TCHDB fptr) =
                    S.peekPtrLen (vp, siz)
 
 fwmkeys :: (S.Storable a, S.Storable b) => TCHDB -> a -> Int -> IO [b]
-fwmkeys (TCHDB fptr) key maxn = 
-    withForeignPtr fptr $ \p ->
+fwmkeys hdb key maxn = 
+    withForeignPtr (unTCHDB hdb) $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) ->
             c_tchdbfwmkeys p kbuf ksiz (fromIntegral maxn)
                            >>= peekTCListAndFree
 
 addint :: (S.Storable a) => TCHDB -> a -> Int -> IO (Maybe Int)
-addint (TCHDB fptr) key num =
-    withForeignPtr fptr $ \p ->
+addint hdb key num =
+    withForeignPtr (unTCHDB hdb) $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) -> do
             sumval <- c_tchdbaddint p kbuf ksiz (fromIntegral num)
             return $ if sumval == cINT_MIN
@@ -167,8 +167,8 @@ addint (TCHDB fptr) key num =
                        else Just $ fromIntegral sumval
 
 adddouble :: (S.Storable a) => TCHDB -> a -> Double -> IO (Maybe Double)
-adddouble (TCHDB fptr) key num =
-    withForeignPtr fptr $ \p ->
+adddouble hdb key num =
+    withForeignPtr (unTCHDB hdb) $ \p ->
         S.withPtrLen key $ \(kbuf, ksiz) -> do
             sumval <- c_tchdbadddouble p kbuf ksiz (realToFrac num)
             return $ if isNaN sumval
@@ -176,39 +176,39 @@ adddouble (TCHDB fptr) key num =
                        else Just $ realToFrac sumval
 
 sync :: TCHDB -> IO Bool
-sync (TCHDB fptr) = withForeignPtr fptr c_tchdbsync
+sync hdb = withForeignPtr (unTCHDB hdb) c_tchdbsync
 
 optimize :: TCHDB -> Int64 -> Int8 -> Int8 -> [TuningOption] -> IO Bool
-optimize (TCHDB fptr) bnum apow fpow options = 
-    withForeignPtr fptr $ \p ->
+optimize hdb bnum apow fpow options = 
+    withForeignPtr (unTCHDB hdb) $ \p ->
         c_tchdboptimize p bnum apow fpow (combineTuningOption options)
 
 vanish :: TCHDB -> IO Bool
-vanish (TCHDB fptr) = withForeignPtr fptr c_tchdbvanish
+vanish hdb = withForeignPtr (unTCHDB hdb) c_tchdbvanish
 
 copy :: TCHDB -> String -> IO Bool
-copy (TCHDB fptr) pathname =
-    withForeignPtr fptr $ \p ->
+copy hdb pathname =
+    withForeignPtr (unTCHDB hdb) $ \p ->
         withCString pathname $ \c_pathname ->
             c_tchdbcopy p c_pathname
 
 tranbegin :: TCHDB -> IO Bool
-tranbegin (TCHDB fptr) = withForeignPtr fptr c_tchdbtranbegin
+tranbegin hdb = withForeignPtr (unTCHDB hdb) c_tchdbtranbegin
 
 trancommit :: TCHDB -> IO Bool
-trancommit (TCHDB fptr) = withForeignPtr fptr c_tchdbtrancommit
+trancommit hdb = withForeignPtr (unTCHDB hdb) c_tchdbtrancommit
 
 tranabort :: TCHDB -> IO Bool
-tranabort (TCHDB fptr) = withForeignPtr fptr c_tchdbtranabort
+tranabort hdb = withForeignPtr (unTCHDB hdb) c_tchdbtranabort
 
 path :: TCHDB -> IO (Maybe String)
-path (TCHDB fptr) =
-    withForeignPtr fptr $ \p -> do
+path hdb =
+    withForeignPtr (unTCHDB hdb) $ \p -> do
       cstr <- c_tchdbpath p
       maybePeek peekCString cstr
 
 rnum :: TCHDB -> IO Int64
-rnum (TCHDB fptr) = withForeignPtr fptr c_tchdbrnum
+rnum hdb = withForeignPtr (unTCHDB hdb) c_tchdbrnum
 
 fsiz :: TCHDB -> IO Int64
-fsiz (TCHDB fptr) = withForeignPtr fptr c_tchdbfsiz
+fsiz hdb = withForeignPtr (unTCHDB hdb) c_tchdbfsiz
