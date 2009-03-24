@@ -34,12 +34,15 @@ type Combiner mode c_mode = [mode] -> c_mode
 type Caster a b = a -> b
 type Checker a = a -> Bool
 
-type FunOpen ptr c_mode = Ptr ptr -> CString -> c_mode -> IO Bool
-type FunPath p =  Ptr p -> IO CString
-type FunPut p = Ptr p -> Ptr Word8 -> CInt -> Ptr Word8 -> CInt -> IO Bool
-type FunGet p = Ptr p -> Ptr Word8 -> CInt -> Ptr CInt -> IO (Ptr Word8)
-type FunOut p = Ptr p -> Ptr Word8 -> CInt -> IO Bool
-type FunAdd p n = Ptr p -> Ptr Word8 -> CInt -> n -> IO n
+type FunOpen p c_mode = Ptr p -> CString -> c_mode -> IO Bool
+type FunPath p = Ptr p -> IO CString
+type FunCopy p = Ptr p -> CString -> IO Bool
+type FunPut  p = Ptr p -> Ptr Word8 -> CInt -> Ptr Word8 -> CInt -> IO Bool
+type FunGet  p = Ptr p -> Ptr Word8 -> CInt -> Ptr CInt -> IO (Ptr Word8)
+type FunOut  p = Ptr p -> Ptr Word8 -> CInt -> IO Bool
+type FunAdd  p n = Ptr p -> Ptr Word8 -> CInt -> n -> IO n
+type FunFwm  p = Ptr p -> Ptr Word8 -> CInt -> CInt -> IO (Ptr LIST)
+type FunVsiz p =  Ptr p -> Ptr Word8 -> CInt -> IO CInt
 
 openHelper :: FunOpen p c_mode -> UnLifter tcdb p
            -> Combiner mode c_mode -> tcdb -> String -> [mode] -> IO Bool
@@ -52,6 +55,10 @@ pathHelper :: FunPath p -> UnLifter tcdb p -> tcdb -> IO (Maybe String)
 pathHelper c_path unlifter tcdb =
     withForeignPtr (unlifter tcdb) $ \db ->
         c_path db >>= (maybePeek peekCString)
+
+copyHelper :: FunCopy p -> UnLifter tcdb p -> tcdb -> String -> IO Bool
+copyHelper c_copy unlifter tcdb fpath =
+    withForeignPtr (unlifter tcdb) $ \db -> withCString fpath (c_copy db)
 
 putHelper :: (Storable a, Storable b) =>
              FunPut p -> UnLifter tcdb p -> tcdb -> a -> b -> IO Bool
@@ -88,3 +95,21 @@ addHelper c_add unlifter cast_in cast_out check tcdb key num =
             return $ if check sumval
                        then Nothing
                        else Just $ cast_out sumval
+
+
+fwmHelper :: (Storable a, Storable b) =>
+             FunFwm p -> UnLifter tcdb p -> tcdb -> a -> Int -> IO [b]
+fwmHelper c_fwm unlifter tcdb key maxn = 
+    withForeignPtr (unlifter tcdb) $ \db ->
+        withPtrLen key $ \(kbuf, ksiz) ->
+            c_fwm db kbuf ksiz (fromIntegral maxn) >>= peekTCListAndFree
+
+vsizHelper :: (Storable a) =>
+              FunVsiz p -> UnLifter tcdb p -> tcdb -> a -> IO (Maybe Int)
+vsizHelper c_vsiz unlifter tcdb key =
+    withForeignPtr (unlifter tcdb) $ \db ->
+        withPtrLen key $ \(kbuf, ksiz) -> do
+          vsize <- c_vsiz db kbuf ksiz
+          return $ if vsize == -1
+                     then Nothing
+                     else Just (fromIntegral vsize)

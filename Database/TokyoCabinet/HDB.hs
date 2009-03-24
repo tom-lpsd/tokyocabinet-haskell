@@ -40,8 +40,6 @@ module Database.TokyoCabinet.HDB
     )
     where
 
-import Foreign.C.String
-
 import Foreign.Storable (peek)
 import Foreign.ForeignPtr
 import Foreign.Marshal (alloca)
@@ -57,9 +55,7 @@ import qualified Database.TokyoCabinet.Storable as S
 data TCHDB = TCHDB { unTCHDB :: !(ForeignPtr HDB) }
 
 new :: IO TCHDB
-new = do ptr <- c_tchdbnew
-         fptr <- newForeignPtr tchdbFinalizer ptr
-         return $ TCHDB fptr
+new = TCHDB `fmap` (c_tchdbnew >>= newForeignPtr tchdbFinalizer)
 
 delete :: TCHDB -> IO ()
 delete hdb = finalizeForeignPtr (unTCHDB hdb)
@@ -73,12 +69,10 @@ tune hdb bnum apow fpow options =
         c_tchdbtune p bnum apow fpow (combineTuningOption options)
 
 setcache :: TCHDB -> Int32 -> IO Bool
-setcache hdb rcnum =
-    withForeignPtr (unTCHDB hdb) $ \p -> c_tchdbsetcache p rcnum
+setcache hdb rcnum = withForeignPtr (unTCHDB hdb) (flip c_tchdbsetcache rcnum)
 
 setxmsiz :: TCHDB -> Int64 -> IO Bool
-setxmsiz hdb xmsiz =
-    withForeignPtr (unTCHDB hdb) $ \p -> c_tchdbsetxmsiz p xmsiz
+setxmsiz hdb xmsiz = withForeignPtr (unTCHDB hdb) (flip c_tchdbsetxmsiz xmsiz)
 
 open :: TCHDB -> String -> [OpenMode] -> IO Bool
 open = openHelper c_tchdbopen unTCHDB combineOpenMode
@@ -105,13 +99,7 @@ get :: (S.Storable a, S.Storable b) => TCHDB -> a -> IO (Maybe b)
 get = getHelper c_tchdbget unTCHDB
 
 vsiz :: (S.Storable a) => TCHDB -> a -> IO (Maybe Int)
-vsiz hdb key =
-    withForeignPtr (unTCHDB hdb) $ \p ->
-        S.withPtrLen key $ \(kbuf, ksiz) -> do
-          vsize <- c_tchdbvsiz p kbuf ksiz
-          return $ if vsize == -1
-                     then Nothing
-                     else Just (fromIntegral vsize)
+vsiz = vsizHelper c_tchdbvsiz unTCHDB
 
 iterinit :: TCHDB -> IO Bool
 iterinit hdb = withForeignPtr (unTCHDB hdb) c_tchdbiterinit
@@ -126,11 +114,7 @@ iternext hdb =
                    S.peekPtrLen (vp, siz)
 
 fwmkeys :: (S.Storable a, S.Storable b) => TCHDB -> a -> Int -> IO [b]
-fwmkeys hdb key maxn = 
-    withForeignPtr (unTCHDB hdb) $ \p ->
-        S.withPtrLen key $ \(kbuf, ksiz) ->
-            c_tchdbfwmkeys p kbuf ksiz (fromIntegral maxn)
-                           >>= peekTCListAndFree
+fwmkeys = fwmHelper c_tchdbfwmkeys unTCHDB
 
 addint :: (S.Storable a) => TCHDB -> a -> Int -> IO (Maybe Int)
 addint = addHelper c_tchdbaddint unTCHDB fromIntegral fromIntegral (== cINT_MIN)
@@ -150,10 +134,7 @@ vanish :: TCHDB -> IO Bool
 vanish hdb = withForeignPtr (unTCHDB hdb) c_tchdbvanish
 
 copy :: TCHDB -> String -> IO Bool
-copy hdb pathname =
-    withForeignPtr (unTCHDB hdb) $ \p ->
-        withCString pathname $ \c_pathname ->
-            c_tchdbcopy p c_pathname
+copy = copyHelper c_tchdbcopy unTCHDB
 
 tranbegin :: TCHDB -> IO Bool
 tranbegin hdb = withForeignPtr (unTCHDB hdb) c_tchdbtranbegin

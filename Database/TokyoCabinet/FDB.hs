@@ -43,7 +43,6 @@ import qualified Database.TokyoCabinet.Storable as S
 import Foreign.Ptr
 import Foreign.ForeignPtr
 import Foreign.C.Types
-import Foreign.C.String
 import Foreign.Storable (peek)
 import Foreign.Marshal (alloca, free)
 import Foreign.Marshal.Array (peekArray)
@@ -55,8 +54,7 @@ import Data.Word
 data TCFDB = TCFDB { unTCFDB :: !(ForeignPtr FDB) }
 
 new :: IO TCFDB
-new = do fdb <- c_tcfdbnew
-         TCFDB `fmap` newForeignPtr tcfdbFinalizer fdb
+new = TCFDB `fmap` (c_tcfdbnew >>= newForeignPtr tcfdbFinalizer)
 
 delete :: TCFDB -> IO ()
 delete fdb = finalizeForeignPtr $ unTCFDB fdb
@@ -136,11 +134,7 @@ range fdb lower upper maxn =
           return $ map (fromID . ID) keys
 
 fwmkeys :: (S.Storable a, S.Storable b) => TCFDB -> a -> Int -> IO [b]
-fwmkeys fdb spec maxn =
-    withForeignPtr (unTCFDB fdb) $ \fdb' ->
-        S.withPtrLen spec $ \(ptr, len) -> do
-          c_tcfdbrange4 fdb' ptr len (fromIntegral maxn)
-                            >>= peekTCListAndFree
+fwmkeys = fwmHelper c_tcfdbrange4 unTCFDB
 
 addint :: (Key a) => TCFDB -> a -> Int -> IO (Maybe Int)
 addint fdb key num =
@@ -169,9 +163,7 @@ vanish :: TCFDB -> IO Bool
 vanish fdb = withForeignPtr (unTCFDB fdb) c_tcfdbvanish
 
 copy :: TCFDB -> String -> IO Bool
-copy fdb fpath =
-    withForeignPtr (unTCFDB fdb) $ \fdb' ->
-        withCString fpath (c_tcfdbcopy fdb')
+copy = copyHelper c_tcfdbcopy unTCFDB
 
 path :: TCFDB -> IO (Maybe String)
 path = pathHelper c_tcfdbpath unTCFDB

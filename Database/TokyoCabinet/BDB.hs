@@ -44,7 +44,6 @@ module Database.TokyoCabinet.BDB
 
 import Data.Int
 
-import Foreign.C.String
 import Foreign.Ptr
 import Foreign.ForeignPtr
 
@@ -54,9 +53,7 @@ import Database.TokyoCabinet.Internal
 import qualified Database.TokyoCabinet.Storable as S
 
 new :: IO TCBDB
-new = do
-  bdb <- c_tcbdbnew
-  TCBDB `fmap` newForeignPtr tcbdbFinalizer bdb
+new = TCBDB `fmap` (c_tcbdbnew >>= newForeignPtr tcbdbFinalizer)
 
 delete :: TCBDB -> IO ()
 delete bdb = finalizeForeignPtr (unTCBDB bdb)
@@ -104,9 +101,7 @@ out :: (S.Storable a) => TCBDB -> a -> IO Bool
 out = outHelper c_tcbdbout unTCBDB
 
 outlist :: (S.Storable a) => TCBDB -> a -> IO Bool
-outlist bdb key =
-    withForeignPtr (unTCBDB bdb) $ \bdb' ->
-        S.withPtrLen key $ \(kbuf, ksize) -> c_tcbdbout3 bdb' kbuf ksize
+outlist = outHelper c_tcbdbout3 unTCBDB
 
 get :: (S.Storable a, S.Storable b) => TCBDB -> a -> IO (Maybe b)
 get = getHelper c_tcbdbget unTCBDB
@@ -130,13 +125,7 @@ vnum bdb key =
                        else Just $ fromIntegral res
 
 vsiz :: (S.Storable a) => TCBDB -> a -> IO (Maybe Int)
-vsiz bdb key =
-    withForeignPtr (unTCBDB bdb) $ \bdb' ->
-        S.withPtrLen key $ \(kbuf, ksize) -> do
-            res <- c_tcbdbvsiz bdb' kbuf ksize
-            return $ if res == -1
-                       then Nothing
-                       else Just $ fromIntegral res
+vsiz = vsizHelper c_tcbdbvsiz unTCBDB
 
 range :: (S.Storable a)
          => TCBDB -> Maybe a -> Bool
@@ -152,11 +141,7 @@ range bdb bkey binc ekey einc maxn =
       withPtrLen' Nothing action = action (nullPtr, 0)
 
 fwmkeys :: (S.Storable a, S.Storable b) => TCBDB -> a -> Int -> IO [b]
-fwmkeys bdb prefix maxn =
-    withForeignPtr (unTCBDB bdb) $ \bdb' ->
-        S.withPtrLen prefix $ \(pbuf, psiz) ->
-            c_tcbdbfwmkeys bdb' pbuf psiz (fromIntegral maxn)
-                               >>= peekTCListAndFree
+fwmkeys = fwmHelper c_tcbdbfwmkeys unTCBDB
 
 addint :: (S.Storable a) => TCBDB -> a -> Int -> IO (Maybe Int)
 addint = addHelper c_tcbdbaddint unTCBDB fromIntegral fromIntegral (== cINT_MIN)
@@ -178,9 +163,7 @@ vanish :: TCBDB -> IO Bool
 vanish bdb = withForeignPtr (unTCBDB bdb) c_tcbdbvanish
 
 copy :: TCBDB -> String -> IO Bool
-copy bdb fpath =
-    withForeignPtr (unTCBDB bdb) $ \bdb' ->
-        withCString fpath (c_tcbdbcopy bdb')
+copy = copyHelper c_tcbdbcopy unTCBDB
 
 tranbegin :: TCBDB -> IO Bool
 tranbegin bdb = withForeignPtr (unTCBDB bdb) c_tcbdbtranbegin
