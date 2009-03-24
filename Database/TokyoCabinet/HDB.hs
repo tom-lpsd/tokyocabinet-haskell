@@ -40,17 +40,14 @@ module Database.TokyoCabinet.HDB
     )
     where
 
-import Foreign.C.Types (CInt)
 import Foreign.C.String
 
-import Foreign.Ptr
 import Foreign.Storable (peek)
 import Foreign.ForeignPtr
 import Foreign.Marshal (alloca)
 import Foreign.Marshal.Utils (maybePeek)
 
 import Data.Int
-import Data.Word
 
 import Database.TokyoCabinet.HDB.C
 import Database.TokyoCabinet.Error
@@ -84,50 +81,28 @@ setxmsiz hdb xmsiz =
     withForeignPtr (unTCHDB hdb) $ \p -> c_tchdbsetxmsiz p xmsiz
 
 open :: TCHDB -> String -> [OpenMode] -> IO Bool
-open hdb name modes = 
-    withForeignPtr (unTCHDB hdb) $ \p ->
-        withCString name $ \c_name ->
-            c_tchdbopen p c_name (combineOpenMode modes)
+open = openHelper c_tchdbopen unTCHDB combineOpenMode
 
 close :: TCHDB -> IO Bool
 close hdb = withForeignPtr (unTCHDB hdb) c_tchdbclose
 
-type PutFunc = Ptr HDB -> Ptr Word8 -> CInt -> Ptr Word8 -> CInt -> IO Bool
-
-liftPutFunc ::
-    (S.Storable a, S.Storable b) => PutFunc -> TCHDB -> a -> b -> IO Bool
-liftPutFunc func hdb key val =
-    withForeignPtr (unTCHDB hdb) $ \p ->
-        S.withPtrLen key $ \(kbuf, ksize) ->
-        S.withPtrLen val $ \(vbuf, vsize) -> func p kbuf ksize vbuf vsize
-
 put :: (S.Storable a, S.Storable b) => TCHDB -> a -> b -> IO Bool
-put = liftPutFunc c_tchdbput
+put = putHelper c_tchdbput unTCHDB
 
 putkeep :: (S.Storable a, S.Storable b) => TCHDB -> a -> b -> IO Bool
-putkeep = liftPutFunc c_tchdbputkeep
+putkeep = putHelper c_tchdbputkeep unTCHDB
 
 putcat :: (S.Storable a, S.Storable b) => TCHDB -> a -> b -> IO Bool
-putcat = liftPutFunc c_tchdbputcat
+putcat = putHelper c_tchdbputcat unTCHDB
 
 putasync :: (S.Storable a, S.Storable b) => TCHDB -> a -> b -> IO Bool
-putasync = liftPutFunc c_tchdbputasync
+putasync = putHelper c_tchdbputasync unTCHDB
 
 out :: (S.Storable a) => TCHDB -> a -> IO Bool
-out hdb key =
-    withForeignPtr (unTCHDB hdb) $ \p ->
-        S.withPtrLen key $ \(kbuf, ksiz) ->
-            c_tchdbout p kbuf ksiz
+out = outHelper c_tchdbout unTCHDB
 
 get :: (S.Storable a, S.Storable b) => TCHDB -> a -> IO (Maybe b)
-get hdb key =
-    withForeignPtr (unTCHDB hdb) $ \p ->
-        S.withPtrLen key $ \(kbuf, ksiz) ->
-            alloca $ \sizbuf -> do
-                vbuf <- c_tchdbget p kbuf ksiz sizbuf
-                flip maybePeek vbuf $ \vp ->
-                    do siz <- peek sizbuf
-                       S.peekPtrLen (vp, siz)
+get = getHelper c_tchdbget unTCHDB
 
 vsiz :: (S.Storable a) => TCHDB -> a -> IO (Maybe Int)
 vsiz hdb key =
@@ -158,22 +133,10 @@ fwmkeys hdb key maxn =
                            >>= peekTCListAndFree
 
 addint :: (S.Storable a) => TCHDB -> a -> Int -> IO (Maybe Int)
-addint hdb key num =
-    withForeignPtr (unTCHDB hdb) $ \p ->
-        S.withPtrLen key $ \(kbuf, ksiz) -> do
-            sumval <- c_tchdbaddint p kbuf ksiz (fromIntegral num)
-            return $ if sumval == cINT_MIN
-                       then Nothing
-                       else Just $ fromIntegral sumval
+addint = addHelper c_tchdbaddint unTCHDB fromIntegral fromIntegral (== cINT_MIN)
 
 adddouble :: (S.Storable a) => TCHDB -> a -> Double -> IO (Maybe Double)
-adddouble hdb key num =
-    withForeignPtr (unTCHDB hdb) $ \p ->
-        S.withPtrLen key $ \(kbuf, ksiz) -> do
-            sumval <- c_tchdbadddouble p kbuf ksiz (realToFrac num)
-            return $ if isNaN sumval
-                       then Nothing
-                       else Just $ realToFrac sumval
+adddouble = addHelper c_tchdbadddouble unTCHDB realToFrac realToFrac isNaN
 
 sync :: TCHDB -> IO Bool
 sync hdb = withForeignPtr (unTCHDB hdb) c_tchdbsync
@@ -202,10 +165,7 @@ tranabort :: TCHDB -> IO Bool
 tranabort hdb = withForeignPtr (unTCHDB hdb) c_tchdbtranabort
 
 path :: TCHDB -> IO (Maybe String)
-path hdb =
-    withForeignPtr (unTCHDB hdb) $ \p -> do
-      cstr <- c_tchdbpath p
-      maybePeek peekCString cstr
+path = pathHelper c_tchdbpath unTCHDB
 
 rnum :: TCHDB -> IO Int64
 rnum hdb = withForeignPtr (unTCHDB hdb) c_tchdbrnum

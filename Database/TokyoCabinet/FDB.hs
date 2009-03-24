@@ -37,7 +37,7 @@ module Database.TokyoCabinet.FDB
 import Database.TokyoCabinet.Error
 import Database.TokyoCabinet.FDB.C
 import Database.TokyoCabinet.FDB.Key
-import Database.TokyoCabinet.Internal (peekTCListAndFree)
+import Database.TokyoCabinet.Internal
 import qualified Database.TokyoCabinet.Storable as S
 
 import Foreign.Ptr
@@ -71,10 +71,7 @@ tune fdb width limsiz =
     withForeignPtr (unTCFDB fdb) $ \fdb' -> c_tcfdbtune fdb' width limsiz
 
 open :: TCFDB -> String -> [OpenMode] -> IO Bool
-open fdb fpath modes =
-    withForeignPtr (unTCFDB fdb) $ \fdb' ->
-        withCString fpath $ \fpath' ->
-            c_tcfdbopen fdb' fpath' (combineOpenMode modes)
+open = openHelper c_tcfdbopen unTCFDB combineOpenMode
 
 close :: TCFDB -> IO Bool
 close fdb = withForeignPtr (unTCFDB fdb) c_tcfdbclose
@@ -177,9 +174,7 @@ copy fdb fpath =
         withCString fpath (c_tcfdbcopy fdb')
 
 path :: TCFDB -> IO (Maybe String)
-path fdb =
-    withForeignPtr (unTCFDB fdb) $ \fdb' ->
-        c_tcfdbpath fdb' >>= (maybePeek peekCString)
+path = pathHelper c_tcfdbpath unTCFDB
 
 rnum :: TCFDB -> IO Int64
 rnum fdb = withForeignPtr (unTCFDB fdb) c_tcfdbrnum

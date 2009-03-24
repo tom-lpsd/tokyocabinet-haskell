@@ -43,15 +43,10 @@ module Database.TokyoCabinet.BDB
     ) where
 
 import Data.Int
-import Data.Word
 
-import Foreign.C.Types
 import Foreign.C.String
 import Foreign.Ptr
 import Foreign.ForeignPtr
-import Foreign.Storable (peek)
-import Foreign.Marshal (alloca)
-import Foreign.Marshal.Utils (maybePeek)
 
 import Database.TokyoCabinet.Error
 import Database.TokyoCabinet.BDB.C
@@ -84,42 +79,29 @@ setxmsiz bdb xmsiz =
     withForeignPtr (unTCBDB bdb) $ \bdb' -> c_tcbdbsetxmsiz bdb' xmsiz
 
 open :: TCBDB -> String -> [OpenMode] -> IO Bool
-open bdb fpath modes =
-    withForeignPtr (unTCBDB bdb) $ \bdb' ->
-        withCString fpath $ \fpath' ->
-            c_tcbdbopen bdb' fpath' (combineOpenMode modes)
+open = openHelper c_tcbdbopen unTCBDB combineOpenMode
 
 close :: TCBDB -> IO Bool
 close bdb = withForeignPtr (unTCBDB bdb) c_tcbdbclose
 
-type PutFunc = Ptr BDB -> Ptr Word8 -> CInt -> Ptr Word8 -> CInt -> IO Bool
-liftPutFunc ::
-    (S.Storable a, S.Storable b) => PutFunc -> TCBDB -> a -> b -> IO Bool
-liftPutFunc func bdb key val =
-    withForeignPtr (unTCBDB bdb) $ \bdb' ->
-        S.withPtrLen key $ \(kbuf, ksize) ->
-        S.withPtrLen val $ \(vbuf, vsize) -> func bdb' kbuf ksize vbuf vsize
-
 put :: (S.Storable a, S.Storable b) => TCBDB -> a -> b -> IO Bool
-put = liftPutFunc c_tcbdbput
+put = putHelper c_tcbdbput unTCBDB
 
 putkeep :: (S.Storable a, S.Storable b) => TCBDB -> a -> b -> IO Bool
-putkeep = liftPutFunc c_tcbdbputkeep
+putkeep = putHelper c_tcbdbputkeep unTCBDB
 
 putcat :: (S.Storable a, S.Storable b) => TCBDB -> a -> b -> IO Bool
-putcat = liftPutFunc c_tcbdbputcat
+putcat = putHelper c_tcbdbputcat unTCBDB
 
 putdup :: (S.Storable a, S.Storable b) => TCBDB -> a -> b -> IO Bool
-putdup = liftPutFunc c_tcbdbputdup
+putdup = putHelper c_tcbdbputdup unTCBDB
 
 putlist :: (S.Storable a, S.Storable b) => TCBDB -> a -> [b] -> IO Bool
 putlist bdb key vals = do
   and `fmap` mapM (putdup bdb key) vals
 
 out :: (S.Storable a) => TCBDB -> a -> IO Bool
-out bdb key =
-    withForeignPtr (unTCBDB bdb) $ \bdb' ->
-        S.withPtrLen key $ \(kbuf, ksize) -> c_tcbdbout bdb' kbuf ksize
+out = outHelper c_tcbdbout unTCBDB
 
 outlist :: (S.Storable a) => TCBDB -> a -> IO Bool
 outlist bdb key =
@@ -127,13 +109,7 @@ outlist bdb key =
         S.withPtrLen key $ \(kbuf, ksize) -> c_tcbdbout3 bdb' kbuf ksize
 
 get :: (S.Storable a, S.Storable b) => TCBDB -> a -> IO (Maybe b)
-get bdb key =
-    withForeignPtr (unTCBDB bdb) $ \bdb' ->
-        S.withPtrLen key $ \(kbuf, ksize) ->
-            alloca $ \sizbuf -> do
-                ptr <- c_tcbdbget bdb' kbuf ksize sizbuf
-                siz <- peek sizbuf
-                flip maybePeek ptr $ \p -> S.peekPtrLen (p, siz)
+get = getHelper c_tcbdbget unTCBDB
 
 getlist :: (S.Storable a, S.Storable b) => TCBDB -> a -> IO [b]
 getlist bdb key =
@@ -183,22 +159,10 @@ fwmkeys bdb prefix maxn =
                                >>= peekTCListAndFree
 
 addint :: (S.Storable a) => TCBDB -> a -> Int -> IO (Maybe Int)
-addint bdb key num =
-    withForeignPtr (unTCBDB bdb) $ \bdb' ->
-        S.withPtrLen key $ \(kbuf, ksiz) -> do
-            sumval <- c_tcbdbaddint bdb' kbuf ksiz (fromIntegral num)
-            return $ if sumval == cINT_MIN
-                       then Nothing
-                       else Just $ fromIntegral sumval
+addint = addHelper c_tcbdbaddint unTCBDB fromIntegral fromIntegral (== cINT_MIN)
 
 adddouble :: (S.Storable a) => TCBDB -> a -> Double -> IO (Maybe Double)
-adddouble bdb key num =
-    withForeignPtr (unTCBDB bdb) $ \bdb' ->
-        S.withPtrLen key $ \(kbuf, ksiz) -> do
-            sumval <- c_tcbdbadddouble bdb' kbuf ksiz (realToFrac num)
-            return $ if isNaN sumval
-                       then Nothing
-                       else Just $ realToFrac sumval
+adddouble = addHelper c_tcbdbadddouble unTCBDB realToFrac realToFrac isNaN
 
 sync :: TCBDB -> IO Bool
 sync bdb = withForeignPtr (unTCBDB bdb) c_tcbdbsync
@@ -228,10 +192,7 @@ tranabort :: TCBDB -> IO Bool
 tranabort bdb = withForeignPtr (unTCBDB bdb) c_tcbdbtranabort
 
 path :: TCBDB -> IO (Maybe String)
-path bdb =
-    withForeignPtr (unTCBDB bdb) $ \bdb' -> do
-        fpath <- c_tcbdbpath bdb'
-        maybePeek peekCString fpath
+path = pathHelper c_tcbdbpath unTCBDB
 
 rnum :: TCBDB -> IO Int64
 rnum bdb = withForeignPtr (unTCBDB bdb) c_tcbdbrnum
