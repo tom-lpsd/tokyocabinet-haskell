@@ -11,8 +11,8 @@ import Control.Monad
 dbname :: String
 dbname = "foo.tch"
 
-withOpendHDB :: String -> (TCHDB -> IO a) -> IO a
-withOpendHDB name action = do
+withOpenedHDB :: String -> (TCHDB -> IO a) -> IO a
+withOpenedHDB name action = do
   h <- new
   open h name [OREADER, OWRITER, OCREAT]
   res <- action h
@@ -39,7 +39,7 @@ test_open_close =
 
 test_putxx =
     withoutFile dbname $ \fn ->
-        withOpendHDB fn $ \hdb -> do
+        withOpenedHDB fn $ \hdb -> do
           put hdb "foo" "bar"
           get hdb "foo" >>= (Just "bar" @=?)
           putkeep hdb "foo" "baz"
@@ -52,7 +52,7 @@ test_putxx =
 
 test_out =
     withoutFile dbname $ \fn ->
-        withOpendHDB fn $ \hdb -> do
+        withOpenedHDB fn $ \hdb -> do
           put hdb "foo" "bar"
           get hdb "foo" >>= (Just "bar" @=?)
           out hdb "foo" @? "out succeeded"
@@ -60,7 +60,7 @@ test_out =
 
 test_put_get =
     withoutFile dbname $ \fn ->
-        withOpendHDB fn $ \hdb -> do
+        withOpenedHDB fn $ \hdb -> do
           put hdb "1" "foo"
           put hdb "2" "bar"
           put hdb "3" "baz"
@@ -70,14 +70,14 @@ test_put_get =
 
 test_vsiz =
     withoutFile dbname $ \fn ->
-        withOpendHDB fn $ \hdb -> do
+        withOpenedHDB fn $ \hdb -> do
           put hdb "foo" "bar"
           vsiz hdb "foo" >>= (Just 3 @=?)
           vsiz hdb "bar" >>= ((Nothing :: Maybe Int) @=?)
 
 test_iterate =
     withoutFile dbname $ \fn ->
-        withOpendHDB fn $ \hdb -> do
+        withOpenedHDB fn $ \hdb -> do
           let keys = [1, 2, 3] :: [Int]
               vals = ["foo", "bar", "baz"]
           zipWithM_ (put hdb) keys vals
@@ -87,7 +87,7 @@ test_iterate =
 
 test_fwmkeys =
     withoutFile dbname $ \fn ->
-        withOpendHDB fn $ \hdb -> do
+        withOpenedHDB fn $ \hdb -> do
           mapM_ (uncurry (put hdb)) ([ ("foo", 100)
                                      , ("bar", 200)
                                      , ("baz", 201)
@@ -98,7 +98,7 @@ test_fwmkeys =
 
 test_addint =
     withoutFile dbname $ \fn ->
-        withOpendHDB fn $ \hdb -> do
+        withOpenedHDB fn $ \hdb -> do
           let ini = 32 :: Int
           put hdb "foo" ini
           get hdb "foo" >>= (Just ini @=?)
@@ -110,7 +110,7 @@ test_addint =
 
 test_adddouble =
     withoutFile dbname $ \fn ->
-        withOpendHDB fn $ \hdb -> do
+        withOpenedHDB fn $ \hdb -> do
           let ini = 0.003 :: Double
           put hdb "foo" ini
           get hdb "foo" >>= (Just ini @=?)
@@ -128,7 +128,7 @@ test_adddouble =
 
 test_vanish =
     withoutFile dbname $ \fn ->
-        withOpendHDB fn $ \hdb -> do
+        withOpenedHDB fn $ \hdb -> do
             put hdb "foo" "111"
             put hdb "bar" "222"
             put hdb "baz" "333"
@@ -139,7 +139,7 @@ test_vanish =
 test_copy =
     withoutFile dbname $ \fns ->
         withoutFile "bar.tch" $ \fnd ->
-            withOpendHDB fns $ \hdb -> do
+            withOpenedHDB fns $ \hdb -> do
                 put hdb "foo" "bar"
                 copy hdb fnd
                 close hdb
@@ -148,7 +148,7 @@ test_copy =
 
 test_txn =
     withoutFile dbname $ \fn ->
-        withOpendHDB fn $ \hdb -> do
+        withOpenedHDB fn $ \hdb -> do
           tranbegin hdb
           put hdb "foo" "bar"
           get hdb "foo" >>= (Just "bar" @=?)
@@ -162,7 +162,7 @@ test_txn =
 
 test_path =
     withoutFile dbname $ \fn ->
-        withOpendHDB fn $ \hdb ->
+        withOpenedHDB fn $ \hdb ->
             path hdb >>= (Just dbname @=?)
 
 test_util =
