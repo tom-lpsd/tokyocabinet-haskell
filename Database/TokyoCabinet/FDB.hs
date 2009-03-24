@@ -51,6 +51,8 @@ import Foreign.Marshal.Utils (maybePeek)
 import Data.Int
 import Data.Word
 
+import Control.Exception
+
 data TCFDB = TCFDB { unTCFDB :: !(ForeignPtr FDB) }
 
 new :: IO TCFDB
@@ -79,7 +81,8 @@ liftPutFunc :: (Key a, S.Storable b) => PutFunc -> TCFDB -> a -> b -> IO Bool
 liftPutFunc func fdb key val =
     withForeignPtr (unTCFDB fdb) $ \fdb' ->
         S.withPtrLen val $ \(vbuf, vsize) -> do
-          func fdb' (unID . toID $ key) vbuf vsize
+          key' <- keyToInt key
+          func fdb' key' vbuf vsize
         
 put :: (Key a, S.Storable b) => TCFDB -> a -> b -> IO Bool
 put = liftPutFunc c_tcfdbput
@@ -93,20 +96,21 @@ putcat =  liftPutFunc c_tcfdbputcat
 out :: (Key a) => TCFDB -> a -> IO Bool
 out fdb key =
     withForeignPtr (unTCFDB fdb) $ \fdb' ->
-        c_tcfdbout fdb' $ unID . toID $ key
+        c_tcfdbout fdb' =<< keyToInt key
 
 get :: (Key a, S.Storable b) => TCFDB -> a -> IO (Maybe b)
 get fdb key =
     withForeignPtr (unTCFDB fdb) $ \fdb' ->
         alloca $ \sizbuf -> do
-            vbuf  <- c_tcfdbget fdb' (unID . toID $ key) sizbuf
-            vsize <- peek sizbuf
-            flip maybePeek vbuf $ \vbuf' -> S.peekPtrLen (vbuf', vsize)
+          key' <- keyToInt key
+          vbuf  <- c_tcfdbget fdb' key' sizbuf
+          vsize <- peek sizbuf
+          flip maybePeek vbuf $ \vbuf' -> S.peekPtrLen (vbuf', vsize)
 
 vsiz :: (Key a) => TCFDB -> a -> IO (Maybe Int)
 vsiz fdb key =
     withForeignPtr (unTCFDB fdb) $ \fdb' -> do
-      vsize <- c_tcfdbvsiz fdb' (unID . toID $ key)
+      vsize <- c_tcfdbvsiz fdb' =<< keyToInt key
       return $ if vsize == (-1)
                  then Nothing
                  else Just (fromIntegral vsize)
@@ -126,8 +130,8 @@ range :: (Key a, Key b) => TCFDB -> a -> a -> Int -> IO [b]
 range fdb lower upper maxn =
     withForeignPtr (unTCFDB fdb) $ \fdb' ->
         alloca $ \sizbuf -> do
-          rp <- c_tcfdbrange fdb' (unID . toID $ lower) (unID . toID $ upper)
-                                  (fromIntegral maxn) sizbuf
+          [l, u] <- mapM keyToInt [lower, upper]
+          rp <- c_tcfdbrange fdb' l u (fromIntegral maxn) sizbuf
           size <- fromIntegral `fmap` peek sizbuf
           keys <- peekArray size rp
           free rp
@@ -139,18 +143,20 @@ fwmkeys = fwmHelper c_tcfdbrange4 unTCFDB
 addint :: (Key a) => TCFDB -> a -> Int -> IO (Maybe Int)
 addint fdb key num =
     withForeignPtr (unTCFDB fdb) $ \fdb' -> do
-        sumval <- c_tcfdbaddint fdb' (unID . toID $ key) (fromIntegral num)
-        return $ if sumval == cINT_MIN
-                   then Nothing
-                   else Just $ fromIntegral sumval
+      key' <- keyToInt key
+      sumval <- c_tcfdbaddint fdb' key' (fromIntegral num)
+      return $ if sumval == cINT_MIN
+                 then Nothing
+                 else Just $ fromIntegral sumval
 
 adddouble :: (Key a) => TCFDB -> a -> Double -> IO (Maybe Double)
 adddouble fdb key num =
     withForeignPtr (unTCFDB fdb) $ \fdb' -> do
-        sumval <- c_tcfdbadddouble fdb' (unID . toID $ key) (realToFrac num)
-        return $ if isNaN sumval
-                   then Nothing
-                   else Just $ realToFrac sumval
+      key' <- keyToInt key
+      sumval <- c_tcfdbadddouble fdb' key' (realToFrac num)
+      return $ if isNaN sumval
+                 then Nothing
+                 else Just $ realToFrac sumval
 
 sync :: TCFDB -> IO Bool
 sync fdb = withForeignPtr (unTCFDB fdb) c_tcfdbsync
@@ -173,3 +179,12 @@ rnum fdb = withForeignPtr (unTCFDB fdb) c_tcfdbrnum
 
 fsiz :: TCFDB -> IO Int64
 fsiz fdb = withForeignPtr (unTCFDB fdb) c_tcfdbfsiz
+
+keyToInt :: (Key a) => a -> IO Int64
+keyToInt i = catchJust selector (evaluate (unID . toID $ i)) handler
+    where
+      selector :: ErrorCall -> Maybe ()
+      selector e = if show e == "Prelude.read: no parse"
+                     then Just ()
+                     else Nothing
+      handler _ = error "Database.TokyoCabinet.FDB: invalid key"
