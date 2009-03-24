@@ -60,6 +60,7 @@ class TCDB a where
     rnum      :: a -> TCM Int64
     size      :: a -> TCM Int64
     ecode     :: a -> TCM E.TCECODE
+    defaultExtention :: a -> String
 
 openModeToHOpenMode :: OpenMode -> H.OpenMode
 openModeToHOpenMode OREADER = H.OREADER
@@ -101,6 +102,7 @@ instance TCDB H.TCHDB where
     rnum              = lift  H.rnum
     size              = lift  H.fsiz
     ecode             = lift  H.ecode
+    defaultExtention  = const ".tch"
 
 openModeToBOpenMode :: OpenMode -> B.OpenMode
 openModeToBOpenMode OREADER = B.OREADER
@@ -150,6 +152,7 @@ instance TCDB TCBDB where
     rnum              = liftB  B.rnum
     size              = liftB  B.fsiz
     ecode             = liftB  B.ecode
+    defaultExtention  = const ".tcb"
 
 instance TCDB B.TCBDB where
     new               = TCM   B.new
@@ -174,6 +177,7 @@ instance TCDB B.TCBDB where
     rnum              = lift  B.rnum
     size              = lift  B.fsiz
     ecode             = lift  B.ecode
+    defaultExtention  = const ".tcb"
 
 openModeToFOpenMode :: OpenMode -> F.OpenMode
 openModeToFOpenMode OREADER = F.OREADER
@@ -227,3 +231,4 @@ instance TCDB F.TCFDB where
     rnum              = lift   F.rnum
     size              = lift   F.fsiz
     ecode             = lift   F.ecode
+    defaultExtention  = const ".tcf"
