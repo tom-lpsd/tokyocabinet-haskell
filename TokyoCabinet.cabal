@@ -83,7 +83,6 @@ Executable BDBTest
   else
     Buildable:            False
   Main-Is:              tests/BDBTest.hs
-  Ghc-options:          -fhpc
   Extra-libraries:      tokyocabinet
   Build-depends:        HUnit >= 1.2, base >= 4.0, directory >= 1.0
   Extensions:           CPP, ForeignFunctionInterface,
