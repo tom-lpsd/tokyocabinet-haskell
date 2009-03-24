@@ -5,7 +5,7 @@ import TestUtil
 import Database.TokyoCabinet.BDB
 import qualified Database.TokyoCabinet.BDB.Cursor as C
 
-import Data.Maybe (catMaybes)
+import Data.Maybe (catMaybes, fromJust)
 import Data.List (sort)
 import Control.Monad
 
@@ -47,6 +47,10 @@ test_putxx =
           get bdb "foo" >>= (Just "bar" @=?)
           putcat bdb "foo" "baz"
           get bdb "foo" >>= (Just "barbaz" @=?)
+          putdup bdb "foo" "bar2" @? "putdup"
+          getlist bdb "foo" >>= (["barbaz", "bar2"] @=?)
+          putlist bdb "bar" ["hoge", "fuga", "abc"] @? "putlist"
+          getlist bdb "bar" >>= (["hoge", "fuga", "abc"] @=?)
 
 test_out =
     withoutFile dbname $ \fn ->
@@ -55,6 +59,11 @@ test_out =
           get bdb "foo" >>= (Just "bar" @=?)
           out bdb "foo" @? "out succeeded"
           get bdb "foo" >>= ((Nothing :: Maybe String) @=?)
+          putlist bdb "bar" ([1, 2, 3] :: [Int])
+          out bdb "bar" -- first one is removed
+          get bdb "bar" >>= ((Just 2 :: Maybe Int) @=?)
+          outlist bdb "bar"
+          get bdb "bar" >>= ((Nothing :: Maybe Int) @=?)
 
 test_put_get =
     withoutFile dbname $ \fn ->
@@ -65,6 +74,17 @@ test_put_get =
           get bdb "1" >>= (Just "foo" @=?)
           get bdb "2" >>= (Just "bar" @=?)
           get bdb "3" >>= (Just "baz" @=?)
+          putdup bdb "1" "foo2"
+          get bdb "4" >>= ((Nothing :: Maybe String) @=?)
+          getlist bdb "1" >>= (["foo", "foo2"] @=?)
+          getlist bdb "4" >>= (([] :: [String]) @=?)
+
+test_vnum =
+    withoutFile dbname $ \fn ->
+        withOpendBDB fn $ \bdb -> do
+          putlist bdb "foo" ["bar", "baz", "hoge", "fuga"]
+          vnum bdb "foo" >>= (Just 4 @=?)
+          vnum bdb "bar" >>= (Nothing @=?)
 
 test_vsiz =
     withoutFile dbname $ \fn ->
@@ -76,28 +96,49 @@ test_vsiz =
 test_iterate =
     withoutFile dbname $ \fn ->
         withOpendBDB fn $ \bdb -> do
-          mapM_ (uncurry (put bdb)) ([ ("foo", 100)
-                                     , ("bar", 200)
-                                     , ("baz", 201)
-                                     , ("jkl", 300)] :: [(String, Int)])
+          let keys  = ["foo", "bar", "baz", "jkl"]
+              vals  = [100, 200 ..] :: [Int]
+              kvs = sort $ zip keys vals
+              destkey = "baz"
+              destval = fromJust $ lookup destkey kvs
+          zipWithM (put bdb) keys vals
           cur <- C.new bdb
           C.first cur
-          C.key cur >>= (Just "bar" @=?)
-          C.val cur >>= (Just (200 :: Int) @=?)
+          C.key cur >>= (Just (fst . head $ kvs) @=?)
+          C.val cur >>= (Just (snd . head $ kvs) @=?)
           C.out cur @? "cursor out"
-          get bdb "bar" >>= ((Nothing :: Maybe String) @=?)
-          C.key cur >>= (Just "baz" @=?)
-          C.val cur >>= (Just (201 :: Int) @=?)
+          get bdb (fst . head $ kvs) >>= ((Nothing :: Maybe String) @=?)
+          C.key cur >>= (Just (fst . (!! 1) $ kvs) @=?)
+          C.val cur >>= (Just (snd . (!! 1) $ kvs) @=?)
           C.next cur @? "cursor next"
-          C.key cur >>= (Just "foo" @=?)
-          C.val cur >>= (Just (100 :: Int) @=?)
+          C.key cur >>= (Just (fst . (!! 2) $ kvs) @=?)
+          C.val cur >>= (Just (snd . (!! 2) $ kvs) @=?)
           C.prev cur @? "cursor prev"
-          C.key cur >>= (Just "baz" @=?)
-          C.val cur >>= (Just (201 :: Int) @=?)
+          C.key cur >>= (Just (fst . (!! 1) $ kvs) @=?)
+          C.val cur >>= (Just (snd . (!! 1) $ kvs) @=?)
           C.jump cur "b" @? "cursor jump"
-          C.key cur >>= (Just "baz" @=?)
-          C.put cur (111 :: Int) C.CPAFTER @? "cursor put"
-          getlist bdb "baz" >>= (([201, 111] :: [Int]) @=?)
+          C.key cur >>= (Just destkey @=?)
+          C.put cur (100 :: Int) C.CPAFTER @? "cursor put"
+          getlist bdb destkey >>= (([destval, 100] :: [Int]) @=?)
+          C.last cur @? "cursor last"
+          C.key cur >>= (Just (fst . last $ kvs) @=?)
+          C.delete cur
+
+test_range =
+    withoutFile dbname $ \fn ->
+        withOpendBDB fn $ \bdb -> do
+          let keys = ["abc", "abd", "bcd", "bcz", "fgh", "ghjc", "ziji"]
+          zipWithM (put bdb) keys ([1..] :: [Int])
+          range bdb (Just "a") True (Just "abz") True 10
+                    >>= (["abc", "abd"] @=?)
+          range bdb (Just "a") True (Just "abd") False 10
+                    >>= (["abc"] @=?)
+          range bdb (Just "abc") False (Just "fgh") False 3
+                    >>= (["abd", "bcd", "bcz"] @=?)
+          range bdb (Just "a") False (Just "ab") False 10
+                    >>= (([] :: [String]) @=?)
+          range bdb Nothing False Nothing False (-1) >>= (keys @=?)
+
 
 test_fwmkeys =
     withoutFile dbname $ \fn ->
@@ -198,10 +239,12 @@ tests = test [
         , "ecode" ~: test_ecode
         , "open close"  ~: test_open_close
         , "put get" ~: test_put_get
+        , "vnum" ~: test_vnum
         , "out" ~: test_out
         , "putxx" ~: test_putxx
         , "copy" ~: test_copy
         , "transaction" ~: test_txn
+        , "range" ~: test_range
         , "fwmkeys" ~: test_fwmkeys
         , "path" ~: test_path
         , "addint" ~: test_addint
