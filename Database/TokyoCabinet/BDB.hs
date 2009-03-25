@@ -1,10 +1,13 @@
+-- | Interface to B+ tree based DBM. See also,
+-- <http://tokyocabinet.sourceforge.net/spex-en.html#tcbdbapi> for details
 module Database.TokyoCabinet.BDB
     (
-    -- * constants
-      TCECODE(..)
+    -- * Constructors
+      TCBDB
+    , TCECODE(..)
     , OpenMode(..)
     , TuningOption(..)
-    -- * basic api
+    -- * Basic API (tokyocabinet.idl compliant)
     , new
     , delete
     , ecode
@@ -39,7 +42,6 @@ module Database.TokyoCabinet.BDB
     , path
     , rnum
     , fsiz
-    , TCBDB
     ) where
 
 import Data.Int
@@ -52,60 +54,97 @@ import Database.TokyoCabinet.BDB.C
 import Database.TokyoCabinet.Internal
 import qualified Database.TokyoCabinet.Storable as S
 
+-- | Create a B+ tree database object. 
 new :: IO TCBDB
 new = TCBDB `fmap` (c_tcbdbnew >>= newForeignPtr tcbdbFinalizer)
 
+-- | Force to free region of BDB. 
+-- BDB is kept by ForeignPtr, so Haskell runtime GC cleans up memory for
+-- almost situation. Most always, you don't need to call this. 
+-- After call this, you must not touch BDB object. Its behavior is undefined.
 delete :: TCBDB -> IO ()
 delete bdb = finalizeForeignPtr (unTCBDB bdb)
 
+-- | Return the last happened error code.
 ecode :: TCBDB -> IO TCECODE
 ecode bdb = cintToError `fmap` withForeignPtr (unTCBDB bdb) c_tcbdbecode
 
-tune :: TCBDB -> Int32 -> Int32
-     -> Int64 -> Int8 -> Int8 -> [TuningOption] -> IO Bool
+-- | Set the tuning parameters.
+tune :: TCBDB -- ^ TCBDB object
+     -> Int32 -- ^ the number of members in each leaf page.
+     -> Int32 -- ^ the number of members in each non-leaf page.
+     -> Int64 -- ^ the number of elements of the bucket array. 
+     -> Int8  -- ^ the size of record alignment by power of 2.
+     -> Int8  -- ^ the maximum number of elements of the free block
+              -- pool by power of 2.
+     -> [TuningOption] -- ^ tuning options
+     -> IO Bool -- ^ if successful, the return value is True.
 tune bdb lmemb nmemb bnum apow fpow opts =
     withForeignPtr (unTCBDB bdb) $ \bdb' ->
         c_tcbdbtune bdb' lmemb nmemb bnum apow fpow (combineTuningOption opts)
 
-setcache :: TCBDB -> Int32 -> Int32 -> IO Bool
+-- | Set the caching parameters.
+setcache :: TCBDB -- ^ TCBDB object
+         -> Int32 -- ^ the maximum number of leaf nodes to be cached.
+         -> Int32 -- ^ the maximum number of non-leaf nodes to be cached.
+         -> IO Bool -- ^ if successful, the return value is True.
 setcache bdb lcnum ncnum =
     withForeignPtr (unTCBDB bdb) $ \bdb' -> c_tcbdbsetcache bdb' lcnum ncnum
 
+-- | Set the size of extra mapped memory.
 setxmsiz :: TCBDB -> Int64 -> IO Bool
 setxmsiz bdb xmsiz =
     withForeignPtr (unTCBDB bdb) $ \bdb' -> c_tcbdbsetxmsiz bdb' xmsiz
 
+-- | Open BDB database file.
 open :: TCBDB -> String -> [OpenMode] -> IO Bool
 open = openHelper c_tcbdbopen unTCBDB combineOpenMode
 
+-- | Close the database file.
 close :: TCBDB -> IO Bool
 close bdb = withForeignPtr (unTCBDB bdb) c_tcbdbclose
 
-put :: (S.Storable a, S.Storable b) => TCBDB -> a -> b -> IO Bool
+-- | Stora a record (key-value pair) on BDB.  Key and value type must
+-- be instance of Storable class.  Usually, we can use `String',
+-- `ByteString' for key, `String', `ByteString', `Int', `Double' for
+-- value.
+put :: (S.Storable k, S.Storable v) => TCBDB -> k -> v -> IO Bool
 put = putHelper c_tcbdbput unTCBDB
 
+-- | Store a new record. If a record with the same key exists in the
+-- database, this function has no effect.
 putkeep :: (S.Storable a, S.Storable b) => TCBDB -> a -> b -> IO Bool
 putkeep = putHelper c_tcbdbputkeep unTCBDB
 
+-- | Concatenate a value at the end of the existing record.
 putcat :: (S.Storable a, S.Storable b) => TCBDB -> a -> b -> IO Bool
 putcat = putHelper c_tcbdbputcat unTCBDB
 
+-- | Store a record with allowing duplication of keys. 
 putdup :: (S.Storable a, S.Storable b) => TCBDB -> a -> b -> IO Bool
 putdup = putHelper c_tcbdbputdup unTCBDB
 
+-- | Store records with allowing duplication of keys. 
 putlist :: (S.Storable a, S.Storable b) => TCBDB -> a -> [b] -> IO Bool
 putlist bdb key vals = do
   and `fmap` mapM (putdup bdb key) vals
 
+-- | Delete a record. If the key of duplicated records is specified,
+-- the first one is deleted. 
 out :: (S.Storable a) => TCBDB -> a -> IO Bool
 out = outHelper c_tcbdbout unTCBDB
 
+-- | Delete records. If the key of duplicated records is specified,
+-- all of them are deleted.
 outlist :: (S.Storable a) => TCBDB -> a -> IO Bool
 outlist = outHelper c_tcbdbout3 unTCBDB
 
+-- | Return the value of record. If the key of duplicated records is
+-- specified, the first one is returned.
 get :: (S.Storable a, S.Storable b) => TCBDB -> a -> IO (Maybe b)
 get = getHelper c_tcbdbget unTCBDB
 
+-- | Retrieve records. 
 getlist :: (S.Storable a, S.Storable b) => TCBDB -> a -> IO [b]
 getlist bdb key =
     withForeignPtr (unTCBDB bdb) $ \bdb' ->
@@ -115,6 +154,7 @@ getlist bdb key =
             then return []
             else peekTCListAndFree ptr
 
+-- | Return the number of records corresponding to a key. 
 vnum :: (S.Storable a) => TCBDB -> a -> IO (Maybe Int)
 vnum bdb key =
     withForeignPtr (unTCBDB bdb) $ \bdb' ->
@@ -124,12 +164,24 @@ vnum bdb key =
                        then Nothing
                        else Just $ fromIntegral res
 
+-- | Return the size of the value of a record. If the key of duplicated
+-- records is specified, the first one is selected.
 vsiz :: (S.Storable a) => TCBDB -> a -> IO (Maybe Int)
 vsiz = vsizHelper c_tcbdbvsiz unTCBDB
 
-range :: (S.Storable a)
-         => TCBDB -> Maybe a -> Bool
-                  -> Maybe a -> Bool -> Int -> IO [a]
+-- | Return list of keys in the specified range.
+range :: (S.Storable a) =>
+         TCBDB   -- ^ TCBDB object
+      -> Maybe a -- ^ the key of the beginning border. If it is
+                 -- Nothing, the first record in the database is
+                 -- specified.
+      -> Bool    -- ^ whether the beginning border is inclusive or not. 
+      -> Maybe a -- ^ the key of the ending border. If it is Nothing,
+                 -- the last record is specified.
+      -> Bool    -- ^ whether the ending border is inclusive or not.
+      -> Int     -- ^ the maximum number of keys to be fetched. If it
+                 -- is negative value, no limit is specified.
+      -> IO [a]  -- ^ keys in the specified range.
 range bdb bkey binc ekey einc maxn =
     withForeignPtr (unTCBDB bdb) $ \bdb' ->
         withPtrLen' bkey $ \(bkbuf, bksiz) ->
@@ -140,45 +192,81 @@ range bdb bkey binc ekey einc maxn =
       withPtrLen' (Just key) action = S.withPtrLen key action
       withPtrLen' Nothing action = action (nullPtr, 0)
 
-fwmkeys :: (S.Storable a, S.Storable b) => TCBDB -> a -> Int -> IO [b]
+-- | Return list of forward matched keys.
+fwmkeys :: (S.Storable a, S.Storable b) =>
+           TCBDB  -- ^ TCBDB object
+        -> a      -- ^ search string
+        -> Int    -- ^ the maximum number of keys to be fetched. If it
+                  -- is negative value, no limit is specified.
+        -> IO [b] -- ^ keys matches specified string (in forward matching).
 fwmkeys = fwmHelper c_tcbdbfwmkeys unTCBDB
 
-addint :: (S.Storable a) => TCBDB -> a -> Int -> IO (Maybe Int)
+-- | Increment the corresponding value. (The value specified by a key
+-- is treated as integer.)
+addint :: (S.Storable a) =>
+          TCBDB -- ^ TCBDB object.
+       -> a     -- ^ Key.
+       -> Int   -- ^ Amount of increment.
+       -> IO (Maybe Int) -- ^ If successful, a new value is returned.
 addint = addHelper c_tcbdbaddint unTCBDB fromIntegral fromIntegral (== cINT_MIN)
 
-adddouble :: (S.Storable a) => TCBDB -> a -> Double -> IO (Maybe Double)
+-- | Increment the corresponding value. (The value specified by a key
+-- is treated as double.)
+adddouble :: (S.Storable a) =>
+             TCBDB  -- ^ TCBDB object.
+          -> a      -- ^ Key.
+          -> Double -- ^ Amount of increment.
+          -> IO (Maybe Double) -- ^ If successful, a new value is returned.
 adddouble = addHelper c_tcbdbadddouble unTCBDB realToFrac realToFrac isNaN
 
+-- | Synchronize updated contents of a database object with the file
+-- and the device.
 sync :: TCBDB -> IO Bool
 sync bdb = withForeignPtr (unTCBDB bdb) c_tcbdbsync
 
-optimize :: TCBDB -> Int32 -> Int32
-         -> Int64 -> Int8 -> Int8 -> [TuningOption] -> IO Bool
+-- |  Optimize the file of a B+ tree database object.
+optimize :: TCBDB
+         -> Int32 -- ^ the number of members in each leaf page.
+         -> Int32 -- ^ the number of members in each non-leaf page.
+         -> Int64 -- ^ the number of elements of the bucket array. 
+         -> Int8  -- ^ the size of record alignment by power of 2.
+         -> Int8  -- ^ the maximum number of elements of the free block
+                  -- pool by power of 2.
+         -> [TuningOption] -- ^ tuning options
+         -> IO Bool -- ^ if successful, the return value is True.
 optimize bdb lmemb nmemb bnum apow fpow opts =
     withForeignPtr (unTCBDB bdb) $ \bdb' ->
         c_tcbdboptimize bdb' lmemb nmemb bnum apow fpow
                         (combineTuningOption opts)
 
+-- | Delete all records.
 vanish :: TCBDB -> IO Bool
 vanish bdb = withForeignPtr (unTCBDB bdb) c_tcbdbvanish
 
+-- | Copy the database file.
 copy :: TCBDB -> String -> IO Bool
 copy = copyHelper c_tcbdbcopy unTCBDB
 
+-- | Begin the transaction.
 tranbegin :: TCBDB -> IO Bool
 tranbegin bdb = withForeignPtr (unTCBDB bdb) c_tcbdbtranbegin
 
+-- | Commit the transaction.
 trancommit :: TCBDB -> IO Bool
 trancommit bdb = withForeignPtr (unTCBDB bdb) c_tcbdbtrancommit
 
+-- | Abort the transaction.
 tranabort :: TCBDB -> IO Bool
 tranabort bdb = withForeignPtr (unTCBDB bdb) c_tcbdbtranabort
 
+-- | Return the file path of currentry opened database.
 path :: TCBDB -> IO (Maybe String)
 path = pathHelper c_tcbdbpath unTCBDB
 
+-- | Return the number of records in the database.
 rnum :: TCBDB -> IO Int64
 rnum bdb = withForeignPtr (unTCBDB bdb) c_tcbdbrnum
 
+-- | Return the size of the database file.
 fsiz :: TCBDB -> IO Int64
 fsiz bdb = withForeignPtr (unTCBDB bdb) c_tcbdbfsiz
