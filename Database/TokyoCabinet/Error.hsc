@@ -1,13 +1,13 @@
 {-# LANGUAGE CPP, ForeignFunctionInterface #-}
 module Database.TokyoCabinet.Error
     (
-    -- * error code type
+    -- * Error code
       TCECODE(..)
-    -- * utility function
+    -- * Utility function
     , errmsg
     , cintToError
     , errorToCInt
-    -- * other constants
+    -- * Other constants
     , cINT_MIN
     ) where
 
@@ -17,31 +17,32 @@ import Foreign.C.String
 
 #include <tcutil.h>
 
+-- | Represents error
 data TCECODE =
-    ESUCCESS |
-    ETHREAD  |
-    EINVALID |
-    ENOFILE  |
-    ENOPERM  |
-    EMETA    |
-    ERHEAD   |
-    EOPEN    |
-    ECLOSE   |
-    ETRUNC   |
-    ESYNC    |
-    ESTAT    |
-    ESEEK    |
-    EREAD    |
-    EWRITE   |
-    EMMAP    |
-    ELOCK    |
-    EUNLINK  |
-    ERENAME  |
-    EMKDIR   |
-    ERMDIR   |
-    EKEEP    |
-    ENOREC   |
-    EMISC
+    ESUCCESS | -- ^ success            
+    ETHREAD  | -- ^ threading error    
+    EINVALID | -- ^ invalid operation  
+    ENOFILE  | -- ^ file not found     
+    ENOPERM  | -- ^ no permission      
+    EMETA    | -- ^ invalid meta data  
+    ERHEAD   | -- ^ invalid record header 
+    EOPEN    | -- ^ open error         
+    ECLOSE   | -- ^ close error        
+    ETRUNC   | -- ^ trunc error        
+    ESYNC    | -- ^ sync error         
+    ESTAT    | -- ^ stat error         
+    ESEEK    | -- ^ seek error         
+    EREAD    | -- ^ read error         
+    EWRITE   | -- ^ write error        
+    EMMAP    | -- ^ mmap error         
+    ELOCK    | -- ^ lock error         
+    EUNLINK  | -- ^ unlink error       
+    ERENAME  | -- ^ rename error       
+    EMKDIR   | -- ^ mkdir error        
+    ERMDIR   | -- ^ rmdir error        
+    EKEEP    | -- ^ existing record    
+    ENOREC   | -- ^ no record found    
+    EMISC      -- ^ miscellaneous error
     deriving (Eq, Ord)
 
 instance Show TCECODE where
@@ -103,6 +104,7 @@ cintToError _ = error "unknown error code"
 cINT_MIN :: CInt
 cINT_MIN = #const INT_MIN
 
+-- | Convert error code to message string.
 errmsg :: TCECODE -> String
 errmsg = unsafePerformIO . peekCString . c_tcerrmsg . errorToCInt
 
