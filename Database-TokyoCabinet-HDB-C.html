@@ -1,0 +1,1292 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--Rendered using the Haskell Html Library v0.2-->
+<HTML
+><HEAD
+><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"
+><TITLE
+>Database.TokyoCabinet.HDB.C</TITLE
+><LINK HREF="haddock.css" REL="stylesheet" TYPE="text/css"
+><SCRIPT SRC="haddock-util.js" TYPE="text/javascript"
+></SCRIPT
+><SCRIPT TYPE="text/javascript"
+>window.onload = function () {setSynopsis("mini_Database-TokyoCabinet-HDB-C.html")};</SCRIPT
+></HEAD
+><BODY
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="topbar"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD
+><IMG SRC="haskell_icon.gif" WIDTH="16" HEIGHT="16" ALT=" "
+></TD
+><TD CLASS="title"
+>tokyocabinet-haskell-0.0.1: Haskell binding of Tokyo Cabinet</TD
+><TD CLASS="topbut"
+><A HREF="index.html"
+>Contents</A
+></TD
+><TD CLASS="topbut"
+><A HREF="doc-index.html"
+>Index</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="modulebar"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD
+><FONT SIZE="6"
+>Database.TokyoCabinet.HDB.C</FONT
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+>Documentation</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t%3AOpenMode"
+></A
+><B
+>OpenMode</B
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="section4"
+>Constructors</TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AOREADER"
+></A
+><B
+>OREADER</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AOWRITER"
+></A
+><B
+>OWRITER</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AOCREAT"
+></A
+><B
+>OCREAT</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AOTRUNC"
+></A
+><B
+>OTRUNC</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AONOLCK"
+></A
+><B
+>ONOLCK</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AOLCKNB"
+></A
+><B
+>OLCKNB</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AOTSYNC"
+></A
+><B
+>OTSYNC</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="section4"
+><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:OpenMode')" ALT="show/hide"
+> Instances</TD
+></TR
+><TR
+><TD CLASS="body"
+><DIV ID="i:OpenMode" STYLE="display:block;"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Eq.html#t%3AEq"
+>Eq</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AOpenMode"
+>OpenMode</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Ord.html#t%3AOrd"
+>Ord</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AOpenMode"
+>OpenMode</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Text-Show.html#t%3AShow"
+>Show</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AOpenMode"
+>OpenMode</A
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3AopenModeToCInt"
+></A
+><B
+>openModeToCInt</B
+> :: <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AOpenMode"
+>OpenMode</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3AcombineOpenMode"
+></A
+><B
+>combineOpenMode</B
+> :: [<A HREF="Database-TokyoCabinet-HDB-C.html#t%3AOpenMode"
+>OpenMode</A
+>] -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t%3ATuningOption"
+></A
+><B
+>TuningOption</B
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="section4"
+>Constructors</TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+><A NAME="v%3ATLARGE"
+></A
+><B
+>TLARGE</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3ATDEFLATE"
+></A
+><B
+>TDEFLATE</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3ATBZIP"
+></A
+><B
+>TBZIP</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3ATTCBS"
+></A
+><B
+>TTCBS</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3ATEXCODEC"
+></A
+><B
+>TEXCODEC</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="section4"
+><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:TuningOption')" ALT="show/hide"
+> Instances</TD
+></TR
+><TR
+><TD CLASS="body"
+><DIV ID="i:TuningOption" STYLE="display:block;"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Eq.html#t%3AEq"
+>Eq</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3ATuningOption"
+>TuningOption</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Ord.html#t%3AOrd"
+>Ord</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3ATuningOption"
+>TuningOption</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Text-Show.html#t%3AShow"
+>Show</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3ATuningOption"
+>TuningOption</A
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3AtuningOptionToWord8"
+></A
+><B
+>tuningOptionToWord8</B
+> :: <A HREF="Database-TokyoCabinet-HDB-C.html#t%3ATuningOption"
+>TuningOption</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3AcombineTuningOption"
+></A
+><B
+>combineTuningOption</B
+> :: [<A HREF="Database-TokyoCabinet-HDB-C.html#t%3ATuningOption"
+>TuningOption</A
+>] -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t%3AHDB"
+></A
+><B
+>HDB</B
+>  </TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3AtchdbFinalizer"
+></A
+><B
+>tchdbFinalizer</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3AFunPtr"
+>FunPtr</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> ())</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbnew"
+></A
+><B
+>c_tchdbnew</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+>)</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbdel"
+></A
+><B
+>c_tchdbdel</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> ()</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbecode"
+></A
+><B
+>c_tchdbecode</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbtune"
+></A
+><B
+>c_tchdbtune</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt8"
+>Int8</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt8"
+>Int8</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbsetcache"
+></A
+><B
+>c_tchdbsetcache</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt32"
+>Int32</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbsetxmsiz"
+></A
+><B
+>c_tchdbsetxmsiz</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbopen"
+></A
+><B
+>c_tchdbopen</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-String.html#t%3ACString"
+>CString</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbclose"
+></A
+><B
+>c_tchdbclose</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbput"
+></A
+><B
+>c_tchdbput</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbput2"
+></A
+><B
+>c_tchdbput2</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-String.html#t%3ACString"
+>CString</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-String.html#t%3ACString"
+>CString</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbputkeep"
+></A
+><B
+>c_tchdbputkeep</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbputkeep2"
+></A
+><B
+>c_tchdbputkeep2</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-String.html#t%3ACString"
+>CString</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-String.html#t%3ACString"
+>CString</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbputcat"
+></A
+><B
+>c_tchdbputcat</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbputcat2"
+></A
+><B
+>c_tchdbputcat2</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-String.html#t%3ACString"
+>CString</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-String.html#t%3ACString"
+>CString</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbputasync"
+></A
+><B
+>c_tchdbputasync</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbout"
+></A
+><B
+>c_tchdbout</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbout2"
+></A
+><B
+>c_tchdbout2</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-String.html#t%3ACString"
+>CString</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbget"
+></A
+><B
+>c_tchdbget</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+>)</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbget2"
+></A
+><B
+>c_tchdbget2</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-String.html#t%3ACString"
+>CString</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-String.html#t%3ACString"
+>CString</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbvsiz"
+></A
+><B
+>c_tchdbvsiz</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbiterinit"
+></A
+><B
+>c_tchdbiterinit</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbiternext"
+></A
+><B
+>c_tchdbiternext</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+>)</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbiternext2"
+></A
+><B
+>c_tchdbiternext2</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-String.html#t%3ACString"
+>CString</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbfwmkeys"
+></A
+><B
+>c_tchdbfwmkeys</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-List-C.html#t%3ALIST"
+>LIST</A
+>)</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbaddint"
+></A
+><B
+>c_tchdbaddint</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbadddouble"
+></A
+><B
+>c_tchdbadddouble</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACDouble"
+>CDouble</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACDouble"
+>CDouble</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbsync"
+></A
+><B
+>c_tchdbsync</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdboptimize"
+></A
+><B
+>c_tchdboptimize</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt8"
+>Int8</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt8"
+>Int8</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbvanish"
+></A
+><B
+>c_tchdbvanish</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbcopy"
+></A
+><B
+>c_tchdbcopy</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-String.html#t%3ACString"
+>CString</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbtranbegin"
+></A
+><B
+>c_tchdbtranbegin</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbtrancommit"
+></A
+><B
+>c_tchdbtrancommit</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbtranabort"
+></A
+><B
+>c_tchdbtranabort</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbpath"
+></A
+><B
+>c_tchdbpath</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-String.html#t%3ACString"
+>CString</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbrnum"
+></A
+><B
+>c_tchdbrnum</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Ac_tchdbfsiz"
+></A
+><B
+>c_tchdbfsiz</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="Database-TokyoCabinet-HDB-C.html#t%3AHDB"
+>HDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="botbar"
+>Produced by <A HREF="http://www.haskell.org/haddock/"
+>Haddock</A
+> version 2.4.1</TD
+></TR
+></TABLE
+></BODY
+></HTML
+>

@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--Rendered using the Haskell Html Library v0.2-->
+<HTML
+><HEAD
+><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"
+><TITLE
+>Database.TokyoCabinet.HDB</TITLE
+><LINK HREF="haddock.css" REL="stylesheet" TYPE="text/css"
+><SCRIPT SRC="haddock-util.js" TYPE="text/javascript"
+></SCRIPT
+></HEAD
+><BODY
+><DIV CLASS="outer"
+><DIV CLASS="mini-topbar"
+>Database.TokyoCabinet.HDB</DIV
+><DIV CLASS="mini-synopsis"
+><H1
+>Constructors
+</H1
+> <DIV CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>&nbsp;<A HREF="Database-TokyoCabinet-HDB.html#t%3ATCHDB" TARGET="main"
+>TCHDB</A
+> </DIV
+> <DIV CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>&nbsp;<A HREF="Database-TokyoCabinet-HDB.html#t%3ATCECODE" TARGET="main"
+>TCECODE</A
+> </DIV
+> <DIV CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>&nbsp;<A HREF="Database-TokyoCabinet-HDB.html#t%3AOpenMode" TARGET="main"
+>OpenMode</A
+> </DIV
+> <DIV CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>&nbsp;<A HREF="Database-TokyoCabinet-HDB.html#t%3ATuningOption" TARGET="main"
+>TuningOption</A
+> </DIV
+> <H1
+>Basic API (tokyocabinet.idl compliant)
+</H1
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Anew" TARGET="main"
+>new</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Adelete" TARGET="main"
+>delete</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Aecode" TARGET="main"
+>ecode</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Aerrmsg" TARGET="main"
+>errmsg</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Atune" TARGET="main"
+>tune</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Asetcache" TARGET="main"
+>setcache</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Asetxmsiz" TARGET="main"
+>setxmsiz</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Aopen" TARGET="main"
+>open</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Aclose" TARGET="main"
+>close</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Aput" TARGET="main"
+>put</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Aputkeep" TARGET="main"
+>putkeep</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Aputcat" TARGET="main"
+>putcat</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Aputasync" TARGET="main"
+>putasync</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Aout" TARGET="main"
+>out</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Aget" TARGET="main"
+>get</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Avsiz" TARGET="main"
+>vsiz</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Aiterinit" TARGET="main"
+>iterinit</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Aiternext" TARGET="main"
+>iternext</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Afwmkeys" TARGET="main"
+>fwmkeys</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Aaddint" TARGET="main"
+>addint</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Aadddouble" TARGET="main"
+>adddouble</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Async" TARGET="main"
+>sync</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Aoptimize" TARGET="main"
+>optimize</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Avanish" TARGET="main"
+>vanish</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Acopy" TARGET="main"
+>copy</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Atranbegin" TARGET="main"
+>tranbegin</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Atrancommit" TARGET="main"
+>trancommit</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Atranabort" TARGET="main"
+>tranabort</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Apath" TARGET="main"
+>path</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Arnum" TARGET="main"
+>rnum</A
+></DIV
+> <DIV CLASS="decl"
+><A HREF="Database-TokyoCabinet-HDB.html#v%3Afsiz" TARGET="main"
+>fsiz</A
+></DIV
+></DIV
+></DIV
+></BODY
+></HTML
+>

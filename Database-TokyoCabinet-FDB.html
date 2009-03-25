@@ -1,0 +1,2288 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--Rendered using the Haskell Html Library v0.2-->
+<HTML
+><HEAD
+><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"
+><TITLE
+>Database.TokyoCabinet.FDB</TITLE
+><LINK HREF="haddock.css" REL="stylesheet" TYPE="text/css"
+><SCRIPT SRC="haddock-util.js" TYPE="text/javascript"
+></SCRIPT
+><SCRIPT TYPE="text/javascript"
+>window.onload = function () {setSynopsis("mini_Database-TokyoCabinet-FDB.html")};</SCRIPT
+></HEAD
+><BODY
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="topbar"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD
+><IMG SRC="haskell_icon.gif" WIDTH="16" HEIGHT="16" ALT=" "
+></TD
+><TD CLASS="title"
+>tokyocabinet-haskell-0.0.1: Haskell binding of Tokyo Cabinet</TD
+><TD CLASS="topbut"
+><A HREF="index.html"
+>Contents</A
+></TD
+><TD CLASS="topbut"
+><A HREF="doc-index.html"
+>Index</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="modulebar"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD
+><FONT SIZE="6"
+>Database.TokyoCabinet.FDB</FONT
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="section4"
+><B
+>Contents</B
+></TD
+></TR
+><TR
+><TD
+><DL
+><DT
+><A HREF="#1"
+>Constructors
+</A
+></DT
+><DT
+><A HREF="#2"
+>Basic API (tokyocabinet.idl compliant)
+</A
+></DT
+></DL
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+>Description</TD
+></TR
+><TR
+><TD CLASS="doc"
+>Interface to Fixed-length DBM. See also,
+ <A HREF="http://tokyocabinet.sourceforge.net/spex-en.html#tcfdbapi"
+>http://tokyocabinet.sourceforge.net/spex-en.html#tcfdbapi</A
+> for details
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+>Synopsis</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A HREF="#t%3ATCFDB"
+>TCFDB</A
+> </TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A HREF="#t%3ATCECODE"
+>TCECODE</A
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+>= <A HREF="#v%3AESUCCESS"
+>ESUCCESS</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AETHREAD"
+>ETHREAD</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEINVALID"
+>EINVALID</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AENOFILE"
+>ENOFILE</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AENOPERM"
+>ENOPERM</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEMETA"
+>EMETA</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AERHEAD"
+>ERHEAD</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEOPEN"
+>EOPEN</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AECLOSE"
+>ECLOSE</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AETRUNC"
+>ETRUNC</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AESYNC"
+>ESYNC</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AESTAT"
+>ESTAT</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AESEEK"
+>ESEEK</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEREAD"
+>EREAD</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEWRITE"
+>EWRITE</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEMMAP"
+>EMMAP</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AELOCK"
+>ELOCK</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEUNLINK"
+>EUNLINK</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AERENAME"
+>ERENAME</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEMKDIR"
+>EMKDIR</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AERMDIR"
+>ERMDIR</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEKEEP"
+>EKEEP</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AENOREC"
+>ENOREC</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEMISC"
+>EMISC</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A HREF="#t%3AOpenMode"
+>OpenMode</A
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+>= <A HREF="#v%3AOREADER"
+>OREADER</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AOWRITER"
+>OWRITER</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AOCREAT"
+>OCREAT</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AOTRUNC"
+>OTRUNC</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AONOLCK"
+>ONOLCK</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AOLCKNB"
+>OLCKNB</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A HREF="#t%3AID"
+>ID</A
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+>= <A HREF="#v%3AIDMIN"
+>IDMIN</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AIDPREV"
+>IDPREV</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AIDMAX"
+>IDMAX</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AIDNEXT"
+>IDNEXT</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AID"
+>ID</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Anew"
+>new</A
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Adelete"
+>delete</A
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> ()</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aecode"
+>ecode</A
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCECODE"
+>TCECODE</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aerrmsg"
+>errmsg</A
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCECODE"
+>TCECODE</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Atune"
+>tune</A
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt32"
+>Int32</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aopen"
+>open</A
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+> -&gt; [<A HREF="Database-TokyoCabinet-FDB.html#t%3AOpenMode"
+>OpenMode</A
+>] -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aclose"
+>close</A
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aput"
+>put</A
+> :: (<A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> v) =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; k -&gt; v -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aputkeep"
+>putkeep</A
+> :: (<A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> v) =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; k -&gt; v -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aputcat"
+>putcat</A
+> :: (<A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> v) =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; k -&gt; v -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aout"
+>out</A
+> :: <A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aget"
+>get</A
+> :: (<A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> v) =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> v)</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Avsiz"
+>vsiz</A
+> :: <A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+>Int</A
+>)</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aiterinit"
+>iterinit</A
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aiternext"
+>iternext</A
+> :: <A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> k)</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Arange"
+>range</A
+> :: (<A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k1, <A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k2) =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; k1 -&gt; k1 -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+>Int</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> [k2]</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Afwmkeys"
+>fwmkeys</A
+> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k1, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k2) =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; k1 -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+>Int</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> [k2]</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aaddint"
+>addint</A
+> :: <A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+>Int</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+>Int</A
+>)</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aadddouble"
+>adddouble</A
+> :: <A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
+>Double</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
+>Double</A
+>)</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Async"
+>sync</A
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aoptimize"
+>optimize</A
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt32"
+>Int32</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Avanish"
+>vanish</A
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Acopy"
+>copy</A
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Apath"
+>path</A
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+>)</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Arnum"
+>rnum</A
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Afsiz"
+>fsiz</A
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+><A NAME="1"
+>Constructors
+</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t%3ATCFDB"
+></A
+><B
+>TCFDB</B
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="section4"
+><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:TCFDB')" ALT="show/hide"
+> Instances</TD
+></TR
+><TR
+><TD CLASS="body"
+><DIV ID="i:TCFDB" STYLE="display:block;"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet.html#t%3ATCDB"
+>TCDB</A
+> <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t%3ATCECODE"
+></A
+><B
+>TCECODE</B
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="ndoc"
+>Represents error
+</TD
+></TR
+><TR
+><TD CLASS="section4"
+>Constructors</TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AESUCCESS"
+></A
+><B
+>ESUCCESS</B
+></TD
+><TD CLASS="rdoc"
+>success            
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AETHREAD"
+></A
+><B
+>ETHREAD</B
+></TD
+><TD CLASS="rdoc"
+>threading error    
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEINVALID"
+></A
+><B
+>EINVALID</B
+></TD
+><TD CLASS="rdoc"
+>invalid operation  
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AENOFILE"
+></A
+><B
+>ENOFILE</B
+></TD
+><TD CLASS="rdoc"
+>file not found     
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AENOPERM"
+></A
+><B
+>ENOPERM</B
+></TD
+><TD CLASS="rdoc"
+>no permission      
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEMETA"
+></A
+><B
+>EMETA</B
+></TD
+><TD CLASS="rdoc"
+>invalid meta data  
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AERHEAD"
+></A
+><B
+>ERHEAD</B
+></TD
+><TD CLASS="rdoc"
+>invalid record header 
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEOPEN"
+></A
+><B
+>EOPEN</B
+></TD
+><TD CLASS="rdoc"
+>open error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AECLOSE"
+></A
+><B
+>ECLOSE</B
+></TD
+><TD CLASS="rdoc"
+>close error        
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AETRUNC"
+></A
+><B
+>ETRUNC</B
+></TD
+><TD CLASS="rdoc"
+>trunc error        
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AESYNC"
+></A
+><B
+>ESYNC</B
+></TD
+><TD CLASS="rdoc"
+>sync error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AESTAT"
+></A
+><B
+>ESTAT</B
+></TD
+><TD CLASS="rdoc"
+>stat error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AESEEK"
+></A
+><B
+>ESEEK</B
+></TD
+><TD CLASS="rdoc"
+>seek error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEREAD"
+></A
+><B
+>EREAD</B
+></TD
+><TD CLASS="rdoc"
+>read error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEWRITE"
+></A
+><B
+>EWRITE</B
+></TD
+><TD CLASS="rdoc"
+>write error        
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEMMAP"
+></A
+><B
+>EMMAP</B
+></TD
+><TD CLASS="rdoc"
+>mmap error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AELOCK"
+></A
+><B
+>ELOCK</B
+></TD
+><TD CLASS="rdoc"
+>lock error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEUNLINK"
+></A
+><B
+>EUNLINK</B
+></TD
+><TD CLASS="rdoc"
+>unlink error       
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AERENAME"
+></A
+><B
+>ERENAME</B
+></TD
+><TD CLASS="rdoc"
+>rename error       
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEMKDIR"
+></A
+><B
+>EMKDIR</B
+></TD
+><TD CLASS="rdoc"
+>mkdir error        
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AERMDIR"
+></A
+><B
+>ERMDIR</B
+></TD
+><TD CLASS="rdoc"
+>rmdir error        
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEKEEP"
+></A
+><B
+>EKEEP</B
+></TD
+><TD CLASS="rdoc"
+>existing record    
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AENOREC"
+></A
+><B
+>ENOREC</B
+></TD
+><TD CLASS="rdoc"
+>no record found    
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEMISC"
+></A
+><B
+>EMISC</B
+></TD
+><TD CLASS="rdoc"
+>miscellaneous error
+</TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="section4"
+><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:TCECODE')" ALT="show/hide"
+> Instances</TD
+></TR
+><TR
+><TD CLASS="body"
+><DIV ID="i:TCECODE" STYLE="display:block;"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Eq.html#t%3AEq"
+>Eq</A
+> <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCECODE"
+>TCECODE</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Ord.html#t%3AOrd"
+>Ord</A
+> <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCECODE"
+>TCECODE</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Text-Show.html#t%3AShow"
+>Show</A
+> <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCECODE"
+>TCECODE</A
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t%3AOpenMode"
+></A
+><B
+>OpenMode</B
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="section4"
+>Constructors</TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AOREADER"
+></A
+><B
+>OREADER</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AOWRITER"
+></A
+><B
+>OWRITER</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AOCREAT"
+></A
+><B
+>OCREAT</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AOTRUNC"
+></A
+><B
+>OTRUNC</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AONOLCK"
+></A
+><B
+>ONOLCK</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AOLCKNB"
+></A
+><B
+>OLCKNB</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="section4"
+><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:OpenMode')" ALT="show/hide"
+> Instances</TD
+></TR
+><TR
+><TD CLASS="body"
+><DIV ID="i:OpenMode" STYLE="display:block;"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Eq.html#t%3AEq"
+>Eq</A
+> <A HREF="Database-TokyoCabinet-FDB.html#t%3AOpenMode"
+>OpenMode</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Ord.html#t%3AOrd"
+>Ord</A
+> <A HREF="Database-TokyoCabinet-FDB.html#t%3AOpenMode"
+>OpenMode</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Text-Show.html#t%3AShow"
+>Show</A
+> <A HREF="Database-TokyoCabinet-FDB.html#t%3AOpenMode"
+>OpenMode</A
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t%3AID"
+></A
+><B
+>ID</B
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="section4"
+>Constructors</TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AIDMIN"
+></A
+><B
+>IDMIN</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AIDPREV"
+></A
+><B
+>IDPREV</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AIDMAX"
+></A
+><B
+>IDMAX</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AIDNEXT"
+></A
+><B
+>IDNEXT</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AID"
+></A
+><B
+>ID</B
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="section4"
+><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:ID')" ALT="show/hide"
+> Instances</TD
+></TR
+><TR
+><TD CLASS="body"
+><DIV ID="i:ID" STYLE="display:block;"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Eq.html#t%3AEq"
+>Eq</A
+> <A HREF="Database-TokyoCabinet-FDB.html#t%3AID"
+>ID</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Ord.html#t%3AOrd"
+>Ord</A
+> <A HREF="Database-TokyoCabinet-FDB.html#t%3AID"
+>ID</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Text-Show.html#t%3AShow"
+>Show</A
+> <A HREF="Database-TokyoCabinet-FDB.html#t%3AID"
+>ID</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> <A HREF="Database-TokyoCabinet-FDB.html#t%3AID"
+>ID</A
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+><A NAME="2"
+>Basic API (tokyocabinet.idl compliant)
+</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Anew"
+></A
+><B
+>new</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Create a Fixed-length database object. 
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Adelete"
+></A
+><B
+>delete</B
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> ()</TD
+></TR
+><TR
+><TD CLASS="doc"
+>Force to free region of FDB. 
+ FDB is kept by ForeignPtr, so Haskell runtime GC cleans up memory for
+ almost situation. Most always, you don't need to call this. 
+ After call this, you must not touch FDB object. Its behavior is undefined.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aecode"
+></A
+><B
+>ecode</B
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCECODE"
+>TCECODE</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Return the last happened error code.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aerrmsg"
+></A
+><B
+>errmsg</B
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCECODE"
+>TCECODE</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Convert error code to message string.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Atune"
+></A
+><B
+>tune</B
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+>:: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+></TD
+><TD CLASS="rdoc"
+>TCFDB object.
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt32"
+>Int32</A
+></TD
+><TD CLASS="rdoc"
+>the width of the value of each record.
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+></TD
+><TD CLASS="rdoc"
+>the limit size of the database file.
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+><TD CLASS="rdoc"
+>if successful, the return value is True.
+</TD
+></TR
+><TR
+><TD CLASS="ndoc" COLSPAN="2"
+>Set the tuning parameters.
+</TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aopen"
+></A
+><B
+>open</B
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+> -&gt; [<A HREF="Database-TokyoCabinet-FDB.html#t%3AOpenMode"
+>OpenMode</A
+>] -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Open FDB database file.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aclose"
+></A
+><B
+>close</B
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Close the database file.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aput"
+></A
+><B
+>put</B
+> :: (<A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> v) =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; k -&gt; v -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Stora a record (key-value pair) on FDB.  Key type must be
+ instance of Key class. Value type must be instance of Storable.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aputkeep"
+></A
+><B
+>putkeep</B
+> :: (<A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> v) =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; k -&gt; v -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Store a new record. If a record with the same key exists in the
+ database, this function has no effect.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aputcat"
+></A
+><B
+>putcat</B
+> :: (<A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> v) =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; k -&gt; v -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Concatenate a value at the end of the existing record.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aout"
+></A
+><B
+>out</B
+> :: <A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Delete a record. 
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aget"
+></A
+><B
+>get</B
+> :: (<A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> v) =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> v)</TD
+></TR
+><TR
+><TD CLASS="doc"
+>Return the value of record. 
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Avsiz"
+></A
+><B
+>vsiz</B
+> :: <A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+>Int</A
+>)</TD
+></TR
+><TR
+><TD CLASS="doc"
+>Return the byte size of value in a record.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aiterinit"
+></A
+><B
+>iterinit</B
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Initialize the iterator of a TCFDB object.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aiternext"
+></A
+><B
+>iternext</B
+> :: <A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> k)</TD
+></TR
+><TR
+><TD CLASS="doc"
+>Return the next key of the iterator of a TCFDB object.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Arange"
+></A
+><B
+>range</B
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+>:: (<A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k1, <A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k2)</TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+>=&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+></TD
+><TD CLASS="rdoc"
+>TCFDB object
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; k1</TD
+><TD CLASS="rdoc"
+>the lower limit of the range.
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; k1</TD
+><TD CLASS="rdoc"
+>the upper limit of the range.
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+>Int</A
+></TD
+><TD CLASS="rdoc"
+>the maximum number of keys to be fetched.
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> [k2]</TD
+><TD CLASS="rdoc"
+>keys in the specified range.
+</TD
+></TR
+><TR
+><TD CLASS="ndoc" COLSPAN="2"
+>Return list of keys in the specified range.
+</TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Afwmkeys"
+></A
+><B
+>fwmkeys</B
+> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k1, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k2) =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; k1 -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+>Int</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> [k2]</TD
+></TR
+><TR
+><TD CLASS="doc"
+>Return list of forward matched keys.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aaddint"
+></A
+><B
+>addint</B
+> :: <A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+>Int</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+>Int</A
+>)</TD
+></TR
+><TR
+><TD CLASS="doc"
+>Increment the corresponding value. (The value specified by a key
+ is treated as integer.)
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aadddouble"
+></A
+><B
+>adddouble</B
+> :: <A HREF="Database-TokyoCabinet-FDB-Key.html#t%3AKey"
+>Key</A
+> k =&gt; <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
+>Double</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
+>Double</A
+>)</TD
+></TR
+><TR
+><TD CLASS="doc"
+>Increment the corresponding value. (The value specified by a key
+ is treated as double.)
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Async"
+></A
+><B
+>sync</B
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Synchronize updated contents of a database object with the file
+ and the device.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aoptimize"
+></A
+><B
+>optimize</B
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt32"
+>Int32</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Optimize the file of a Hash database object.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Avanish"
+></A
+><B
+>vanish</B
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Delete all records.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Acopy"
+></A
+><B
+>copy</B
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Copy the database file.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Apath"
+></A
+><B
+>path</B
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+>)</TD
+></TR
+><TR
+><TD CLASS="doc"
+>Return the file path of currentry opened database.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Arnum"
+></A
+><B
+>rnum</B
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Return the number of records in the database.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Afsiz"
+></A
+><B
+>fsiz</B
+> :: <A HREF="Database-TokyoCabinet-FDB.html#t%3ATCFDB"
+>TCFDB</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Return the size of the database file.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="botbar"
+>Produced by <A HREF="http://www.haskell.org/haddock/"
+>Haddock</A
+> version 2.4.1</TD
+></TR
+></TABLE
+></BODY
+></HTML
+>

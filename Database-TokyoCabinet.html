@@ -1,0 +1,1847 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--Rendered using the Haskell Html Library v0.2-->
+<HTML
+><HEAD
+><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"
+><TITLE
+>Database.TokyoCabinet</TITLE
+><LINK HREF="haddock.css" REL="stylesheet" TYPE="text/css"
+><SCRIPT SRC="haddock-util.js" TYPE="text/javascript"
+></SCRIPT
+><SCRIPT TYPE="text/javascript"
+>window.onload = function () {setSynopsis("mini_Database-TokyoCabinet.html")};</SCRIPT
+></HEAD
+><BODY
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="topbar"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD
+><IMG SRC="haskell_icon.gif" WIDTH="16" HEIGHT="16" ALT=" "
+></TD
+><TD CLASS="title"
+>tokyocabinet-haskell-0.0.1: Haskell binding of Tokyo Cabinet</TD
+><TD CLASS="topbut"
+><A HREF="index.html"
+>Contents</A
+></TD
+><TD CLASS="topbut"
+><A HREF="doc-index.html"
+>Index</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="modulebar"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD
+><FONT SIZE="6"
+>Database.TokyoCabinet</FONT
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+>Synopsis</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A HREF="#t%3ATCM"
+>TCM</A
+> a</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3ArunTCM"
+>runTCM</A
+> :: <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> a</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A HREF="#t%3AOpenMode"
+>OpenMode</A
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+>= <A HREF="#v%3AOREADER"
+>OREADER</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AOWRITER"
+>OWRITER</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AOCREAT"
+>OCREAT</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AOTRUNC"
+>OTRUNC</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AONOLCK"
+>ONOLCK</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AOLCKNB"
+>OLCKNB</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>class</SPAN
+>  <A HREF="#t%3ATCDB"
+>TCDB</A
+> a  <SPAN CLASS="keyword"
+>where</SPAN
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Anew"
+>new</A
+> :: <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> a</TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Adelete"
+>delete</A
+> :: a -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> ()</TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aopen"
+>open</A
+> :: a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+> -&gt; [<A HREF="Database-TokyoCabinet.html#t%3AOpenMode"
+>OpenMode</A
+>] -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aclose"
+>close</A
+> :: a -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aput"
+>put</A
+> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> v) =&gt; a -&gt; k -&gt; v -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aputkeep"
+>putkeep</A
+> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> v) =&gt; a -&gt; k -&gt; v -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aputcat"
+>putcat</A
+> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> v) =&gt; a -&gt; k -&gt; v -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aget"
+>get</A
+> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> v) =&gt; a -&gt; k -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> v)</TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aout"
+>out</A
+> :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k =&gt; a -&gt; k -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Avsiz"
+>vsiz</A
+> :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k =&gt; a -&gt; k -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+>Int</A
+>)</TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aiterinit"
+>iterinit</A
+> :: a -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aiternext"
+>iternext</A
+> :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> v =&gt; a -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> v)</TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Afwmkeys"
+>fwmkeys</A
+> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> v) =&gt; a -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+>Int</A
+> -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> [v]</TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aaddint"
+>addint</A
+> :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k =&gt; a -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+>Int</A
+> -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+>Int</A
+>)</TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aadddouble"
+>adddouble</A
+> :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k =&gt; a -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
+>Double</A
+> -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
+>Double</A
+>)</TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Async"
+>sync</A
+> :: a -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Avanish"
+>vanish</A
+> :: a -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Acopy"
+>copy</A
+> :: a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+> -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Apath"
+>path</A
+> :: a -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+>)</TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Arnum"
+>rnum</A
+> :: a -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Asize"
+>size</A
+> :: a -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aecode"
+>ecode</A
+> :: a -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="Database-TokyoCabinet.html#t%3ATCECODE"
+>TCECODE</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3AdefaultExtension"
+>defaultExtension</A
+> :: a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A HREF="#t%3ATCHDB"
+>TCHDB</A
+> </TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A HREF="#t%3ATCFDB"
+>TCFDB</A
+> </TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A HREF="#t%3ATCBDB"
+>TCBDB</A
+> </TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A HREF="#t%3ATCECODE"
+>TCECODE</A
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+>= <A HREF="#v%3AESUCCESS"
+>ESUCCESS</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AETHREAD"
+>ETHREAD</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEINVALID"
+>EINVALID</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AENOFILE"
+>ENOFILE</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AENOPERM"
+>ENOPERM</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEMETA"
+>EMETA</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AERHEAD"
+>ERHEAD</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEOPEN"
+>EOPEN</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AECLOSE"
+>ECLOSE</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AETRUNC"
+>ETRUNC</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AESYNC"
+>ESYNC</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AESTAT"
+>ESTAT</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AESEEK"
+>ESEEK</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEREAD"
+>EREAD</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEWRITE"
+>EWRITE</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEMMAP"
+>EMMAP</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AELOCK"
+>ELOCK</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEUNLINK"
+>EUNLINK</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AERENAME"
+>ERENAME</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEMKDIR"
+>EMKDIR</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AERMDIR"
+>ERMDIR</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEKEEP"
+>EKEEP</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AENOREC"
+>ENOREC</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEMISC"
+>EMISC</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aerrmsg"
+>errmsg</A
+> :: <A HREF="Database-TokyoCabinet.html#t%3ATCECODE"
+>TCECODE</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+>Documentation</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t%3ATCM"
+></A
+><B
+>TCM</B
+> a </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="section4"
+><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:TCM')" ALT="show/hide"
+> Instances</TD
+></TR
+><TR
+><TD CLASS="body"
+><DIV ID="i:TCM" STYLE="display:block;"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Control-Monad.html#t%3AMonad"
+>Monad</A
+> <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/mtl/Control-Monad-Trans.html#t%3AMonadIO"
+>MonadIO</A
+> <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3ArunTCM"
+></A
+><B
+>runTCM</B
+> :: <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> a</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t%3AOpenMode"
+></A
+><B
+>OpenMode</B
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="section4"
+>Constructors</TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AOREADER"
+></A
+><B
+>OREADER</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AOWRITER"
+></A
+><B
+>OWRITER</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AOCREAT"
+></A
+><B
+>OCREAT</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AOTRUNC"
+></A
+><B
+>OTRUNC</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AONOLCK"
+></A
+><B
+>ONOLCK</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AOLCKNB"
+></A
+><B
+>OLCKNB</B
+></TD
+><TD CLASS="rdoc"
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="section4"
+><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:OpenMode')" ALT="show/hide"
+> Instances</TD
+></TR
+><TR
+><TD CLASS="body"
+><DIV ID="i:OpenMode" STYLE="display:block;"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Eq.html#t%3AEq"
+>Eq</A
+> <A HREF="Database-TokyoCabinet.html#t%3AOpenMode"
+>OpenMode</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Ord.html#t%3AOrd"
+>Ord</A
+> <A HREF="Database-TokyoCabinet.html#t%3AOpenMode"
+>OpenMode</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Text-Show.html#t%3AShow"
+>Show</A
+> <A HREF="Database-TokyoCabinet.html#t%3AOpenMode"
+>OpenMode</A
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>class</SPAN
+>  <A NAME="t%3ATCDB"
+></A
+><B
+>TCDB</B
+> a  <SPAN CLASS="keyword"
+>where</SPAN
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="section4"
+>Methods</TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Anew"
+></A
+><B
+>new</B
+> :: <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> a</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Adelete"
+></A
+><B
+>delete</B
+> :: a -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> ()</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aopen"
+></A
+><B
+>open</B
+> :: a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+> -&gt; [<A HREF="Database-TokyoCabinet.html#t%3AOpenMode"
+>OpenMode</A
+>] -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aclose"
+></A
+><B
+>close</B
+> :: a -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aput"
+></A
+><B
+>put</B
+> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> v) =&gt; a -&gt; k -&gt; v -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aputkeep"
+></A
+><B
+>putkeep</B
+> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> v) =&gt; a -&gt; k -&gt; v -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aputcat"
+></A
+><B
+>putcat</B
+> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> v) =&gt; a -&gt; k -&gt; v -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aget"
+></A
+><B
+>get</B
+> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> v) =&gt; a -&gt; k -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> v)</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aout"
+></A
+><B
+>out</B
+> :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k =&gt; a -&gt; k -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Avsiz"
+></A
+><B
+>vsiz</B
+> :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k =&gt; a -&gt; k -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+>Int</A
+>)</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aiterinit"
+></A
+><B
+>iterinit</B
+> :: a -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aiternext"
+></A
+><B
+>iternext</B
+> :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> v =&gt; a -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> v)</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Afwmkeys"
+></A
+><B
+>fwmkeys</B
+> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> v) =&gt; a -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+>Int</A
+> -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> [v]</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aaddint"
+></A
+><B
+>addint</B
+> :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k =&gt; a -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+>Int</A
+> -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+>Int</A
+>)</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aadddouble"
+></A
+><B
+>adddouble</B
+> :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> k =&gt; a -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
+>Double</A
+> -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
+>Double</A
+>)</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Async"
+></A
+><B
+>sync</B
+> :: a -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Avanish"
+></A
+><B
+>vanish</B
+> :: a -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Acopy"
+></A
+><B
+>copy</B
+> :: a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+> -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
+>Bool</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Apath"
+></A
+><B
+>path</B
+> :: a -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+>Maybe</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+>)</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Arnum"
+></A
+><B
+>rnum</B
+> :: a -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Asize"
+></A
+><B
+>size</B
+> :: a -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aecode"
+></A
+><B
+>ecode</B
+> :: a -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>TCM</A
+> <A HREF="Database-TokyoCabinet.html#t%3ATCECODE"
+>TCECODE</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3AdefaultExtension"
+></A
+><B
+>defaultExtension</B
+> :: a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="section4"
+><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:TCDB')" ALT="show/hide"
+> Instances</TD
+></TR
+><TR
+><TD CLASS="body"
+><DIV ID="i:TCDB" STYLE="display:block;"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet.html#t%3ATCDB"
+>TCDB</A
+> <A HREF="Database-TokyoCabinet.html#t%3ATCFDB"
+>TCFDB</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet.html#t%3ATCDB"
+>TCDB</A
+> <A HREF="Database-TokyoCabinet-BDB-C.html#t%3ATCBDB"
+>TCBDB</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet.html#t%3ATCDB"
+>TCDB</A
+> <A HREF="Database-TokyoCabinet.html#t%3ATCHDB"
+>TCHDB</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet.html#t%3ATCDB"
+>TCDB</A
+> <A HREF="Database-TokyoCabinet.html#t%3ATCBDB"
+>TCBDB</A
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t%3ATCHDB"
+></A
+><B
+>TCHDB</B
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="section4"
+><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:TCHDB')" ALT="show/hide"
+> Instances</TD
+></TR
+><TR
+><TD CLASS="body"
+><DIV ID="i:TCHDB" STYLE="display:block;"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet.html#t%3ATCDB"
+>TCDB</A
+> <A HREF="Database-TokyoCabinet.html#t%3ATCHDB"
+>TCHDB</A
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t%3ATCFDB"
+></A
+><B
+>TCFDB</B
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="section4"
+><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:TCFDB')" ALT="show/hide"
+> Instances</TD
+></TR
+><TR
+><TD CLASS="body"
+><DIV ID="i:TCFDB" STYLE="display:block;"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet.html#t%3ATCDB"
+>TCDB</A
+> <A HREF="Database-TokyoCabinet.html#t%3ATCFDB"
+>TCFDB</A
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t%3ATCBDB"
+></A
+><B
+>TCBDB</B
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="section4"
+><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:TCBDB')" ALT="show/hide"
+> Instances</TD
+></TR
+><TR
+><TD CLASS="body"
+><DIV ID="i:TCBDB" STYLE="display:block;"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet.html#t%3ATCDB"
+>TCDB</A
+> <A HREF="Database-TokyoCabinet.html#t%3ATCBDB"
+>TCBDB</A
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t%3ATCECODE"
+></A
+><B
+>TCECODE</B
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="ndoc"
+>Represents error
+</TD
+></TR
+><TR
+><TD CLASS="section4"
+>Constructors</TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AESUCCESS"
+></A
+><B
+>ESUCCESS</B
+></TD
+><TD CLASS="rdoc"
+>success            
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AETHREAD"
+></A
+><B
+>ETHREAD</B
+></TD
+><TD CLASS="rdoc"
+>threading error    
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEINVALID"
+></A
+><B
+>EINVALID</B
+></TD
+><TD CLASS="rdoc"
+>invalid operation  
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AENOFILE"
+></A
+><B
+>ENOFILE</B
+></TD
+><TD CLASS="rdoc"
+>file not found     
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AENOPERM"
+></A
+><B
+>ENOPERM</B
+></TD
+><TD CLASS="rdoc"
+>no permission      
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEMETA"
+></A
+><B
+>EMETA</B
+></TD
+><TD CLASS="rdoc"
+>invalid meta data  
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AERHEAD"
+></A
+><B
+>ERHEAD</B
+></TD
+><TD CLASS="rdoc"
+>invalid record header 
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEOPEN"
+></A
+><B
+>EOPEN</B
+></TD
+><TD CLASS="rdoc"
+>open error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AECLOSE"
+></A
+><B
+>ECLOSE</B
+></TD
+><TD CLASS="rdoc"
+>close error        
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AETRUNC"
+></A
+><B
+>ETRUNC</B
+></TD
+><TD CLASS="rdoc"
+>trunc error        
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AESYNC"
+></A
+><B
+>ESYNC</B
+></TD
+><TD CLASS="rdoc"
+>sync error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AESTAT"
+></A
+><B
+>ESTAT</B
+></TD
+><TD CLASS="rdoc"
+>stat error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AESEEK"
+></A
+><B
+>ESEEK</B
+></TD
+><TD CLASS="rdoc"
+>seek error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEREAD"
+></A
+><B
+>EREAD</B
+></TD
+><TD CLASS="rdoc"
+>read error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEWRITE"
+></A
+><B
+>EWRITE</B
+></TD
+><TD CLASS="rdoc"
+>write error        
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEMMAP"
+></A
+><B
+>EMMAP</B
+></TD
+><TD CLASS="rdoc"
+>mmap error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AELOCK"
+></A
+><B
+>ELOCK</B
+></TD
+><TD CLASS="rdoc"
+>lock error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEUNLINK"
+></A
+><B
+>EUNLINK</B
+></TD
+><TD CLASS="rdoc"
+>unlink error       
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AERENAME"
+></A
+><B
+>ERENAME</B
+></TD
+><TD CLASS="rdoc"
+>rename error       
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEMKDIR"
+></A
+><B
+>EMKDIR</B
+></TD
+><TD CLASS="rdoc"
+>mkdir error        
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AERMDIR"
+></A
+><B
+>ERMDIR</B
+></TD
+><TD CLASS="rdoc"
+>rmdir error        
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEKEEP"
+></A
+><B
+>EKEEP</B
+></TD
+><TD CLASS="rdoc"
+>existing record    
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AENOREC"
+></A
+><B
+>ENOREC</B
+></TD
+><TD CLASS="rdoc"
+>no record found    
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEMISC"
+></A
+><B
+>EMISC</B
+></TD
+><TD CLASS="rdoc"
+>miscellaneous error
+</TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="section4"
+><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:TCECODE')" ALT="show/hide"
+> Instances</TD
+></TR
+><TR
+><TD CLASS="body"
+><DIV ID="i:TCECODE" STYLE="display:block;"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Eq.html#t%3AEq"
+>Eq</A
+> <A HREF="Database-TokyoCabinet.html#t%3ATCECODE"
+>TCECODE</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Ord.html#t%3AOrd"
+>Ord</A
+> <A HREF="Database-TokyoCabinet.html#t%3ATCECODE"
+>TCECODE</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Text-Show.html#t%3AShow"
+>Show</A
+> <A HREF="Database-TokyoCabinet.html#t%3ATCECODE"
+>TCECODE</A
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aerrmsg"
+></A
+><B
+>errmsg</B
+> :: <A HREF="Database-TokyoCabinet.html#t%3ATCECODE"
+>TCECODE</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Convert error code to message string.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="botbar"
+>Produced by <A HREF="http://www.haskell.org/haddock/"
+>Haddock</A
+> version 2.4.1</TD
+></TR
+></TABLE
+></BODY
+></HTML
+>

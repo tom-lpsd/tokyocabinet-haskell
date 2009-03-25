@@ -1,0 +1,463 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--Rendered using the Haskell Html Library v0.2-->
+<HTML
+><HEAD
+><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"
+><TITLE
+>Database.TokyoCabinet.Storable</TITLE
+><LINK HREF="haddock.css" REL="stylesheet" TYPE="text/css"
+><SCRIPT SRC="haddock-util.js" TYPE="text/javascript"
+></SCRIPT
+><SCRIPT TYPE="text/javascript"
+>window.onload = function () {setSynopsis("mini_Database-TokyoCabinet-Storable.html")};</SCRIPT
+></HEAD
+><BODY
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="topbar"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD
+><IMG SRC="haskell_icon.gif" WIDTH="16" HEIGHT="16" ALT=" "
+></TD
+><TD CLASS="title"
+>tokyocabinet-haskell-0.0.1: Haskell binding of Tokyo Cabinet</TD
+><TD CLASS="topbut"
+><A HREF="index.html"
+>Contents</A
+></TD
+><TD CLASS="topbut"
+><A HREF="doc-index.html"
+>Index</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="modulebar"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD
+><FONT SIZE="6"
+>Database.TokyoCabinet.Storable</FONT
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+>Documentation</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>type</SPAN
+> <A NAME="t%3APtrLen"
+></A
+><B
+>PtrLen</B
+> = (<A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+>Ptr</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+>, <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+>)</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3AliftPL"
+></A
+><B
+>liftPL</B
+> ::  (a -&gt; (<A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-String.html#t%3ACStringLen"
+>CStringLen</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> b) -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> b) -&gt; a -&gt; (<A HREF="Database-TokyoCabinet-Storable.html#t%3APtrLen"
+>PtrLen</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> b) -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> b</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>class</SPAN
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Text-Show.html#t%3AShow"
+>Show</A
+> a =&gt; <A NAME="t%3AStorable"
+></A
+><B
+>Storable</B
+> a  <SPAN CLASS="keyword"
+>where</SPAN
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="section4"
+>Methods</TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A NAME="v%3AwithPtrLen"
+></A
+><B
+>withPtrLen</B
+> ::  a -&gt; (<A HREF="Database-TokyoCabinet-Storable.html#t%3APtrLen"
+>PtrLen</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> b) -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> b</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3ApeekPtrLen"
+></A
+><B
+>peekPtrLen</B
+> :: <A HREF="Database-TokyoCabinet-Storable.html#t%3APtrLen"
+>PtrLen</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> a</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3AwithPtrLenL"
+></A
+><B
+>withPtrLenL</B
+> ::  [a] -&gt; (<A HREF="Database-TokyoCabinet-Storable.html#t%3APtrLen"
+>PtrLen</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> b) -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> b</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3ApeekPtrLenL"
+></A
+><B
+>peekPtrLenL</B
+> :: <A HREF="Database-TokyoCabinet-Storable.html#t%3APtrLen"
+>PtrLen</A
+> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> [a]</TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="section4"
+><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:Storable')" ALT="show/hide"
+> Instances</TD
+></TR
+><TR
+><TD CLASS="body"
+><DIV ID="i:Storable" STYLE="display:block;"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AChar"
+>Char</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
+>Double</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AFloat"
+>Float</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+>Int</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt8"
+>Int8</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt16"
+>Int16</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt32"
+>Int32</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+>Word8</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord16"
+>Word16</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord32"
+>Word32</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord64"
+>Word64</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACFloat"
+>CFloat</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACDouble"
+>CDouble</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/bytestring/Data-ByteString-Lazy-Internal.html#t%3AByteString"
+>ByteString</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> <A HREF="/usr/local/share/doc/ghc/libraries/bytestring/Data-ByteString-Internal.html#t%3AByteString"
+>ByteString</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>(<A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Storable.html#t%3AStorable"
+>Storable</A
+> a, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> a) =&gt; <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> ([] a)</TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3AwithPtrLenForFStorable"
+></A
+><B
+>withPtrLenForFStorable</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Storable.html#t%3AStorable"
+>Storable</A
+> a =&gt; a -&gt; (<A HREF="Database-TokyoCabinet-Storable.html#t%3APtrLen"
+>PtrLen</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> b) -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> b</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3ApeekPtrLenForFStorable"
+></A
+><B
+>peekPtrLenForFStorable</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Storable.html#t%3AStorable"
+>Storable</A
+> a =&gt; <A HREF="Database-TokyoCabinet-Storable.html#t%3APtrLen"
+>PtrLen</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> a</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3AwithPtrLenLForFStorable"
+></A
+><B
+>withPtrLenLForFStorable</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Storable.html#t%3AStorable"
+>Storable</A
+> a =&gt; [a] -&gt; (<A HREF="Database-TokyoCabinet-Storable.html#t%3APtrLen"
+>PtrLen</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> b) -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> b</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3ApeekPtrLenLForFStorable"
+></A
+><B
+>peekPtrLenLForFStorable</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Storable.html#t%3AStorable"
+>Storable</A
+> a =&gt; <A HREF="Database-TokyoCabinet-Storable.html#t%3APtrLen"
+>PtrLen</A
+> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> [a]</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="botbar"
+>Produced by <A HREF="http://www.haskell.org/haddock/"
+>Haddock</A
+> version 2.4.1</TD
+></TR
+></TABLE
+></BODY
+></HTML
+>

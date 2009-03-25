@@ -1,0 +1,779 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--Rendered using the Haskell Html Library v0.2-->
+<HTML
+><HEAD
+><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"
+><TITLE
+>Database.TokyoCabinet.Error</TITLE
+><LINK HREF="haddock.css" REL="stylesheet" TYPE="text/css"
+><SCRIPT SRC="haddock-util.js" TYPE="text/javascript"
+></SCRIPT
+><SCRIPT TYPE="text/javascript"
+>window.onload = function () {setSynopsis("mini_Database-TokyoCabinet-Error.html")};</SCRIPT
+></HEAD
+><BODY
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="topbar"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD
+><IMG SRC="haskell_icon.gif" WIDTH="16" HEIGHT="16" ALT=" "
+></TD
+><TD CLASS="title"
+>tokyocabinet-haskell-0.0.1: Haskell binding of Tokyo Cabinet</TD
+><TD CLASS="topbut"
+><A HREF="index.html"
+>Contents</A
+></TD
+><TD CLASS="topbut"
+><A HREF="doc-index.html"
+>Index</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="modulebar"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD
+><FONT SIZE="6"
+>Database.TokyoCabinet.Error</FONT
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="section4"
+><B
+>Contents</B
+></TD
+></TR
+><TR
+><TD
+><DL
+><DT
+><A HREF="#1"
+>Error code
+</A
+></DT
+><DT
+><A HREF="#2"
+>Utility function
+</A
+></DT
+><DT
+><A HREF="#3"
+>Other constants
+</A
+></DT
+></DL
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+>Synopsis</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A HREF="#t%3ATCECODE"
+>TCECODE</A
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+>= <A HREF="#v%3AESUCCESS"
+>ESUCCESS</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AETHREAD"
+>ETHREAD</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEINVALID"
+>EINVALID</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AENOFILE"
+>ENOFILE</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AENOPERM"
+>ENOPERM</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEMETA"
+>EMETA</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AERHEAD"
+>ERHEAD</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEOPEN"
+>EOPEN</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AECLOSE"
+>ECLOSE</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AETRUNC"
+>ETRUNC</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AESYNC"
+>ESYNC</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AESTAT"
+>ESTAT</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AESEEK"
+>ESEEK</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEREAD"
+>EREAD</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEWRITE"
+>EWRITE</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEMMAP"
+>EMMAP</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AELOCK"
+>ELOCK</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEUNLINK"
+>EUNLINK</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AERENAME"
+>ERENAME</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEMKDIR"
+>EMKDIR</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AERMDIR"
+>ERMDIR</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEKEEP"
+>EKEEP</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AENOREC"
+>ENOREC</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+>| <A HREF="#v%3AEMISC"
+>EMISC</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Aerrmsg"
+>errmsg</A
+> :: <A HREF="Database-TokyoCabinet-Error.html#t%3ATCECODE"
+>TCECODE</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3AcintToError"
+>cintToError</A
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="Database-TokyoCabinet-Error.html#t%3ATCECODE"
+>TCECODE</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3AerrorToCInt"
+>errorToCInt</A
+> :: <A HREF="Database-TokyoCabinet-Error.html#t%3ATCECODE"
+>TCECODE</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3AcINT_MIN"
+>cINT_MIN</A
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+><A NAME="1"
+>Error code
+</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><SPAN CLASS="keyword"
+>data</SPAN
+>  <A NAME="t%3ATCECODE"
+></A
+><B
+>TCECODE</B
+>  </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="ndoc"
+>Represents error
+</TD
+></TR
+><TR
+><TD CLASS="section4"
+>Constructors</TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AESUCCESS"
+></A
+><B
+>ESUCCESS</B
+></TD
+><TD CLASS="rdoc"
+>success            
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AETHREAD"
+></A
+><B
+>ETHREAD</B
+></TD
+><TD CLASS="rdoc"
+>threading error    
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEINVALID"
+></A
+><B
+>EINVALID</B
+></TD
+><TD CLASS="rdoc"
+>invalid operation  
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AENOFILE"
+></A
+><B
+>ENOFILE</B
+></TD
+><TD CLASS="rdoc"
+>file not found     
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AENOPERM"
+></A
+><B
+>ENOPERM</B
+></TD
+><TD CLASS="rdoc"
+>no permission      
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEMETA"
+></A
+><B
+>EMETA</B
+></TD
+><TD CLASS="rdoc"
+>invalid meta data  
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AERHEAD"
+></A
+><B
+>ERHEAD</B
+></TD
+><TD CLASS="rdoc"
+>invalid record header 
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEOPEN"
+></A
+><B
+>EOPEN</B
+></TD
+><TD CLASS="rdoc"
+>open error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AECLOSE"
+></A
+><B
+>ECLOSE</B
+></TD
+><TD CLASS="rdoc"
+>close error        
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AETRUNC"
+></A
+><B
+>ETRUNC</B
+></TD
+><TD CLASS="rdoc"
+>trunc error        
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AESYNC"
+></A
+><B
+>ESYNC</B
+></TD
+><TD CLASS="rdoc"
+>sync error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AESTAT"
+></A
+><B
+>ESTAT</B
+></TD
+><TD CLASS="rdoc"
+>stat error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AESEEK"
+></A
+><B
+>ESEEK</B
+></TD
+><TD CLASS="rdoc"
+>seek error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEREAD"
+></A
+><B
+>EREAD</B
+></TD
+><TD CLASS="rdoc"
+>read error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEWRITE"
+></A
+><B
+>EWRITE</B
+></TD
+><TD CLASS="rdoc"
+>write error        
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEMMAP"
+></A
+><B
+>EMMAP</B
+></TD
+><TD CLASS="rdoc"
+>mmap error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AELOCK"
+></A
+><B
+>ELOCK</B
+></TD
+><TD CLASS="rdoc"
+>lock error         
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEUNLINK"
+></A
+><B
+>EUNLINK</B
+></TD
+><TD CLASS="rdoc"
+>unlink error       
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AERENAME"
+></A
+><B
+>ERENAME</B
+></TD
+><TD CLASS="rdoc"
+>rename error       
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEMKDIR"
+></A
+><B
+>EMKDIR</B
+></TD
+><TD CLASS="rdoc"
+>mkdir error        
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AERMDIR"
+></A
+><B
+>ERMDIR</B
+></TD
+><TD CLASS="rdoc"
+>rmdir error        
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEKEEP"
+></A
+><B
+>EKEEP</B
+></TD
+><TD CLASS="rdoc"
+>existing record    
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AENOREC"
+></A
+><B
+>ENOREC</B
+></TD
+><TD CLASS="rdoc"
+>no record found    
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+><A NAME="v%3AEMISC"
+></A
+><B
+>EMISC</B
+></TD
+><TD CLASS="rdoc"
+>miscellaneous error
+</TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="section4"
+><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:TCECODE')" ALT="show/hide"
+> Instances</TD
+></TR
+><TR
+><TD CLASS="body"
+><DIV ID="i:TCECODE" STYLE="display:block;"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Eq.html#t%3AEq"
+>Eq</A
+> <A HREF="Database-TokyoCabinet-Error.html#t%3ATCECODE"
+>TCECODE</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Ord.html#t%3AOrd"
+>Ord</A
+> <A HREF="Database-TokyoCabinet-Error.html#t%3ATCECODE"
+>TCECODE</A
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Text-Show.html#t%3AShow"
+>Show</A
+> <A HREF="Database-TokyoCabinet-Error.html#t%3ATCECODE"
+>TCECODE</A
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+><A NAME="2"
+>Utility function
+</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3Aerrmsg"
+></A
+><B
+>errmsg</B
+> :: <A HREF="Database-TokyoCabinet-Error.html#t%3ATCECODE"
+>TCECODE</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Convert error code to message string.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3AcintToError"
+></A
+><B
+>cintToError</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+> -&gt; <A HREF="Database-TokyoCabinet-Error.html#t%3ATCECODE"
+>TCECODE</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3AerrorToCInt"
+></A
+><B
+>errorToCInt</B
+> :: <A HREF="Database-TokyoCabinet-Error.html#t%3ATCECODE"
+>TCECODE</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+><A NAME="3"
+>Other constants
+</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3AcINT_MIN"
+></A
+><B
+>cINT_MIN</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>CInt</A
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="botbar"
+>Produced by <A HREF="http://www.haskell.org/haddock/"
+>Haddock</A
+> version 2.4.1</TD
+></TR
+></TABLE
+></BODY
+></HTML
+>
