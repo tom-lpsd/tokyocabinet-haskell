@@ -6,7 +6,6 @@ License-File:   LICENSE
 Author:         Tom Tsuruhara
 Maintainer:     tom.lpsd@gmail.com
 Stability:      experimental
-Homepage:       http://tom-lpsd.dyndns.org/tom/ (Japanese)
 Category:       Database
 Synopsis:       bindings to Tokyo Cabinet (modern implementaion of DBM)
 Description:    interface to Tokyo Cabinet library.
