@@ -1,4 +1,4 @@
-Name:           TokyoCabinet
+Name:           tokyocabinet-haskell
 Version:        0.0.1
 Cabal-Version:  >= 1.6.0.2
 License:        BSD3
