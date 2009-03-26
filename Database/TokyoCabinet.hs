@@ -1,6 +1,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 module Database.TokyoCabinet
     (
+    -- $doc
       TCM
     , runTCM
     , OpenMode(..)
@@ -8,6 +9,7 @@ module Database.TokyoCabinet
     , H.TCHDB
     , F.TCFDB
     , TCBDB
+    -- * Error Code
     , E.TCECODE(..)
     , E.errmsg
     ) where
@@ -27,8 +29,47 @@ import Foreign.C.String (newCStringLen)
 
 import Data.Int
 
-newtype TCM a = TCM { runTCM :: IO a } deriving (Monad, MonadIO)
+-- $doc
+-- Basic Usage (sample code)
+--
+-- @
+--    import Database.TokyoCabinet
+--    import Data.ByteString.Char8
+-- @
+--
+-- @
+--    putsample :: String -> [(ByteString, ByteString)] -> TCM Bool
+--    putsample file kv =
+--        do tc <- new :: TCM TCHDB -- alternatively you can use TCBDB or TCFDB
+--           open tc file [OWRITER, OCREAT]
+--           mapM (uncurry $ put tc) kv
+--           close tc
+-- @
+--
+-- @
+--    getsample :: String -> ByteString -> TCM (Maybe ByteString)
+--    getsample file key =
+--        do tc <- new :: TCM TCHDB -- alternatively you can use TCBDB or TCFDB
+--           open tc file [OREADER]
+--           val <- get tc key
+--           close tc
+--           return val
+-- @
+--
+-- @
+--    main = runTCM (do putsample "foo.tch" [(pack "foo", pack "bar")]
+--                      getsample "foo.tch" (pack "foo")) >>=
+--           maybe (return ()) (putStrLn . show)
+-- @
+--
 
+-- | Tokyo Cabinet related computation. Wrap of IO.
+newtype TCM a =
+    TCM { -- | Unwrap TCM.
+          runTCM :: IO a
+    } deriving (Monad, MonadIO)
+
+-- | Represent open mode for `open' function.
 data OpenMode = OREADER |
                 OWRITER |
                 OCREAT  |
@@ -37,6 +78,7 @@ data OpenMode = OREADER |
                 OLCKNB
                 deriving (Eq, Ord, Show)
 
+-- | Type class that abstract Tokyo Cabinet database.
 class TCDB a where
     new       :: TCM a
     delete    :: a -> TCM ()
