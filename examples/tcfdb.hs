@@ -8,7 +8,7 @@ main = do fdb <- new
           puts fdb [(1, "one"), (12, "twelve"), (144, "one forty four")]
                     >>= err fdb . (all id)
           -- retrieve records
-          get fdb (1 :: Int) >>= maybe (error "something go wrong") putStrLn
+          get fdb (1 :: Int) >>= maybe (error "something goes wrong") putStrLn
           -- close the database
           close fdb >>= err fdb
     where

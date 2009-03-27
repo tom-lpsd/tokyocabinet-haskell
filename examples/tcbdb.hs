@@ -11,7 +11,7 @@ main =
        puts bdb [ ("foo", "hop"), ("bar", "step"), ("baz", "jump") ]
                 >>= err bdb . (all id)
        -- retrieve records
-       get bdb "foo" >>= maybe (error "something go wrong") putStrLn
+       get bdb "foo" >>= maybe (error "something goes wrong") putStrLn
        -- traverse records
        cur <- C.new bdb
        C.first cur >>= err bdb

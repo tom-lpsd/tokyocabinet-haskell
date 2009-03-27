@@ -2,6 +2,7 @@
 -- <http://tokyocabinet.sourceforge.net/spex-en.html#tchdbapi> for details
 module Database.TokyoCabinet.HDB
     (
+    -- $doc
     -- * Constructors
       TCHDB
     , TCECODE(..)
@@ -53,6 +54,51 @@ import Database.TokyoCabinet.HDB.C
 import Database.TokyoCabinet.Error
 import Database.TokyoCabinet.Internal
 import qualified Database.TokyoCabinet.Storable as S
+
+-- $doc
+-- Example
+--
+-- @
+--    import Control.Monad
+--    import Database.TokyoCabinet.HDB
+-- @
+--
+-- @
+--    main = do hdb <- new
+--              -- open the database
+--              open hdb \"casket.tch\" [OWRITER, OCREAT] >>= err hdb
+--              -- store records
+--              puts hdb [(\"foo\", \"hop\"), (\"bar\", \"step\"), (\"baz\", \"jump\")] >>=
+--                       err hdb . (all id)
+--              -- retrieve records
+--              get_print hdb \"foo\"
+--              -- traverse records
+--              iterinit hdb
+--              iter hdb >>= mapM_ (\k -> putStr (k++\":\") >> get_print hdb k)
+--              -- close the database
+--              close hdb >>= err hdb
+--        where
+--          puts :: TCHDB -> [(String, String)] -> IO [Bool]
+--          puts hdb = mapM (uncurry $ put hdb)
+-- @
+--
+-- @
+--          get_print :: TCHDB -> String -> IO ()
+--          get_print hdb key = get hdb key >>=
+--                              maybe (error \"something goes wrong\") putStrLn
+-- @
+--
+-- @  
+--          err :: TCHDB -> Bool -> IO ()
+--          err hdb = flip unless $ ecode hdb >>= error . show
+-- @
+--
+-- @    
+--          iter :: TCHDB -> IO [String]
+--          iter hdb = iternext hdb >>=
+--                     maybe (return []) (\x -> return . (x:) =<< iter hdb)
+-- @
+--
 
 data TCHDB = TCHDB { unTCHDB :: !(ForeignPtr HDB) }
 
