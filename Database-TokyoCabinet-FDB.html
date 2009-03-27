@@ -64,11 +64,6 @@
 ><DL
 ><DT
 ><A HREF="#1"
->Constructors
-</A
-></DT
-><DT
-><A HREF="#2"
 >Basic API (tokyocabinet.idl compliant)
 </A
 ></DT
@@ -879,14 +874,44 @@
 ></TD
 ></TR
 ><TR
+><TD CLASS="section1"
+>Documentation</TD
+></TR
+><TR
 ><TD CLASS="s15"
 ></TD
 ></TR
 ><TR
-><TD CLASS="section1"
-><A NAME="1"
->Constructors
-</A
+><TD CLASS="doc"
+><P
+>Example
+</P
+><PRE
+>
+    import Control.Monad
+    import Database.TokyoCabinet.FDB
+</PRE
+><PRE
+>  
+    main = do fdb &lt;- new
+              -- open the database
+              open fdb &quot;casket.tcf&quot; [OWRITER, OCREAT] &gt;&gt;= err fdb
+              -- store records
+              puts fdb [(1, &quot;one&quot;), (12, &quot;twelve&quot;), (144, &quot;one forty four&quot;)] &gt;&gt;=
+                        err fdb . (all id)
+              -- retrieve records
+              get fdb (1 :: Int) &gt;&gt;= maybe (error &quot;something goes wrong&quot;) putStrLn
+              -- close the database
+              close fdb &gt;&gt;= err fdb
+        where
+          puts :: TCFDB -&gt; [(Int, String)] -&gt; IO [Bool]
+          puts fdb = mapM (uncurry $ put fdb)
+</PRE
+><PRE
+>  
+          err :: TCFDB -&gt; Bool -&gt; IO ()
+          err fdb = flip unless $ ecode fdb &gt;&gt;= error . show
+</PRE
 ></TD
 ></TR
 ><TR
@@ -1526,7 +1551,7 @@
 ></TR
 ><TR
 ><TD CLASS="section1"
-><A NAME="2"
+><A NAME="1"
 >Basic API (tokyocabinet.idl compliant)
 </A
 ></TD

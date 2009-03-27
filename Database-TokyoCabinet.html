@@ -51,6 +51,33 @@
 ></TD
 ></TR
 ><TR
+><TD
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="section4"
+><B
+>Contents</B
+></TD
+></TR
+><TR
+><TD
+><DL
+><DT
+><A HREF="#1"
+>Error Code
+</A
+></DT
+></DL
+></TD
+></TR
+></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
 ><TD CLASS="s15"
 ></TD
 ></TR
@@ -673,6 +700,57 @@
 ></TD
 ></TR
 ><TR
+><TD CLASS="doc"
+><P
+>Basic Usage (sample code)
+</P
+><PRE
+>
+    import Database.TokyoCabinet
+    import Data.ByteString.Char8
+</PRE
+><PRE
+>
+    putsample :: String -&gt; [(ByteString, ByteString)] -&gt; TCM Bool
+    putsample file kv =
+        do tc &lt;- new :: TCM TCHDB -- alternatively you can use TCBDB or TCFDB
+           open tc file [OWRITER, OCREAT]
+           mapM (uncurry $ put tc) kv
+           close tc
+</PRE
+><PRE
+>
+    getsample :: String -&gt; ByteString -&gt; TCM (Maybe ByteString)
+    getsample file key =
+        do tc &lt;- new :: TCM TCHDB -- alternatively you can use TCBDB or TCFDB
+           open tc file [OREADER]
+           val &lt;- get tc key
+           close tc
+           return val
+</PRE
+><PRE
+>
+    main = runTCM (do putsample <A HREF="foo-tch.html"
+>foo.tch</A
+> [(pack <A HREF="foo.html"
+>foo</A
+>, pack <A HREF="bar.html"
+>bar</A
+>)]
+                      getsample <A HREF="foo-tch.html"
+>foo.tch</A
+> (pack <A HREF="foo.html"
+>foo</A
+>)) &gt;&gt;=
+           maybe (return ()) (putStrLn . show)
+</PRE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
 ><TD CLASS="decl"
 ><SPAN CLASS="keyword"
 >data</SPAN
@@ -685,6 +763,11 @@
 ><TR
 ><TD CLASS="body"
 ><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="ndoc"
+>Tokyo Cabinet related computation. Wrap of IO.
+</TD
+></TR
 ><TR
 ><TD CLASS="section4"
 ><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:TCM')" ALT="show/hide"
@@ -734,6 +817,11 @@
 > a</TD
 ></TR
 ><TR
+><TD CLASS="doc"
+>Unwrap TCM.
+</TD
+></TR
+><TR
 ><TD CLASS="s15"
 ></TD
 ></TR
@@ -750,6 +838,15 @@
 ><TR
 ><TD CLASS="body"
 ><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="ndoc"
+>Represent open mode for <TT
+><A HREF="Database-TokyoCabinet.html#v%3Aopen"
+>open</A
+></TT
+> function.
+</TD
+></TR
 ><TR
 ><TD CLASS="section4"
 >Constructors</TD
@@ -879,6 +976,11 @@
 ><TR
 ><TD CLASS="body"
 ><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="ndoc"
+>Type class that abstract Tokyo Cabinet database.
+</TD
+></TR
 ><TR
 ><TD CLASS="s8"
 ></TD
@@ -1472,6 +1574,17 @@
 ></TD
 ></TR
 ></TABLE
+></TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="section1"
+><A NAME="1"
+>Error Code
+</A
 ></TD
 ></TR
 ><TR

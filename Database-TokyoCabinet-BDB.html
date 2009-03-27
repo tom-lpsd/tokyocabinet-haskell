@@ -64,11 +64,6 @@
 ><DL
 ><DT
 ><A HREF="#1"
->Constructors
-</A
-></DT
-><DT
-><A HREF="#2"
 >Basic API (tokyocabinet.idl compliant)
 </A
 ></DT
@@ -1053,14 +1048,60 @@
 ></TD
 ></TR
 ><TR
+><TD CLASS="section1"
+>Documentation</TD
+></TR
+><TR
 ><TD CLASS="s15"
 ></TD
 ></TR
 ><TR
-><TD CLASS="section1"
-><A NAME="1"
->Constructors
-</A
+><TD CLASS="doc"
+><P
+>Example
+</P
+><PRE
+>
+    import Control.Monad
+    import Database.TokyoCabinet.BDB
+    import qualified Database.TokyoCabinet.BDB.Cursor as C
+</PRE
+><PRE
+>  
+    main :: IO ()
+    main =
+        do bdb &lt;- new
+           -- open the database
+           open bdb &quot;casket.tcb&quot; [OWRITER, OCREAT] &gt;&gt;= err bdb
+           -- store records
+           puts bdb [ (&quot;foo&quot;, &quot;hop&quot;), (&quot;bar&quot;, &quot;step&quot;), (&quot;baz&quot;, &quot;jump&quot;) ] &gt;&gt;=
+                    err bdb . (all id)
+           -- retrieve records
+           get bdb &quot;foo&quot; &gt;&gt;= maybe (error &quot;something goes wrong&quot;) putStrLn
+           -- traverse records
+           cur &lt;- C.new bdb
+           C.first cur &gt;&gt;= err bdb
+           iter cur &gt;&gt;= putStrLn . show
+           -- close the database
+           close bdb &gt;&gt;= err bdb
+        where
+          puts :: TCBDB -&gt; [(String, String)] -&gt; IO [Bool]
+          puts bdb = mapM (uncurry $ put bdb)
+</PRE
+><PRE
+>
+          err :: TCBDB -&gt; Bool -&gt; IO ()
+          err bdb = flip unless $ ecode bdb &gt;&gt;= error . show
+</PRE
+><PRE
+>  
+          iter :: C.TCBDBCUR -&gt; IO [(String, String)]
+          iter cur = do
+            [key, value] &lt;- sequence [C.key cur, C.val cur]
+            case (key, value) of
+              (Just k, Just v) -&gt; C.next cur &gt;&gt; iter cur &gt;&gt;= return . ((k,v):)
+              _ -&gt; return []
+</PRE
 ></TD
 ></TR
 ><TR
@@ -1700,7 +1741,7 @@
 ></TR
 ><TR
 ><TD CLASS="section1"
-><A NAME="2"
+><A NAME="1"
 >Basic API (tokyocabinet.idl compliant)
 </A
 ></TD
