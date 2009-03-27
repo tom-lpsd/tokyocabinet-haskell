@@ -2,7 +2,7 @@
 module Database.TokyoCabinet.Error
     (
     -- * Error code
-      TCECODE(..)
+      ECODE(..)
     -- * Utility function
     , errmsg
     , cintToError
@@ -18,7 +18,7 @@ import Foreign.C.String
 #include <tcutil.h>
 
 -- | Represents error
-data TCECODE =
+data ECODE =
     ESUCCESS | -- ^ success            
     ETHREAD  | -- ^ threading error    
     EINVALID | -- ^ invalid operation  
@@ -45,10 +45,10 @@ data TCECODE =
     EMISC      -- ^ miscellaneous error
     deriving (Eq, Ord)
 
-instance Show TCECODE where
+instance Show ECODE where
     show e =  errmsg e ++ " (code:" ++ show (errorToCInt e) ++ ")"
 
-errorToCInt :: TCECODE -> CInt
+errorToCInt :: ECODE -> CInt
 errorToCInt ESUCCESS = #const TCESUCCESS
 errorToCInt ETHREAD  = #const TCETHREAD
 errorToCInt EINVALID = #const TCEINVALID
@@ -74,7 +74,7 @@ errorToCInt EKEEP    = #const TCEKEEP
 errorToCInt ENOREC   = #const TCENOREC
 errorToCInt EMISC    = #const TCEMISC
 
-cintToError :: CInt -> TCECODE
+cintToError :: CInt -> ECODE
 cintToError #{const TCESUCCESS} = ESUCCESS
 cintToError #{const TCETHREAD} = ETHREAD
 cintToError #{const TCEINVALID} = EINVALID
@@ -105,7 +105,7 @@ cINT_MIN :: CInt
 cINT_MIN = #const INT_MIN
 
 -- | Convert error code to message string.
-errmsg :: TCECODE -> String
+errmsg :: ECODE -> String
 errmsg = unsafePerformIO . peekCString . c_tcerrmsg . errorToCInt
 
 foreign import ccall "tcerrmsg"

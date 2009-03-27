@@ -5,7 +5,7 @@ module Database.TokyoCabinet.HDB
     -- $doc
     -- * Constructors
       HDB
-    , TCECODE(..)
+    , ECODE(..)
     , OpenMode(..)
     , TuningOption(..)
     -- * Basic API (tokyocabinet.idl compliant)
@@ -114,7 +114,7 @@ delete :: HDB -> IO ()
 delete hdb = finalizeForeignPtr (unTCHDB hdb)
 
 -- | Return the last happened error code.
-ecode :: HDB -> IO TCECODE
+ecode :: HDB -> IO ECODE
 ecode hdb = cintToError `fmap` withForeignPtr (unTCHDB hdb) c_tchdbecode
 
 -- | Set the tuning parameters.

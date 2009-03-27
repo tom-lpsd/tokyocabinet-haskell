@@ -5,7 +5,7 @@ module Database.TokyoCabinet.BDB
     -- $doc
     -- * Constructors
       BDB
-    , TCECODE(..)
+    , ECODE(..)
     , OpenMode(..)
     , TuningOption(..)
     -- * Basic API (tokyocabinet.idl compliant)
@@ -113,7 +113,7 @@ delete :: BDB -> IO ()
 delete bdb = finalizeForeignPtr (unTCBDB bdb)
 
 -- | Return the last happened error code.
-ecode :: BDB -> IO TCECODE
+ecode :: BDB -> IO ECODE
 ecode bdb = cintToError `fmap` withForeignPtr (unTCBDB bdb) c_tcbdbecode
 
 -- | Set the tuning parameters.

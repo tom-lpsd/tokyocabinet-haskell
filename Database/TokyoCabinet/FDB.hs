@@ -5,7 +5,7 @@ module Database.TokyoCabinet.FDB
      -- $doc
      -- * Constructors
       FDB
-    , TCECODE(..)
+    , ECODE(..)
     , OpenMode(..)
     , ID(..)
     -- * Basic API (tokyocabinet.idl compliant)
@@ -101,7 +101,7 @@ delete :: FDB -> IO ()
 delete fdb = finalizeForeignPtr $ unTCFDB fdb
 
 -- | Return the last happened error code.
-ecode :: FDB -> IO TCECODE
+ecode :: FDB -> IO ECODE
 ecode fdb =
     withForeignPtr (unTCFDB fdb) $ \fdb' ->
         cintToError `fmap` c_tcfdbecode fdb'

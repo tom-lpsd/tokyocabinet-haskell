@@ -10,7 +10,7 @@ module Database.TokyoCabinet
     , F.FDB
     , BDB
     -- * Error Code
-    , E.TCECODE(..)
+    , E.ECODE(..)
     , E.errmsg
     ) where
 
@@ -101,7 +101,7 @@ class TCDB a where
     path      :: a -> TCM (Maybe String)
     rnum      :: a -> TCM Int64
     size      :: a -> TCM Int64
-    ecode     :: a -> TCM E.TCECODE
+    ecode     :: a -> TCM E.ECODE
     defaultExtension :: a -> String
 
 openModeToHOpenMode :: OpenMode -> H.OpenMode
