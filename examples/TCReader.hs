@@ -9,7 +9,7 @@ import Database.TokyoCabinet
     (
       TCM
     , TCDB
-    , TCHDB
+    , HDB
     , BDB
     , FDB
     , new
@@ -46,7 +46,7 @@ kvstore kv = do open "abcd.tch" [OWRITER, OCREAT]
                 close
 
 main :: IO ()
-main = runTCM $ do h <- new :: TCM TCHDB
+main = runTCM $ do h <- new :: TCM HDB
                    let kv =[ ("foo", 112)
                            , ("bar", 200)
                            , ("baz", 300) ] :: [(String, Int)]

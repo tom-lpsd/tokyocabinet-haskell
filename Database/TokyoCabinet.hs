@@ -6,7 +6,7 @@ module Database.TokyoCabinet
     , runTCM
     , OpenMode(..)
     , TCDB(..)
-    , H.TCHDB
+    , H.HDB
     , F.FDB
     , BDB
     -- * Error Code
@@ -40,7 +40,7 @@ import Data.Int
 -- @
 --    putsample :: String -> [(ByteString, ByteString)] -> TCM Bool
 --    putsample file kv =
---        do tc <- new :: TCM TCHDB -- alternatively you can use BDB or FDB
+--        do tc <- new :: TCM HDB -- alternatively you can use BDB or FDB
 --           open tc file [OWRITER, OCREAT]
 --           mapM (uncurry $ put tc) kv
 --           close tc
@@ -49,7 +49,7 @@ import Data.Int
 -- @
 --    getsample :: String -> ByteString -> TCM (Maybe ByteString)
 --    getsample file key =
---        do tc <- new :: TCM TCHDB -- alternatively you can use BDB or FDB
+--        do tc <- new :: TCM HDB -- alternatively you can use BDB or FDB
 --           open tc file [OREADER]
 --           val <- get tc key
 --           close tc
@@ -121,7 +121,7 @@ lift2 f x y = TCM $ f x y
 lift3 :: (a -> b -> c -> IO d) -> a -> b -> c -> TCM d
 lift3 f x y z = TCM $ f x y z
 
-instance TCDB H.TCHDB where
+instance TCDB H.HDB where
     new               = TCM   H.new
     delete            = lift  H.delete
     open tc name mode = TCM $ H.open tc name (map openModeToHOpenMode mode)

@@ -15,16 +15,16 @@ main = do hdb <- new
           -- close the database
           close hdb >>= err hdb
     where
-      puts :: TCHDB -> [(String, String)] -> IO [Bool]
+      puts :: HDB -> [(String, String)] -> IO [Bool]
       puts hdb = mapM (uncurry $ put hdb)
 
-      get_print :: TCHDB -> String -> IO ()
+      get_print :: HDB -> String -> IO ()
       get_print hdb key = get hdb key >>=
                           maybe (error "something goes wrong") putStrLn
 
-      err :: TCHDB -> Bool -> IO ()
+      err :: HDB -> Bool -> IO ()
       err hdb = flip unless $ ecode hdb >>= error . show
 
-      iter :: TCHDB -> IO [String]
+      iter :: HDB -> IO [String]
       iter hdb = iternext hdb >>=
                  maybe (return []) (\x -> return . (x:) =<< iter hdb)

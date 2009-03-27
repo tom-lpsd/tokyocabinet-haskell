@@ -4,7 +4,7 @@ module Database.TokyoCabinet.HDB
     (
     -- $doc
     -- * Constructors
-      TCHDB
+      HDB
     , TCECODE(..)
     , OpenMode(..)
     , TuningOption(..)
@@ -78,47 +78,47 @@ import qualified Database.TokyoCabinet.Storable as S
 --              -- close the database
 --              close hdb >>= err hdb
 --        where
---          puts :: TCHDB -> [(String, String)] -> IO [Bool]
+--          puts :: HDB -> [(String, String)] -> IO [Bool]
 --          puts hdb = mapM (uncurry $ put hdb)
 -- @
 --
 -- @
---          get_print :: TCHDB -> String -> IO ()
+--          get_print :: HDB -> String -> IO ()
 --          get_print hdb key = get hdb key >>=
 --                              maybe (error \"something goes wrong\") putStrLn
 -- @
 --
 -- @  
---          err :: TCHDB -> Bool -> IO ()
+--          err :: HDB -> Bool -> IO ()
 --          err hdb = flip unless $ ecode hdb >>= error . show
 -- @
 --
 -- @    
---          iter :: TCHDB -> IO [String]
+--          iter :: HDB -> IO [String]
 --          iter hdb = iternext hdb >>=
 --                     maybe (return []) (\x -> return . (x:) =<< iter hdb)
 -- @
 --
 
-data TCHDB = TCHDB { unTCHDB :: !(ForeignPtr HDB) }
+data HDB = HDB { unTCHDB :: !(ForeignPtr HDB') }
 
 -- | Create a Hash database object. 
-new :: IO TCHDB
-new = TCHDB `fmap` (c_tchdbnew >>= newForeignPtr tchdbFinalizer)
+new :: IO HDB
+new = HDB `fmap` (c_tchdbnew >>= newForeignPtr tchdbFinalizer)
 
 -- | Force to free region of HDB. 
 -- HDB is kept by ForeignPtr, so Haskell runtime GC cleans up memory for
 -- almost situation. Most always, you don't need to call this. 
 -- After call this, you must not touch HDB object. Its behavior is undefined.
-delete :: TCHDB -> IO ()
+delete :: HDB -> IO ()
 delete hdb = finalizeForeignPtr (unTCHDB hdb)
 
 -- | Return the last happened error code.
-ecode :: TCHDB -> IO TCECODE
+ecode :: HDB -> IO TCECODE
 ecode hdb = cintToError `fmap` withForeignPtr (unTCHDB hdb) c_tchdbecode
 
 -- | Set the tuning parameters.
-tune :: TCHDB -- ^ TCHDB object
+tune :: HDB   -- ^ HDB object
      -> Int64 -- ^ the number of elements of the bucket array.
      -> Int8  -- ^ the size of record alignment by power of 2. 
      -> Int8  -- ^ the maximum number of elements of the free block
@@ -130,61 +130,61 @@ tune hdb bnum apow fpow options =
         c_tchdbtune p bnum apow fpow (combineTuningOption options)
 
 -- | Set the caching parameters.
-setcache :: TCHDB   -- ^ TCHDB object.
+setcache :: HDB   -- ^ HDB object.
          -> Int32   -- ^ the maximum number of records to be cached.
          -> IO Bool -- ^ if successful, the return value is True.
 setcache hdb rcnum = withForeignPtr (unTCHDB hdb) (flip c_tchdbsetcache rcnum)
 
 -- | Set the size of extra mapped memory.
-setxmsiz :: TCHDB -> Int64 -> IO Bool
+setxmsiz :: HDB -> Int64 -> IO Bool
 setxmsiz hdb xmsiz = withForeignPtr (unTCHDB hdb) (flip c_tchdbsetxmsiz xmsiz)
 
 -- | Open a database file.
-open :: TCHDB -> String -> [OpenMode] -> IO Bool
+open :: HDB -> String -> [OpenMode] -> IO Bool
 open = openHelper c_tchdbopen unTCHDB combineOpenMode
 
 -- | Close the database file.
-close :: TCHDB -> IO Bool
+close :: HDB -> IO Bool
 close hdb = withForeignPtr (unTCHDB hdb) c_tchdbclose
 
 -- | Stora a record (key-value pair) on HDB.  Key and value type must
 -- be instance of Storable class.  Usually, we can use `String',
 -- `ByteString' for key, `String', `ByteString', `Int', `Double' for
 -- value.
-put :: (S.Storable a, S.Storable b) => TCHDB -> a -> b -> IO Bool
+put :: (S.Storable a, S.Storable b) => HDB -> a -> b -> IO Bool
 put = putHelper c_tchdbput unTCHDB
 
 -- | Store a new record. If a record with the same key exists in the
 -- database, this function has no effect.
-putkeep :: (S.Storable a, S.Storable b) => TCHDB -> a -> b -> IO Bool
+putkeep :: (S.Storable a, S.Storable b) => HDB -> a -> b -> IO Bool
 putkeep = putHelper c_tchdbputkeep unTCHDB
 
 -- | Concatenate a value at the end of the existing record.
-putcat :: (S.Storable a, S.Storable b) => TCHDB -> a -> b -> IO Bool
+putcat :: (S.Storable a, S.Storable b) => HDB -> a -> b -> IO Bool
 putcat = putHelper c_tchdbputcat unTCHDB
 
 -- | Store a record into a hash database object in asynchronous fashion.
-putasync :: (S.Storable a, S.Storable b) => TCHDB -> a -> b -> IO Bool
+putasync :: (S.Storable a, S.Storable b) => HDB -> a -> b -> IO Bool
 putasync = putHelper c_tchdbputasync unTCHDB
 
 -- | Delete a record.
-out :: (S.Storable a) => TCHDB -> a -> IO Bool
+out :: (S.Storable a) => HDB -> a -> IO Bool
 out = outHelper c_tchdbout unTCHDB
 
 -- | Return the value of record. 
-get :: (S.Storable a, S.Storable b) => TCHDB -> a -> IO (Maybe b)
+get :: (S.Storable a, S.Storable b) => HDB -> a -> IO (Maybe b)
 get = getHelper c_tchdbget unTCHDB
 
 -- | Return the byte size of value in a record.
-vsiz :: (S.Storable a) => TCHDB -> a -> IO (Maybe Int)
+vsiz :: (S.Storable a) => HDB -> a -> IO (Maybe Int)
 vsiz = vsizHelper c_tchdbvsiz unTCHDB
 
--- | Initialize the iterator of a TCHDB object.
-iterinit :: TCHDB -> IO Bool
+-- | Initialize the iterator of a HDB object.
+iterinit :: HDB -> IO Bool
 iterinit hdb = withForeignPtr (unTCHDB hdb) c_tchdbiterinit
 
--- | Return the next key of the iterator of a TCHDB object.
-iternext :: (S.Storable a) => TCHDB -> IO (Maybe a)
+-- | Return the next key of the iterator of a HDB object.
+iternext :: (S.Storable a) => HDB -> IO (Maybe a)
 iternext hdb =
     withForeignPtr (unTCHDB hdb) $ \p ->
         alloca $ \sizbuf -> do
@@ -194,26 +194,26 @@ iternext hdb =
                    S.peekPtrLen (vp, siz)
 
 -- | Return list of forward matched keys.
-fwmkeys :: (S.Storable a, S.Storable b) => TCHDB -> a -> Int -> IO [b]
+fwmkeys :: (S.Storable a, S.Storable b) => HDB -> a -> Int -> IO [b]
 fwmkeys = fwmHelper c_tchdbfwmkeys unTCHDB
 
 -- | Increment the corresponding value. (The value specified by a key
 -- is treated as integer.)
-addint :: (S.Storable a) => TCHDB -> a -> Int -> IO (Maybe Int)
+addint :: (S.Storable a) => HDB -> a -> Int -> IO (Maybe Int)
 addint = addHelper c_tchdbaddint unTCHDB fromIntegral fromIntegral (== cINT_MIN)
 
 -- | Increment the corresponding value. (The value specified by a key
 -- is treated as double.)
-adddouble :: (S.Storable a) => TCHDB -> a -> Double -> IO (Maybe Double)
+adddouble :: (S.Storable a) => HDB -> a -> Double -> IO (Maybe Double)
 adddouble = addHelper c_tchdbadddouble unTCHDB realToFrac realToFrac isNaN
 
 -- | Synchronize updated contents of a database object with the file
 -- and the device.
-sync :: TCHDB -> IO Bool
+sync :: HDB -> IO Bool
 sync hdb = withForeignPtr (unTCHDB hdb) c_tchdbsync
 
 -- |  Optimize the file of a Hash database object.
-optimize :: TCHDB -- ^ TCHDB object
+optimize :: HDB   -- ^ HDB object
          -> Int64 -- ^ the number of elements of the bucket array.
          -> Int8  -- ^ the size of record alignment by power of 2. 
          -> Int8  -- ^ the maximum number of elements of the free block
@@ -225,33 +225,33 @@ optimize hdb bnum apow fpow options =
         c_tchdboptimize p bnum apow fpow (combineTuningOption options)
 
 -- | Delete all records.
-vanish :: TCHDB -> IO Bool
+vanish :: HDB -> IO Bool
 vanish hdb = withForeignPtr (unTCHDB hdb) c_tchdbvanish
 
 -- | Copy the database file.
-copy :: TCHDB -> String -> IO Bool
+copy :: HDB -> String -> IO Bool
 copy = copyHelper c_tchdbcopy unTCHDB
 
 -- | Begin the transaction.
-tranbegin :: TCHDB -> IO Bool
+tranbegin :: HDB -> IO Bool
 tranbegin hdb = withForeignPtr (unTCHDB hdb) c_tchdbtranbegin
 
 -- | Commit the transaction.
-trancommit :: TCHDB -> IO Bool
+trancommit :: HDB -> IO Bool
 trancommit hdb = withForeignPtr (unTCHDB hdb) c_tchdbtrancommit
 
 -- | Abort the transaction.
-tranabort :: TCHDB -> IO Bool
+tranabort :: HDB -> IO Bool
 tranabort hdb = withForeignPtr (unTCHDB hdb) c_tchdbtranabort
 
 -- | Return the file path of currentry opened database.
-path :: TCHDB -> IO (Maybe String)
+path :: HDB -> IO (Maybe String)
 path = pathHelper c_tchdbpath unTCHDB
 
 -- | Return the number of records in the database.
-rnum :: TCHDB -> IO Int64
+rnum :: HDB -> IO Int64
 rnum hdb = withForeignPtr (unTCHDB hdb) c_tchdbrnum
 
 -- | Return the size of the database file.
-fsiz :: TCHDB -> IO Int64
+fsiz :: HDB -> IO Int64
 fsiz hdb = withForeignPtr (unTCHDB hdb) c_tchdbfsiz

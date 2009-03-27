@@ -11,7 +11,7 @@ import Control.Monad
 dbname :: String
 dbname = "foo.tch"
 
-withOpenedHDB :: String -> (TCHDB -> IO a) -> IO a
+withOpenedHDB :: String -> (HDB -> IO a) -> IO a
 withOpenedHDB name action = do
   h <- new
   open h name [OREADER, OWRITER, OCREAT]
