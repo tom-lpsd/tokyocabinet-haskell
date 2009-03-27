@@ -3,14 +3,14 @@ import Data.ByteString.Char8 (ByteString, pack)
 
 putsample :: String -> [(ByteString, ByteString)] -> TCM Bool
 putsample file kv =
-    do tc <- new :: TCM TCHDB
+    do tc <- new :: TCM HDB
        open tc file [OWRITER, OCREAT]
        mapM (uncurry $ put tc) kv
        close tc
               
 getsample :: String -> ByteString -> TCM (Maybe ByteString)
 getsample file key =
-    do tc <- new :: TCM TCHDB
+    do tc <- new :: TCM HDB
        open tc file [OREADER]
        val <- get tc key
        close tc
