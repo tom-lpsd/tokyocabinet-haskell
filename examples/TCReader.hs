@@ -11,7 +11,7 @@ import Database.TokyoCabinet
     , TCDB
     , TCHDB
     , BDB
-    , TCFDB
+    , FDB
     , new
     , runTCM
     , OpenMode(..)

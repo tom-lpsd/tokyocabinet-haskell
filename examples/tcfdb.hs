@@ -12,8 +12,8 @@ main = do fdb <- new
           -- close the database
           close fdb >>= err fdb
     where
-      puts :: TCFDB -> [(Int, String)] -> IO [Bool]
+      puts :: FDB -> [(Int, String)] -> IO [Bool]
       puts fdb = mapM (uncurry $ put fdb)
 
-      err :: TCFDB -> Bool -> IO ()
+      err :: FDB -> Bool -> IO ()
       err fdb = flip unless $ ecode fdb >>= error . show

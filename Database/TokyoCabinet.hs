@@ -7,7 +7,7 @@ module Database.TokyoCabinet
     , OpenMode(..)
     , TCDB(..)
     , H.TCHDB
-    , F.TCFDB
+    , F.FDB
     , BDB
     -- * Error Code
     , E.TCECODE(..)
@@ -40,7 +40,7 @@ import Data.Int
 -- @
 --    putsample :: String -> [(ByteString, ByteString)] -> TCM Bool
 --    putsample file kv =
---        do tc <- new :: TCM TCHDB -- alternatively you can use BDB or TCFDB
+--        do tc <- new :: TCM TCHDB -- alternatively you can use BDB or FDB
 --           open tc file [OWRITER, OCREAT]
 --           mapM (uncurry $ put tc) kv
 --           close tc
@@ -49,7 +49,7 @@ import Data.Int
 -- @
 --    getsample :: String -> ByteString -> TCM (Maybe ByteString)
 --    getsample file key =
---        do tc <- new :: TCM TCHDB -- alternatively you can use BDB or TCFDB
+--        do tc <- new :: TCM TCHDB -- alternatively you can use BDB or FDB
 --           open tc file [OREADER]
 --           val <- get tc key
 --           close tc
@@ -247,7 +247,7 @@ keyToStorable :: (Storable a) => ID -> IO a
 keyToStorable k = newCStringLen (show k) >>= \(ptr, len) ->
                   peekPtrLen (castPtr ptr, fromIntegral len)
 
-instance TCDB F.TCFDB where
+instance TCDB F.FDB where
     new               = TCM    F.new
     delete            = lift   F.delete
     open tc name mode = TCM $  F.open tc name (map openModeToFOpenMode mode)

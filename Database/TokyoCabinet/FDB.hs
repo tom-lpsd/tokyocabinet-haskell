@@ -4,7 +4,7 @@ module Database.TokyoCabinet.FDB
     (
      -- $doc
      -- * Constructors
-      TCFDB
+      FDB
     , TCECODE(..)
     , OpenMode(..)
     , ID(..)
@@ -76,38 +76,38 @@ import Control.Exception
 --              -- close the database
 --              close fdb >>= err fdb
 --        where
---          puts :: TCFDB -> [(Int, String)] -> IO [Bool]
+--          puts :: FDB -> [(Int, String)] -> IO [Bool]
 --          puts fdb = mapM (uncurry $ put fdb)
 -- @
 --
 -- @  
---          err :: TCFDB -> Bool -> IO ()
+--          err :: FDB -> Bool -> IO ()
 --          err fdb = flip unless $ ecode fdb >>= error . show
 -- @
 --
 
 
-data TCFDB = TCFDB { unTCFDB :: !(ForeignPtr FDB) }
+data FDB = FDB { unTCFDB :: !(ForeignPtr FDB') }
 
 -- | Create a Fixed-length database object. 
-new :: IO TCFDB
-new = TCFDB `fmap` (c_tcfdbnew >>= newForeignPtr tcfdbFinalizer)
+new :: IO FDB
+new = FDB `fmap` (c_tcfdbnew >>= newForeignPtr tcfdbFinalizer)
 
 -- | Force to free region of FDB. 
 -- FDB is kept by ForeignPtr, so Haskell runtime GC cleans up memory for
 -- almost situation. Most always, you don't need to call this. 
 -- After call this, you must not touch FDB object. Its behavior is undefined.
-delete :: TCFDB -> IO ()
+delete :: FDB -> IO ()
 delete fdb = finalizeForeignPtr $ unTCFDB fdb
 
 -- | Return the last happened error code.
-ecode :: TCFDB -> IO TCECODE
+ecode :: FDB -> IO TCECODE
 ecode fdb =
     withForeignPtr (unTCFDB fdb) $ \fdb' ->
         cintToError `fmap` c_tcfdbecode fdb'
 
 -- | Set the tuning parameters.
-tune :: TCFDB   -- ^ TCFDB object.
+tune :: FDB     -- ^ FDB object.
      -> Int32   -- ^ the width of the value of each record.
      -> Int64   -- ^ the limit size of the database file.
      -> IO Bool -- ^ if successful, the return value is True.
@@ -115,15 +115,15 @@ tune fdb width limsiz =
     withForeignPtr (unTCFDB fdb) $ \fdb' -> c_tcfdbtune fdb' width limsiz
 
 -- | Open FDB database file.
-open :: TCFDB -> String -> [OpenMode] -> IO Bool
+open :: FDB -> String -> [OpenMode] -> IO Bool
 open = openHelper c_tcfdbopen unTCFDB combineOpenMode
 
 -- | Close the database file.
-close :: TCFDB -> IO Bool
+close :: FDB -> IO Bool
 close fdb = withForeignPtr (unTCFDB fdb) c_tcfdbclose
 
-type PutFunc = Ptr FDB -> Int64 -> Ptr Word8 -> CInt -> IO Bool
-liftPutFunc :: (Key k, S.Storable v) => PutFunc -> TCFDB -> k -> v -> IO Bool
+type PutFunc = Ptr FDB' -> Int64 -> Ptr Word8 -> CInt -> IO Bool
+liftPutFunc :: (Key k, S.Storable v) => PutFunc -> FDB -> k -> v -> IO Bool
 liftPutFunc func fdb key val =
     withForeignPtr (unTCFDB fdb) $ \fdb' ->
         S.withPtrLen val $ \(vbuf, vsize) -> do
@@ -132,26 +132,26 @@ liftPutFunc func fdb key val =
 
 -- | Stora a record (key-value pair) on FDB.  Key type must be
 -- instance of Key class. Value type must be instance of Storable.
-put :: (Key k, S.Storable v) => TCFDB -> k -> v -> IO Bool
+put :: (Key k, S.Storable v) => FDB -> k -> v -> IO Bool
 put = liftPutFunc c_tcfdbput
 
 -- | Store a new record. If a record with the same key exists in the
 -- database, this function has no effect.
-putkeep :: (Key k, S.Storable v) => TCFDB -> k -> v -> IO Bool
+putkeep :: (Key k, S.Storable v) => FDB -> k -> v -> IO Bool
 putkeep = liftPutFunc c_tcfdbputkeep
 
 -- | Concatenate a value at the end of the existing record.
-putcat :: (Key k, S.Storable v) => TCFDB -> k -> v -> IO Bool
+putcat :: (Key k, S.Storable v) => FDB -> k -> v -> IO Bool
 putcat =  liftPutFunc c_tcfdbputcat
 
 -- | Delete a record. 
-out :: (Key k) => TCFDB -> k -> IO Bool
+out :: (Key k) => FDB -> k -> IO Bool
 out fdb key =
     withForeignPtr (unTCFDB fdb) $ \fdb' ->
         c_tcfdbout fdb' =<< keyToInt key
 
 -- | Return the value of record. 
-get :: (Key k, S.Storable v) => TCFDB -> k -> IO (Maybe v)
+get :: (Key k, S.Storable v) => FDB -> k -> IO (Maybe v)
 get fdb key =
     withForeignPtr (unTCFDB fdb) $ \fdb' ->
         alloca $ \sizbuf -> do
@@ -161,7 +161,7 @@ get fdb key =
           flip maybePeek vbuf $ \vbuf' -> S.peekPtrLen (vbuf', vsize)
 
 -- | Return the byte size of value in a record.
-vsiz :: (Key k) => TCFDB -> k -> IO (Maybe Int)
+vsiz :: (Key k) => FDB -> k -> IO (Maybe Int)
 vsiz fdb key =
     withForeignPtr (unTCFDB fdb) $ \fdb' -> do
       vsize <- c_tcfdbvsiz fdb' =<< keyToInt key
@@ -169,12 +169,12 @@ vsiz fdb key =
                  then Nothing
                  else Just (fromIntegral vsize)
 
--- | Initialize the iterator of a TCFDB object.
-iterinit :: TCFDB -> IO Bool
+-- | Initialize the iterator of a FDB object.
+iterinit :: FDB -> IO Bool
 iterinit fdb = withForeignPtr (unTCFDB fdb) c_tcfdbiterinit
 
--- | Return the next key of the iterator of a TCFDB object.
-iternext :: (Key k) => TCFDB -> IO (Maybe k)
+-- | Return the next key of the iterator of a FDB object.
+iternext :: (Key k) => FDB -> IO (Maybe k)
 iternext fdb = 
     withForeignPtr (unTCFDB fdb) $ \fdb' -> do
       i <-  c_tcfdbiternext fdb'
@@ -184,7 +184,7 @@ iternext fdb =
 
 -- | Return list of keys in the specified range.
 range :: (Key k1, Key k2) =>
-         TCFDB   -- ^ TCFDB object
+         FDB     -- ^ FDB object
       -> k1      -- ^ the lower limit of the range.
       -> k1      -- ^ the upper limit of the range.
       -> Int     -- ^ the maximum number of keys to be fetched.
@@ -200,12 +200,12 @@ range fdb lower upper maxn =
           return $ map (fromID . ID) keys
 
 -- | Return list of forward matched keys.
-fwmkeys :: (S.Storable k1, S.Storable k2) => TCFDB -> k1 -> Int -> IO [k2]
+fwmkeys :: (S.Storable k1, S.Storable k2) => FDB -> k1 -> Int -> IO [k2]
 fwmkeys = fwmHelper c_tcfdbrange4 unTCFDB
 
 -- | Increment the corresponding value. (The value specified by a key
 -- is treated as integer.)
-addint :: (Key k) => TCFDB -> k -> Int -> IO (Maybe Int)
+addint :: (Key k) => FDB -> k -> Int -> IO (Maybe Int)
 addint fdb key num =
     withForeignPtr (unTCFDB fdb) $ \fdb' -> do
       key' <- keyToInt key
@@ -216,7 +216,7 @@ addint fdb key num =
 
 -- | Increment the corresponding value. (The value specified by a key
 -- is treated as double.)
-adddouble :: (Key k) => TCFDB -> k -> Double -> IO (Maybe Double)
+adddouble :: (Key k) => FDB -> k -> Double -> IO (Maybe Double)
 adddouble fdb key num =
     withForeignPtr (unTCFDB fdb) $ \fdb' -> do
       key' <- keyToInt key
@@ -227,32 +227,32 @@ adddouble fdb key num =
 
 -- | Synchronize updated contents of a database object with the file
 -- and the device.
-sync :: TCFDB -> IO Bool
+sync :: FDB -> IO Bool
 sync fdb = withForeignPtr (unTCFDB fdb) c_tcfdbsync
 
 -- |  Optimize the file of a Hash database object.
-optimize :: TCFDB -> Int32 -> Int64 -> IO Bool
+optimize :: FDB -> Int32 -> Int64 -> IO Bool
 optimize fdb width limsiz =
     withForeignPtr (unTCFDB fdb) $ \fdb' -> c_tcfdboptimize fdb' width limsiz
 
 -- | Delete all records.
-vanish :: TCFDB -> IO Bool
+vanish :: FDB -> IO Bool
 vanish fdb = withForeignPtr (unTCFDB fdb) c_tcfdbvanish
 
 -- | Copy the database file.
-copy :: TCFDB -> String -> IO Bool
+copy :: FDB -> String -> IO Bool
 copy = copyHelper c_tcfdbcopy unTCFDB
 
 -- | Return the file path of currentry opened database.
-path :: TCFDB -> IO (Maybe String)
+path :: FDB -> IO (Maybe String)
 path = pathHelper c_tcfdbpath unTCFDB
 
 -- | Return the number of records in the database.
-rnum :: TCFDB -> IO Int64
+rnum :: FDB -> IO Int64
 rnum fdb = withForeignPtr (unTCFDB fdb) c_tcfdbrnum
 
 -- | Return the size of the database file.
-fsiz :: TCFDB -> IO Int64
+fsiz :: FDB -> IO Int64
 fsiz fdb = withForeignPtr (unTCFDB fdb) c_tcfdbfsiz
 
 keyToInt :: (Key k) => k -> IO Int64

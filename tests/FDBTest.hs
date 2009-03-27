@@ -11,7 +11,7 @@ import Control.Monad
 dbname :: String
 dbname = "foo.tcf"
 
-withOpenedFDB :: String -> (TCFDB -> IO a) -> IO ()
+withOpenedFDB :: String -> (FDB -> IO a) -> IO ()
 withOpenedFDB name action = do
   h <- new
   open h name [OREADER, OWRITER, OCREAT]

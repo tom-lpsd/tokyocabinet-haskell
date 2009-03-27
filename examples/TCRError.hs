@@ -13,7 +13,7 @@ import Database.TokyoCabinet
     , TCDB
     , TCHDB
     , BDB
-    , TCFDB
+    , FDB
     )
 
 import Database.TokyoCabinet.Storable
