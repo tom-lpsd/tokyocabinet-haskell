@@ -123,3 +123,29 @@ Executable FDBTest
     Database.TokyoCabinet.List
     Database.TokyoCabinet.List.C
     Database.TokyoCabinet.Storable
+
+Executable ADBTest
+  if flag(BuildTest)
+    Buildable:            True
+  else
+    Buildable:            False
+  Main-Is:              tests/ADBTest.hs
+  Extra-libraries:      tokyocabinet
+  Build-depends:        HUnit >= 1.2, base >= 4.0, directory >= 1.0
+  ghc-options:          -fhpc
+  Extensions:           CPP, ForeignFunctionInterface,
+                        EmptyDataDecls, TypeSynonymInstances
+  Other-modules:
+    TestUtil
+    Database.TokyoCabinet.HDB
+    Database.TokyoCabinet.HDB.C
+    Database.TokyoCabinet.FDB
+    Database.TokyoCabinet.FDB.C
+    Database.TokyoCabinet.BDB
+    Database.TokyoCabinet.BDB.C
+    Database.TokyoCabinet.BDB.Cursor
+    Database.TokyoCabinet.BDB.Cursor.C
+    Database.TokyoCabinet.Error
+    Database.TokyoCabinet.List
+    Database.TokyoCabinet.List.C
+    Database.TokyoCabinet.Storable
