@@ -160,39 +160,39 @@ put = putHelper c_tcbdbput unTCBDB
 
 -- | Store a new record. If a record with the same key exists in the
 -- database, this function has no effect.
-putkeep :: (S.Storable a, S.Storable b) => BDB -> a -> b -> IO Bool
+putkeep :: (S.Storable k, S.Storable v) => BDB -> k -> v -> IO Bool
 putkeep = putHelper c_tcbdbputkeep unTCBDB
 
 -- | Concatenate a value at the end of the existing record.
-putcat :: (S.Storable a, S.Storable b) => BDB -> a -> b -> IO Bool
+putcat :: (S.Storable k, S.Storable v) => BDB -> k -> v -> IO Bool
 putcat = putHelper c_tcbdbputcat unTCBDB
 
 -- | Store a record with allowing duplication of keys. 
-putdup :: (S.Storable a, S.Storable b) => BDB -> a -> b -> IO Bool
+putdup :: (S.Storable k, S.Storable v) => BDB -> k -> v -> IO Bool
 putdup = putHelper c_tcbdbputdup unTCBDB
 
 -- | Store records with allowing duplication of keys. 
-putlist :: (S.Storable a, S.Storable b) => BDB -> a -> [b] -> IO Bool
+putlist :: (S.Storable k, S.Storable v) => BDB -> k -> [v] -> IO Bool
 putlist bdb key vals = do
   and `fmap` mapM (putdup bdb key) vals
 
 -- | Delete a record. If the key of duplicated records is specified,
 -- the first one is deleted. 
-out :: (S.Storable a) => BDB -> a -> IO Bool
+out :: (S.Storable k) => BDB -> k -> IO Bool
 out = outHelper c_tcbdbout unTCBDB
 
 -- | Delete records. If the key of duplicated records is specified,
 -- all of them are deleted.
-outlist :: (S.Storable a) => BDB -> a -> IO Bool
+outlist :: (S.Storable k) => BDB -> k -> IO Bool
 outlist = outHelper c_tcbdbout3 unTCBDB
 
 -- | Return the value of record. If the key of duplicated records is
 -- specified, the first one is returned.
-get :: (S.Storable a, S.Storable b) => BDB -> a -> IO (Maybe b)
+get :: (S.Storable k, S.Storable v) => BDB -> k -> IO (Maybe v)
 get = getHelper c_tcbdbget unTCBDB
 
 -- | Retrieve records. 
-getlist :: (S.Storable a, S.Storable b) => BDB -> a -> IO [b]
+getlist :: (S.Storable k, S.Storable v) => BDB -> k -> IO [v]
 getlist bdb key =
     withForeignPtr (unTCBDB bdb) $ \bdb' ->
         S.withPtrLen key $ \(kbuf, ksize) -> do
@@ -202,7 +202,7 @@ getlist bdb key =
             else peekTCListAndFree ptr
 
 -- | Return the number of records corresponding to a key. 
-vnum :: (S.Storable a) => BDB -> a -> IO (Maybe Int)
+vnum :: (S.Storable k) => BDB -> k -> IO (Maybe Int)
 vnum bdb key =
     withForeignPtr (unTCBDB bdb) $ \bdb' ->
         S.withPtrLen key $ \(kbuf, ksize) -> do
@@ -213,22 +213,22 @@ vnum bdb key =
 
 -- | Return the size of the value of a record. If the key of duplicated
 -- records is specified, the first one is selected.
-vsiz :: (S.Storable a) => BDB -> a -> IO (Maybe Int)
+vsiz :: (S.Storable k) => BDB -> k -> IO (Maybe Int)
 vsiz = vsizHelper c_tcbdbvsiz unTCBDB
 
 -- | Return list of keys in the specified range.
-range :: (S.Storable a) =>
+range :: (S.Storable k) =>
          BDB     -- ^ BDB object
-      -> Maybe a -- ^ the key of the beginning border. If it is
+      -> Maybe k -- ^ the key of the beginning border. If it is
                  -- Nothing, the first record in the database is
                  -- specified.
       -> Bool    -- ^ whether the beginning border is inclusive or not. 
-      -> Maybe a -- ^ the key of the ending border. If it is Nothing,
+      -> Maybe k -- ^ the key of the ending border. If it is Nothing,
                  -- the last record is specified.
       -> Bool    -- ^ whether the ending border is inclusive or not.
       -> Int     -- ^ the maximum number of keys to be fetched. If it
                  -- is negative value, no limit is specified.
-      -> IO [a]  -- ^ keys in the specified range.
+      -> IO [k]  -- ^ keys in the specified range.
 range bdb bkey binc ekey einc maxn =
     withForeignPtr (unTCBDB bdb) $ \bdb' ->
         withPtrLen' bkey $ \(bkbuf, bksiz) ->
@@ -240,28 +240,28 @@ range bdb bkey binc ekey einc maxn =
       withPtrLen' Nothing action = action (nullPtr, 0)
 
 -- | Return list of forward matched keys.
-fwmkeys :: (S.Storable a, S.Storable b) =>
+fwmkeys :: (S.Storable k1, S.Storable k2) =>
            BDB    -- ^ BDB object
-        -> a      -- ^ search string
+        -> k1      -- ^ search string
         -> Int    -- ^ the maximum number of keys to be fetched. If it
                   -- is negative value, no limit is specified.
-        -> IO [b] -- ^ keys matches specified string (in forward matching).
+        -> IO [k2] -- ^ keys matches specified string (in forward matching).
 fwmkeys = fwmHelper c_tcbdbfwmkeys unTCBDB
 
 -- | Increment the corresponding value. (The value specified by a key
 -- is treated as integer.)
-addint :: (S.Storable a) =>
+addint :: (S.Storable k) =>
           BDB   -- ^ BDB object.
-       -> a     -- ^ Key.
+       -> k     -- ^ Key.
        -> Int   -- ^ Amount of increment.
        -> IO (Maybe Int) -- ^ If successful, a new value is returned.
 addint = addHelper c_tcbdbaddint unTCBDB fromIntegral fromIntegral (== cINT_MIN)
 
 -- | Increment the corresponding value. (The value specified by a key
 -- is treated as double.)
-adddouble :: (S.Storable a) =>
+adddouble :: (S.Storable k) =>
              BDB    -- ^ BDB object.
-          -> a      -- ^ Key.
+          -> k      -- ^ Key.
           -> Double -- ^ Amount of increment.
           -> IO (Maybe Double) -- ^ If successful, a new value is returned.
 adddouble = addHelper c_tcbdbadddouble unTCBDB realToFrac realToFrac isNaN

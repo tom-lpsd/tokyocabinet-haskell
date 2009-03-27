@@ -151,32 +151,32 @@ close hdb = withForeignPtr (unTCHDB hdb) c_tchdbclose
 -- be instance of Storable class.  Usually, we can use `String',
 -- `ByteString' for key, `String', `ByteString', `Int', `Double' for
 -- value.
-put :: (S.Storable a, S.Storable b) => HDB -> a -> b -> IO Bool
+put :: (S.Storable k, S.Storable v) => HDB -> k -> v -> IO Bool
 put = putHelper c_tchdbput unTCHDB
 
 -- | Store a new record. If a record with the same key exists in the
 -- database, this function has no effect.
-putkeep :: (S.Storable a, S.Storable b) => HDB -> a -> b -> IO Bool
+putkeep :: (S.Storable k, S.Storable v) => HDB -> k -> v -> IO Bool
 putkeep = putHelper c_tchdbputkeep unTCHDB
 
 -- | Concatenate a value at the end of the existing record.
-putcat :: (S.Storable a, S.Storable b) => HDB -> a -> b -> IO Bool
+putcat :: (S.Storable k, S.Storable v) => HDB -> k -> v -> IO Bool
 putcat = putHelper c_tchdbputcat unTCHDB
 
 -- | Store a record into a hash database object in asynchronous fashion.
-putasync :: (S.Storable a, S.Storable b) => HDB -> a -> b -> IO Bool
+putasync :: (S.Storable k, S.Storable v) => HDB -> k -> v -> IO Bool
 putasync = putHelper c_tchdbputasync unTCHDB
 
 -- | Delete a record.
-out :: (S.Storable a) => HDB -> a -> IO Bool
+out :: (S.Storable k) => HDB -> k -> IO Bool
 out = outHelper c_tchdbout unTCHDB
 
 -- | Return the value of record. 
-get :: (S.Storable a, S.Storable b) => HDB -> a -> IO (Maybe b)
+get :: (S.Storable k, S.Storable v) => HDB -> k -> IO (Maybe v)
 get = getHelper c_tchdbget unTCHDB
 
 -- | Return the byte size of value in a record.
-vsiz :: (S.Storable a) => HDB -> a -> IO (Maybe Int)
+vsiz :: (S.Storable k) => HDB -> k -> IO (Maybe Int)
 vsiz = vsizHelper c_tchdbvsiz unTCHDB
 
 -- | Initialize the iterator of a HDB object.
@@ -184,7 +184,7 @@ iterinit :: HDB -> IO Bool
 iterinit hdb = withForeignPtr (unTCHDB hdb) c_tchdbiterinit
 
 -- | Return the next key of the iterator of a HDB object.
-iternext :: (S.Storable a) => HDB -> IO (Maybe a)
+iternext :: (S.Storable k) => HDB -> IO (Maybe k)
 iternext hdb =
     withForeignPtr (unTCHDB hdb) $ \p ->
         alloca $ \sizbuf -> do
@@ -194,17 +194,17 @@ iternext hdb =
                    S.peekPtrLen (vp, siz)
 
 -- | Return list of forward matched keys.
-fwmkeys :: (S.Storable a, S.Storable b) => HDB -> a -> Int -> IO [b]
+fwmkeys :: (S.Storable k1, S.Storable k2) => HDB -> k1 -> Int -> IO [k2]
 fwmkeys = fwmHelper c_tchdbfwmkeys unTCHDB
 
 -- | Increment the corresponding value. (The value specified by a key
 -- is treated as integer.)
-addint :: (S.Storable a) => HDB -> a -> Int -> IO (Maybe Int)
+addint :: (S.Storable k) => HDB -> k -> Int -> IO (Maybe Int)
 addint = addHelper c_tchdbaddint unTCHDB fromIntegral fromIntegral (== cINT_MIN)
 
 -- | Increment the corresponding value. (The value specified by a key
 -- is treated as double.)
-adddouble :: (S.Storable a) => HDB -> a -> Double -> IO (Maybe Double)
+adddouble :: (S.Storable k) => HDB -> k -> Double -> IO (Maybe Double)
 adddouble = addHelper c_tchdbadddouble unTCHDB realToFrac realToFrac isNaN
 
 -- | Synchronize updated contents of a database object with the file
