@@ -219,7 +219,7 @@ tests = test [
         , "fwmkeys BDB" ~: (runTCM $ bdb test_fwmkeys)
         , "fwmkeys HDB" ~: (runTCM $ hdb test_fwmkeys)
         , "fwmkeys FDB" ~: (runTCM $ fdb test_fwmkeys_fdb)
-        , "fwmkeys B.BDB" ~: (runTCM $ bbdb test_fwmkeys_fdb)
+        , "fwmkeys B.BDB" ~: (runTCM $ bbdb test_fwmkeys)
         , "addint BDB" ~: (runTCM $ bdb test_addint)
         , "addint HDB" ~: (runTCM $ hdb test_addint)
         , "addint FDB" ~: (runTCM $ fdb test_addint)
