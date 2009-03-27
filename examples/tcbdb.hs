@@ -19,13 +19,13 @@ main =
        -- close the database
        close bdb >>= err bdb
     where
-      puts :: TCBDB -> [(String, String)] -> IO [Bool]
+      puts :: BDB -> [(String, String)] -> IO [Bool]
       puts bdb = mapM (uncurry $ put bdb)
 
-      err :: TCBDB -> Bool -> IO ()
+      err :: BDB -> Bool -> IO ()
       err bdb = flip unless $ ecode bdb >>= error . show
 
-      iter :: C.TCBDBCUR -> IO [(String, String)]
+      iter :: C.BDBCUR -> IO [(String, String)]
       iter cur = do
         [key, value] <- sequence [C.key cur, C.val cur]
         case (key, value) of

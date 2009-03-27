@@ -25,7 +25,7 @@ cpToCInt CPAFTER   = #const BDBCPAFTER
 data CUR
 
 foreign import ccall safe "tcbdbcurnew"
-  c_tcbdbcurnew :: Ptr BDB -> IO (Ptr CUR)
+  c_tcbdbcurnew :: Ptr BDB' -> IO (Ptr CUR)
 
 foreign import ccall safe "tcbdbcurdel"
   c_tcbdbcurdel :: Ptr CUR -> IO ()

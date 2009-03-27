@@ -10,7 +10,7 @@ import Database.TokyoCabinet
       TCM
     , TCDB
     , TCHDB
-    , TCBDB
+    , BDB
     , TCFDB
     , new
     , runTCM

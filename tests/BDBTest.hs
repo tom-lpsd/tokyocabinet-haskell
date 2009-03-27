@@ -12,7 +12,7 @@ import Control.Monad
 dbname :: String
 dbname = "foo.tcb"
 
-withOpenedBDB :: String -> (TCBDB -> IO a) -> IO ()
+withOpenedBDB :: String -> (BDB -> IO a) -> IO ()
 withOpenedBDB name action = do
   h <- new
   open h name [OREADER, OWRITER, OCREAT]

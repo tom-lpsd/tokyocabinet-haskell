@@ -13,7 +13,7 @@ module Database.TokyoCabinet.BDB.Cursor
     , out
     , key
     , val
-    , TCBDBCUR
+    , BDBCUR
     ) where
 
 import Prelude hiding (last)
@@ -28,48 +28,48 @@ import Foreign.Marshal (alloca)
 import Foreign.Storable (peek)
 import Foreign.Marshal.Utils (maybePeek)
 
-data TCBDBCUR = TCBDBCUR !(ForeignPtr CUR) TCBDB
+data BDBCUR = BDBCUR !(ForeignPtr CUR) BDB
 
-unTCBDBCUR :: TCBDBCUR -> ForeignPtr CUR
-unTCBDBCUR (TCBDBCUR cur _) = cur
+unTCBDBCUR :: BDBCUR -> ForeignPtr CUR
+unTCBDBCUR (BDBCUR cur _) = cur
 
-new :: TCBDB -> IO TCBDBCUR
+new :: BDB -> IO BDBCUR
 new bdb =
     withForeignPtr (unTCBDB bdb) $ \bdb' -> do
       cur <- c_tcbdbcurnew bdb'
-      flip TCBDBCUR bdb `fmap` newForeignPtr tcbdbcurFinalizer cur
+      flip BDBCUR bdb `fmap` newForeignPtr tcbdbcurFinalizer cur
 
-delete :: TCBDBCUR -> IO ()
+delete :: BDBCUR -> IO ()
 delete cur = finalizeForeignPtr (unTCBDBCUR cur)
 
-first :: TCBDBCUR -> IO Bool
+first :: BDBCUR -> IO Bool
 first cur = withForeignPtr (unTCBDBCUR cur) c_tcbdbcurfirst
 
-last :: TCBDBCUR -> IO Bool
+last :: BDBCUR -> IO Bool
 last cur = withForeignPtr (unTCBDBCUR cur) c_tcbdbcurlast
 
-jump :: (S.Storable k) => TCBDBCUR -> k -> IO Bool
+jump :: (S.Storable k) => BDBCUR -> k -> IO Bool
 jump cur k =
     withForeignPtr (unTCBDBCUR cur) $ \cur' ->
         S.withPtrLen k $ \(kbuf, ksiz) ->
             c_tcbdbcurjump cur' kbuf ksiz
 
-prev :: TCBDBCUR -> IO Bool
+prev :: BDBCUR -> IO Bool
 prev cur = withForeignPtr (unTCBDBCUR cur) c_tcbdbcurprev
 
-next :: TCBDBCUR -> IO Bool
+next :: BDBCUR -> IO Bool
 next cur = withForeignPtr (unTCBDBCUR cur) c_tcbdbcurnext
 
-put :: (S.Storable v) => TCBDBCUR -> v -> CursorPutMode -> IO Bool
+put :: (S.Storable v) => BDBCUR -> v -> CursorPutMode -> IO Bool
 put cur v mode =
     withForeignPtr (unTCBDBCUR cur) $ \cur' ->
         S.withPtrLen v $ \(vbuf, vsiz) ->
             c_tcbdbcurput cur' vbuf vsiz (cpToCInt mode)
 
-out :: TCBDBCUR -> IO Bool
+out :: BDBCUR -> IO Bool
 out cur = withForeignPtr (unTCBDBCUR cur) c_tcbdbcurout
 
-key :: (S.Storable k) => TCBDBCUR -> IO (Maybe k)
+key :: (S.Storable k) => BDBCUR -> IO (Maybe k)
 key cur =
     withForeignPtr (unTCBDBCUR cur) $ \cur' ->
         alloca $ \sizbuf -> do
@@ -77,7 +77,7 @@ key cur =
           vsiz <- fromIntegral `fmap` peek sizbuf
           flip maybePeek vbuf $ \vbuf' -> S.peekPtrLen (vbuf', vsiz) 
 
-val :: (S.Storable v) => TCBDBCUR -> IO (Maybe v)
+val :: (S.Storable v) => BDBCUR -> IO (Maybe v)
 val cur =
     withForeignPtr (unTCBDBCUR cur) $ \cur' ->
         alloca $ \sizbuf -> do

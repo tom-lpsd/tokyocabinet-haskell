@@ -12,7 +12,7 @@ import Database.TokyoCabinet
     , OpenMode(..)
     , TCDB
     , TCHDB
-    , TCBDB
+    , BDB
     , TCFDB
     )
 
@@ -55,7 +55,7 @@ kvstore kv = do open "abcd.tch" [OREADER]
                 close
 
 main :: IO ()
-main = runTCM $ do h <- new :: TCM TCBDB
+main = runTCM $ do h <- new :: TCM BDB
                    let kv = [("foo", "100"), ("bar", "200")]
                    flip runTCRE h $ catchError (kvstore kv) (\e -> error e)
        >> return ()

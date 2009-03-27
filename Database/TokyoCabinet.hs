@@ -8,7 +8,7 @@ module Database.TokyoCabinet
     , TCDB(..)
     , H.TCHDB
     , F.TCFDB
-    , TCBDB
+    , BDB
     -- * Error Code
     , E.TCECODE(..)
     , E.errmsg
@@ -40,7 +40,7 @@ import Data.Int
 -- @
 --    putsample :: String -> [(ByteString, ByteString)] -> TCM Bool
 --    putsample file kv =
---        do tc <- new :: TCM TCHDB -- alternatively you can use TCBDB or TCFDB
+--        do tc <- new :: TCM TCHDB -- alternatively you can use BDB or TCFDB
 --           open tc file [OWRITER, OCREAT]
 --           mapM (uncurry $ put tc) kv
 --           close tc
@@ -49,7 +49,7 @@ import Data.Int
 -- @
 --    getsample :: String -> ByteString -> TCM (Maybe ByteString)
 --    getsample file key =
---        do tc <- new :: TCM TCHDB -- alternatively you can use TCBDB or TCFDB
+--        do tc <- new :: TCM TCHDB -- alternatively you can use BDB or TCFDB
 --           open tc file [OREADER]
 --           val <- get tc key
 --           close tc
@@ -154,22 +154,22 @@ openModeToBOpenMode OTRUNC  = B.OTRUNC
 openModeToBOpenMode ONOLCK  = B.ONOLCK
 openModeToBOpenMode OLCKNB  = B.OLCKNB
 
-data TCBDB = TCBDB { unTCBDB    :: B.TCBDB
-                   , unTCBDBCUR :: C.TCBDBCUR }
+data BDB = BDB { unTCBDB    :: B.BDB
+               , unTCBDBCUR :: C.BDBCUR }
 
-liftB :: (B.TCBDB -> IO a) -> TCBDB -> TCM a
+liftB :: (B.BDB -> IO a) -> BDB -> TCM a
 liftB f x = TCM $ f (unTCBDB x)
 
-liftB2 :: (B.TCBDB -> a -> IO b) -> TCBDB -> a -> TCM b
+liftB2 :: (B.BDB -> a -> IO b) -> BDB -> a -> TCM b
 liftB2 f x y = TCM $ f (unTCBDB x) y
 
-liftB3 :: (B.TCBDB -> a -> b -> IO c) -> TCBDB -> a -> b -> TCM c
+liftB3 :: (B.BDB -> a -> b -> IO c) -> BDB -> a -> b -> TCM c
 liftB3 f x y z = TCM $ f (unTCBDB x) y z
 
-instance TCDB TCBDB where
+instance TCDB BDB where
     new               = TCM $ do bdb <- B.new
                                  cur <- C.new bdb
-                                 return $ TCBDB bdb cur
+                                 return $ BDB bdb cur
     delete            = liftB  B.delete
     open tc name mode = TCM $  B.open (unTCBDB tc) name
                                    (map openModeToBOpenMode mode)
@@ -196,7 +196,7 @@ instance TCDB TCBDB where
     ecode             = liftB  B.ecode
     defaultExtension  = const ".tcb"
 
-instance TCDB B.TCBDB where
+instance TCDB B.BDB where
     new               = TCM   B.new
     delete            = lift  B.delete
     open tc name mode = TCM $ B.open tc name (map openModeToBOpenMode mode)
