@@ -236,16 +236,10 @@ liftF3 :: (Storable b) => (a -> ID -> c -> IO d) -> a -> b -> c -> TCM d
 liftF3 f x y z = TCM $ f x (storableToKey y) z
 
 storableToKey :: (Storable a) => a -> ID
-storableToKey s = toID . strip . show $ s
-    where
-      strip "" = ""
-      strip ('"':[]) = ""
-      strip ('"':xs) = strip xs
-      strip (x:xs) = x:strip xs
+storableToKey = ID . toInt64
 
-keyToStorable :: (Storable a) => ID -> IO a
-keyToStorable k = newCStringLen (show k) >>= \(ptr, len) ->
-                  peekPtrLen (castPtr ptr, fromIntegral len)
+keyToStorable :: (Storable a) => String -> a
+keyToStorable = fromString
 
 instance TCDB F.FDB where
     new               = TCM    F.new
@@ -262,8 +256,8 @@ instance TCDB F.FDB where
     iternext tc       = TCM    $ do key <- F.iternext tc
                                     case key of
                                       Nothing -> return Nothing
-                                      Just x  -> Just `fmap` keyToStorable x
-    fwmkeys           = lift3  F.fwmkeys
+                                      Just x  -> return $ Just (keyToStorable x)
+    fwmkeys f k maxn  = TCM $ map fromString `fmap` F.fwmkeys f k maxn
     addint            = liftF3 F.addint
     adddouble         = liftF3 F.adddouble
     sync              = lift   F.sync

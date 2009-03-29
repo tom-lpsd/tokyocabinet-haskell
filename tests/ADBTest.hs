@@ -118,7 +118,7 @@ test_fwmkeys_fdb tc =
     withoutFileM (dbname tc) $ \fn ->
         withOpenedTC fn tc $ \tc' -> do
           zipWithM_ (put tc') ([1..10] :: [Int]) ([100, 200..1000] :: [Int])
-          fwmkeys tc' "[min,max]" 10 >>= (([1..10] :: [Int]) @=?:) . sort
+          fwmkeys tc' "[min,max]" 10 >>= (([1..10] :: [Int]) @=?:)
 
 test_addint tc =
     withoutFileM (dbname tc) $ \fn ->
