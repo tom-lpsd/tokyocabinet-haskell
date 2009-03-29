@@ -26,7 +26,7 @@ Flag BuildTest
   Default:      False
 
 Library
-  Build-Depends:        base, bytestring, mtl
+  Build-Depends:        base >= 4.0, bytestring >= 0.9, mtl >= 1.1
   Exposed-modules:
     Database.TokyoCabinet,
     Database.TokyoCabinet.HDB
@@ -50,7 +50,7 @@ Library
   Extra-libraries:      tokyocabinet
   Extra-lib-dirs:       /usr/local/lib
   Include-dirs:         /usr/local/include
-  ghc-options:          -Wall
+  GHC-Options:          -Wall
 
 Executable ListTest
   if flag(BuildTest)
