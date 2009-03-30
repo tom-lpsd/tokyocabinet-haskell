@@ -730,18 +730,8 @@
 </PRE
 ><PRE
 >
-    main = runTCM (do putsample <A HREF="foo-tch.html"
->foo.tch</A
-> [(pack <A HREF="foo.html"
->foo</A
->, pack <A HREF="bar.html"
->bar</A
->)]
-                      getsample <A HREF="foo-tch.html"
->foo.tch</A
-> (pack <A HREF="foo.html"
->foo</A
->)) &gt;&gt;=
+    main = runTCM (do putsample &quot;foo.tch&quot; [(pack &quot;foo&quot;, pack &quot;bar&quot;)]
+                      getsample &quot;foo.tch&quot; (pack &quot;foo&quot;)) &gt;&gt;=
            maybe (return ()) (putStrLn . show)
 </PRE
 ></TD
@@ -1003,6 +993,11 @@
 > a</TD
 ></TR
 ><TR
+><TD CLASS="doc"
+>Create a database object.
+</TD
+></TR
+><TR
 ><TD CLASS="s8"
 ></TD
 ></TR
@@ -1017,6 +1012,11 @@
 > ()</TD
 ></TR
 ><TR
+><TD CLASS="doc"
+>Force to free object resource.
+</TD
+></TR
+><TR
 ><TD CLASS="s8"
 ></TD
 ></TR
@@ -1026,14 +1026,53 @@
 ></A
 ><B
 >open</B
-> :: a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+>:: a</TD
+><TD CLASS="rdoc"
+>database object
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
 >String</A
-> -&gt; [<A HREF="Database-TokyoCabinet.html#t%3AOpenMode"
+></TD
+><TD CLASS="rdoc"
+>path to database file
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; [<A HREF="Database-TokyoCabinet.html#t%3AOpenMode"
 >OpenMode</A
->] -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+>]</TD
+><TD CLASS="rdoc"
+>open mode
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
 >TCM</A
 > <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
+></TD
+><TD CLASS="rdoc"
+>if successful, the return value is True
+</TD
+></TR
+><TR
+><TD CLASS="ndoc" COLSPAN="2"
+>Open a database file.
+</TD
+></TR
+></TABLE
 ></TD
 ></TR
 ><TR
@@ -1053,6 +1092,11 @@
 ></TD
 ></TR
 ><TR
+><TD CLASS="doc"
+>Close the database file. If successful, the return value is True
+</TD
+></TR
+><TR
 ><TD CLASS="s8"
 ></TD
 ></TR
@@ -1062,14 +1106,59 @@
 ></A
 ><B
 >put</B
-> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+>:: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
 > k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> v) =&gt; a -&gt; k -&gt; v -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+> v)</TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+>=&gt; a</TD
+><TD CLASS="rdoc"
+>database object
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; k</TD
+><TD CLASS="rdoc"
+>key
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; v</TD
+><TD CLASS="rdoc"
+>value
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
 >TCM</A
 > <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
+></TD
+><TD CLASS="rdoc"
+>if successful, the return value is True
+</TD
+></TR
+><TR
+><TD CLASS="ndoc" COLSPAN="2"
+>Store a record.
+</TD
+></TR
+></TABLE
 ></TD
 ></TR
 ><TR
@@ -1082,14 +1171,60 @@
 ></A
 ><B
 >putkeep</B
-> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+>:: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
 > k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> v) =&gt; a -&gt; k -&gt; v -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+> v)</TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+>=&gt; a</TD
+><TD CLASS="rdoc"
+>database object
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; k</TD
+><TD CLASS="rdoc"
+>key
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; v</TD
+><TD CLASS="rdoc"
+>value
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
 >TCM</A
 > <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
+></TD
+><TD CLASS="rdoc"
+>if successful, the return value is True
+</TD
+></TR
+><TR
+><TD CLASS="ndoc" COLSPAN="2"
+>Store a new recoed. If a record with the same key exists
+ in the database, this function has no effect.
+</TD
+></TR
+></TABLE
 ></TD
 ></TR
 ><TR
@@ -1102,14 +1237,59 @@
 ></A
 ><B
 >putcat</B
-> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+>:: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
 > k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> v) =&gt; a -&gt; k -&gt; v -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+> v)</TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+>=&gt; a</TD
+><TD CLASS="rdoc"
+>database object
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; k</TD
+><TD CLASS="rdoc"
+>key
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; v</TD
+><TD CLASS="rdoc"
+>value
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
 >TCM</A
 > <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
+></TD
+><TD CLASS="rdoc"
+>if successful, the return value is True
+</TD
+></TR
+><TR
+><TD CLASS="ndoc" COLSPAN="2"
+>Concatenate a value at the end of the existing record.
+</TD
+></TR
+></TABLE
 ></TD
 ></TR
 ><TR
@@ -1122,15 +1302,59 @@
 ></A
 ><B
 >get</B
-> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+>:: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
 > k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> v) =&gt; a -&gt; k -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+> v)</TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+>=&gt; a</TD
+><TD CLASS="rdoc"
+>database object
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; k</TD
+><TD CLASS="rdoc"
+>key
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
 >TCM</A
 > (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
 >Maybe</A
 > v)</TD
+><TD CLASS="rdoc"
+>If successful, the return value is the
+ value of the corresponding record wrapped
+ by <TT
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#v%3AJust"
+>Just</A
+></TT
+>, else, Nothing is returned.
+</TD
+></TR
+><TR
+><TD CLASS="ndoc" COLSPAN="2"
+>Retrieve a record.
+</TD
+></TR
+></TABLE
+></TD
 ></TR
 ><TR
 ><TD CLASS="s8"
@@ -1142,12 +1366,50 @@
 ></A
 ><B
 >out</B
-> :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+>:: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> k =&gt; a -&gt; k -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+> k</TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+>=&gt; a</TD
+><TD CLASS="rdoc"
+>database object
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; k</TD
+><TD CLASS="rdoc"
+>key
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
 >TCM</A
 > <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
+></TD
+><TD CLASS="rdoc"
+>if successful, the return value is True
+</TD
+></TR
+><TR
+><TD CLASS="ndoc" COLSPAN="2"
+>Remove a record.
+</TD
+></TR
+></TABLE
 ></TD
 ></TR
 ><TR
@@ -1160,15 +1422,60 @@
 ></A
 ><B
 >vsiz</B
-> :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+>:: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> k =&gt; a -&gt; k -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+> k</TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+>=&gt; a</TD
+><TD CLASS="rdoc"
+>database object
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; k</TD
+><TD CLASS="rdoc"
+>key
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
 >TCM</A
 > (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
 >Maybe</A
 > <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
 >)</TD
+><TD CLASS="rdoc"
+>If successful, the return value
+ is the size of the value of the
+ corresponding record wrapped by
+ <TT
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#v%3AJust"
+>Just</A
+></TT
+>, else, it is Nothing.
+</TD
+></TR
+><TR
+><TD CLASS="ndoc" COLSPAN="2"
+>Get the size of the value of a record.
+</TD
+></TR
+></TABLE
+></TD
 ></TR
 ><TR
 ><TD CLASS="s8"
@@ -1185,6 +1492,11 @@
 > <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
 ></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Initialize the iterator. If successful, the return value is True.
+</TD
 ></TR
 ><TR
 ><TD CLASS="s8"
@@ -1205,6 +1517,16 @@
 > v)</TD
 ></TR
 ><TR
+><TD CLASS="doc"
+>Get the next key of the iterator.  If successful, the return
+ value is the next key wrapped by <TT
+><A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#v%3AJust"
+>Just</A
+></TT
+>, else, it is Nothing.
+</TD
+></TR
+><TR
 ><TD CLASS="s8"
 ></TD
 ></TR
@@ -1214,15 +1536,60 @@
 ></A
 ><B
 >fwmkeys</B
-> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+>:: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
 > k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> v) =&gt; a -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+> v)</TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+>=&gt; a</TD
+><TD CLASS="rdoc"
+>database object
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; k</TD
+><TD CLASS="rdoc"
+>search string
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
-> -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+></TD
+><TD CLASS="rdoc"
+>the maximum number of keys to be fetched
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
 >TCM</A
 > [v]</TD
+><TD CLASS="rdoc"
+>result keys
+</TD
+></TR
+><TR
+><TD CLASS="ndoc" COLSPAN="2"
+>Get forward matching keys.
+</TD
+></TR
+></TABLE
+></TD
 ></TR
 ><TR
 ><TD CLASS="s8"
@@ -1234,17 +1601,66 @@
 ></A
 ><B
 >addint</B
-> :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+>:: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> k =&gt; a -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+> k</TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+>=&gt; a</TD
+><TD CLASS="rdoc"
+>database object
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; k</TD
+><TD CLASS="rdoc"
+>key
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
-> -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+></TD
+><TD CLASS="rdoc"
+>the addtional value
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
 >TCM</A
 > (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
 >Maybe</A
 > <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
 >)</TD
+><TD CLASS="rdoc"
+>If the corresponding record
+ exists, the value is treated as an
+ integer and is added to. If no
+ record corresponds, a new record
+ of the additional value is stored.
+</TD
+></TR
+><TR
+><TD CLASS="ndoc" COLSPAN="2"
+>Add an integer to a record.
+</TD
+></TR
+></TABLE
+></TD
 ></TR
 ><TR
 ><TD CLASS="s8"
@@ -1256,17 +1672,67 @@
 ></A
 ><B
 >adddouble</B
-> :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+>:: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> k =&gt; a -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
+> k</TD
+><TD CLASS="rdoc"
+></TD
+></TR
+><TR
+><TD CLASS="arg"
+>=&gt; a</TD
+><TD CLASS="rdoc"
+>database object
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; k</TD
+><TD CLASS="rdoc"
+>key
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
 >Double</A
-> -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+></TD
+><TD CLASS="rdoc"
+>the additional value
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
 >TCM</A
 > (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
 >Maybe</A
 > <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
 >Double</A
 >)</TD
+><TD CLASS="rdoc"
+>If the corresponding record
+ exists, the value is treated as
+ a real number and is added
+ to. If no record corresponds, a
+ new record of the additional
+ value is stored.
+</TD
+></TR
+><TR
+><TD CLASS="ndoc" COLSPAN="2"
+>Add a real number to a record.
+</TD
+></TR
+></TABLE
+></TD
 ></TR
 ><TR
 ><TD CLASS="s8"
@@ -1285,6 +1751,12 @@
 ></TD
 ></TR
 ><TR
+><TD CLASS="doc"
+>Synchronize updated contents with the file and the device.
+ If successful, the return value is True.
+</TD
+></TR
+><TR
 ><TD CLASS="s8"
 ></TD
 ></TR
@@ -1301,6 +1773,11 @@
 ></TD
 ></TR
 ><TR
+><TD CLASS="doc"
+>Remove all records. If successful, the return value is True.
+</TD
+></TR
+><TR
 ><TD CLASS="s8"
 ></TD
 ></TR
@@ -1310,12 +1787,44 @@
 ></A
 ><B
 >copy</B
-> :: a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+></TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="arg"
+>:: a</TD
+><TD CLASS="rdoc"
+>database object
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
 >String</A
-> -&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
+></TD
+><TD CLASS="rdoc"
+>path of the destination file
+</TD
+></TR
+><TR
+><TD CLASS="arg"
+>-&gt; <A HREF="Database-TokyoCabinet.html#t%3ATCM"
 >TCM</A
 > <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
+></TD
+><TD CLASS="rdoc"
+>If successful, the return value is True.
+</TD
+></TR
+><TR
+><TD CLASS="ndoc" COLSPAN="2"
+>Copy the database file.
+</TD
+></TR
+></TABLE
 ></TD
 ></TR
 ><TR
@@ -1337,6 +1846,11 @@
 >)</TD
 ></TR
 ><TR
+><TD CLASS="doc"
+>Get the path of the database file.
+</TD
+></TR
+><TR
 ><TD CLASS="s8"
 ></TD
 ></TR
@@ -1351,6 +1865,11 @@
 > <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
 >Int64</A
 ></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Get the number of records.
+</TD
 ></TR
 ><TR
 ><TD CLASS="s8"
@@ -1369,6 +1888,11 @@
 ></TD
 ></TR
 ><TR
+><TD CLASS="doc"
+>Get the size of the database file.
+</TD
+></TR
+><TR
 ><TD CLASS="s8"
 ></TD
 ></TR
@@ -1385,6 +1909,11 @@
 ></TD
 ></TR
 ><TR
+><TD CLASS="doc"
+>Get the last happened error code.
+</TD
+></TR
+><TR
 ><TD CLASS="s8"
 ></TD
 ></TR
@@ -1397,6 +1926,11 @@
 > :: a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
 >String</A
 ></TD
+></TR
+><TR
+><TD CLASS="doc"
+>Get the default extension for specified database object.
+</TD
 ></TR
 ></TABLE
 ></TD
