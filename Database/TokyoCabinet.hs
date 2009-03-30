@@ -54,8 +54,8 @@ import Data.Int
 -- @
 --
 -- @
---    main = runTCM (do putsample "foo.tch" [(pack "foo", pack "bar")]
---                      getsample "foo.tch" (pack "foo")) >>=
+--    main = runTCM (do putsample \"foo.tch\" [(pack \"foo\", pack \"bar\")]
+--                      getsample \"foo.tch\" (pack \"foo\")) >>=
 --           maybe (return ()) (putStrLn . show)
 -- @
 --
@@ -77,28 +77,128 @@ data OpenMode = OREADER |
 
 -- | Type class that abstract Tokyo Cabinet database.
 class TCDB a where
+    -- | Create a database object.
     new       :: TCM a
+
+    -- | Force to free object resource.
     delete    :: a -> TCM ()
-    open      :: a -> String -> [OpenMode] -> TCM Bool
+
+    -- | Open a database file.
+    open      :: a          -- ^ database object
+              -> String     -- ^ path to database file
+              -> [OpenMode] -- ^ open mode
+              -> TCM Bool   -- ^ if successful, the return value is True
+
+    -- | Close the database file. If successful, the return value is True
     close     :: a -> TCM Bool
-    put       :: (Storable k, Storable v) => a -> k -> v -> TCM Bool
-    putkeep   :: (Storable k, Storable v) => a -> k -> v -> TCM Bool
-    putcat    :: (Storable k, Storable v) => a -> k -> v -> TCM Bool
-    get       :: (Storable k, Storable v) => a -> k -> TCM (Maybe v)
-    out       :: (Storable k) => a -> k -> TCM Bool
-    vsiz      :: (Storable k) => a -> k -> TCM (Maybe Int)
+
+    -- | Store a record.
+    put       :: (Storable k, Storable v) =>
+                 a -- ^ database object
+              -> k -- ^ key
+              -> v -- ^ value
+              -> TCM Bool -- ^ if successful, the return value is True
+
+    -- | Store a new recoed. If a record with the same key exists
+    -- in the database, this function has no effect.
+    putkeep   :: (Storable k, Storable v) =>
+                 a -- ^ database object
+              -> k -- ^ key
+              -> v -- ^ value
+              -> TCM Bool -- ^ if successful, the return value is True
+
+    -- | Concatenate a value at the end of the existing record.
+    putcat    :: (Storable k, Storable v) =>
+                 a -- ^ database object
+              -> k -- ^ key
+              -> v -- ^ value
+              -> TCM Bool -- ^ if successful, the return value is True
+
+    -- | Retrieve a record.
+    get       :: (Storable k, Storable v) =>
+                 a -- ^ database object
+              -> k -- ^ key
+              -> TCM (Maybe v) -- ^ If successful, the return value is the
+                               -- value of the corresponding record wrapped
+                               -- by `Just', else, Nothing is returned.
+
+    -- | Remove a record.
+    out       :: (Storable k) =>
+                 a -- ^ database object
+              -> k -- ^ key
+              -> TCM Bool -- ^ if successful, the return value is True
+
+    -- | Get the size of the value of a record.
+    vsiz      :: (Storable k) =>
+                 a -- ^ database object
+              -> k -- ^ key
+              -> TCM (Maybe Int) -- ^ If successful, the return value
+                                 -- is the size of the value of the
+                                 -- corresponding record wrapped by
+                                 -- `Just', else, it is Nothing.
+
+    -- | Initialize the iterator. If successful, the return value is True.
     iterinit  :: a -> TCM Bool
+
+    -- | Get the next key of the iterator.  If successful, the return
+    -- value is the next key wrapped by `Just', else, it is Nothing.
     iternext  :: (Storable v) => a -> TCM (Maybe v)
-    fwmkeys   :: (Storable k, Storable v) => a -> k -> Int -> TCM [v]
-    addint    :: (Storable k) => a -> k -> Int -> TCM (Maybe Int)
-    adddouble :: (Storable k) => a -> k -> Double -> TCM (Maybe Double)
+
+    -- | Get forward matching keys.
+    fwmkeys   :: (Storable k, Storable v) =>
+                 a   -- ^ database object
+              -> k   -- ^ search string
+              -> Int -- ^ the maximum number of keys to be fetched
+              -> TCM [v] -- ^ result keys
+
+    -- | Add an integer to a record.
+    addint    :: (Storable k) =>
+                 a -- ^ database object
+              -> k -- ^ key
+              -> Int -- ^ the addtional value
+              -> TCM (Maybe Int) -- ^ If the corresponding record
+                                 -- exists, the value is treated as an
+                                 -- integer and is added to. If no
+                                 -- record corresponds, a new record
+                                 -- of the additional value is stored.
+
+    -- | Add a real number to a record.
+    adddouble :: (Storable k) =>
+                 a -- ^ database object
+              -> k -- ^ key
+              -> Double -- ^ the additional value
+              -> TCM (Maybe Double) -- ^ If the corresponding record
+                                    -- exists, the value is treated as
+                                    -- a real number and is added
+                                    -- to. If no record corresponds, a
+                                    -- new record of the additional
+                                    -- value is stored.
+
+    -- | Synchronize updated contents with the file and the device.
+    -- If successful, the return value is True.
     sync      :: a -> TCM Bool
+
+    -- | Remove all records. If successful, the return value is True.
     vanish    :: a -> TCM Bool
-    copy      :: a -> String -> TCM Bool
+
+    -- | Copy the database file.
+    copy      :: a        -- ^ database object
+              -> String   -- ^ path of the destination file
+              -> TCM Bool -- ^ If successful, the return value is True.
+
+    -- | Get the path of the database file.
     path      :: a -> TCM (Maybe String)
+
+    -- | Get the number of records.
     rnum      :: a -> TCM Int64
+
+    -- | Get the size of the database file.
     size      :: a -> TCM Int64
+
+    -- | Get the last happened error code.
     ecode     :: a -> TCM E.ECODE
+
+    -- | Get the default extension for specified database object.
     defaultExtension :: a -> String
 
 openModeToHOpenMode :: OpenMode -> H.OpenMode
