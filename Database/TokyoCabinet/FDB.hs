@@ -201,7 +201,8 @@ range fdb lower upper maxn =
 
 -- | Return list of forward matched keys.
 fwmkeys :: (S.Storable k1, S.Storable k2) => FDB -> k1 -> Int -> IO [k2]
-fwmkeys = fwmHelper c_tcfdbrange4 unTCFDB
+fwmkeys fdb k maxn = map S.fromString `fmap` fwmkeys' fdb k maxn
+    where fwmkeys' = fwmHelper c_tcfdbrange4 unTCFDB
 
 -- | Increment the corresponding value. (The value specified by a key
 -- is treated as integer.)

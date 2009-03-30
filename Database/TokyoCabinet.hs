@@ -257,7 +257,7 @@ instance TCDB F.FDB where
                                     case key of
                                       Nothing -> return Nothing
                                       Just x  -> return $ Just (keyToStorable x)
-    fwmkeys f k maxn  = TCM $ map fromString `fmap` F.fwmkeys f k maxn
+    fwmkeys           = lift3  F.fwmkeys
     addint            = liftF3 F.addint
     adddouble         = liftF3 F.adddouble
     sync              = lift   F.sync
