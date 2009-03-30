@@ -80,7 +80,7 @@ class TCDB a where
     -- | Create a database object.
     new       :: TCM a
 
-    -- | Force to free object resource.
+    -- | Free object resource forcibly.
     delete    :: a -> TCM ()
 
     -- | Open a database file.

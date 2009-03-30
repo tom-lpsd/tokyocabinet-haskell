@@ -106,7 +106,7 @@ data HDB = HDB { unTCHDB :: !(ForeignPtr HDB') }
 new :: IO HDB
 new = HDB `fmap` (c_tchdbnew >>= newForeignPtr tchdbFinalizer)
 
--- | Force to free region of HDB. 
+-- | Free HDB resource forcibly. 
 -- HDB is kept by ForeignPtr, so Haskell runtime GC cleans up memory for
 -- almost situation. Most always, you don't need to call this. 
 -- After call this, you must not touch HDB object. Its behavior is undefined.

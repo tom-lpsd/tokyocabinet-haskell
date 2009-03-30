@@ -93,7 +93,7 @@ data FDB = FDB { unTCFDB :: !(ForeignPtr FDB') }
 new :: IO FDB
 new = FDB `fmap` (c_tcfdbnew >>= newForeignPtr tcfdbFinalizer)
 
--- | Force to free region of FDB. 
+-- | Free FDB resource forcibly.
 -- FDB is kept by ForeignPtr, so Haskell runtime GC cleans up memory for
 -- almost situation. Most always, you don't need to call this. 
 -- After call this, you must not touch FDB object. Its behavior is undefined.

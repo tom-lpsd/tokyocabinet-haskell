@@ -11,12 +11,12 @@ Synopsis:       Haskell binding of Tokyo Cabinet
 Description:
   Bindings to Tokyo Cabinet library.
   Tokyo Cabinet is a modern implementation of DBM.
-  More about Tokyo Cabinet, see <http://tokyocabinet.sourceforge.net/index.html>.
+  For more about Tokyo Cabinet, see <http://tokyocabinet.sourceforge.net/index.html>.
 
   This module provides `tokyocabinet.idl compliant' naive interface. 
   See, <http://tokyocabinet.sourceforge.net/tokyocabinet.idl>.
   
-  Sorry, Map interface and TDB is not yet supported.  
+  Map interface and TDB have not supported yet.
 
 Tested-With:    GHC
 Build-Type:     Simple

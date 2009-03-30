@@ -105,7 +105,7 @@ import qualified Database.TokyoCabinet.Storable as S
 new :: IO BDB
 new = BDB `fmap` (c_tcbdbnew >>= newForeignPtr tcbdbFinalizer)
 
--- | Force to free region of BDB. 
+-- | Free BDB resource forcibly. 
 -- BDB is kept by ForeignPtr, so Haskell runtime GC cleans up memory for
 -- almost situation. Most always, you don't need to call this. 
 -- After call this, you must not touch BDB object. Its behavior is undefined.
