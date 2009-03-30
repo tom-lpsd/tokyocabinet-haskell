@@ -122,9 +122,9 @@ open = openHelper c_tcfdbopen unTCFDB combineOpenMode
 close :: FDB -> IO Bool
 close fdb = withForeignPtr (unTCFDB fdb) c_tcfdbclose
 
-type PutFunc = Ptr FDB' -> Int64 -> Ptr Word8 -> CInt -> IO Bool
-liftPutFunc :: (Key k, S.Storable v) => PutFunc -> FDB -> k -> v -> IO Bool
-liftPutFunc func fdb key val =
+type FunPut' = Ptr FDB' -> Int64 -> Ptr Word8 -> CInt -> IO Bool
+putHelper' :: (Key k, S.Storable v) => FunPut' -> FDB -> k -> v -> IO Bool
+putHelper' func fdb key val =
     withForeignPtr (unTCFDB fdb) $ \fdb' ->
         S.withPtrLen val $ \(vbuf, vsize) -> do
           key' <- keyToInt key
@@ -133,16 +133,16 @@ liftPutFunc func fdb key val =
 -- | Stora a record (key-value pair) on FDB.  Key type must be
 -- instance of Key class. Value type must be instance of Storable.
 put :: (Key k, S.Storable v) => FDB -> k -> v -> IO Bool
-put = liftPutFunc c_tcfdbput
+put = putHelper' c_tcfdbput
 
 -- | Store a new record. If a record with the same key exists in the
 -- database, this function has no effect.
 putkeep :: (Key k, S.Storable v) => FDB -> k -> v -> IO Bool
-putkeep = liftPutFunc c_tcfdbputkeep
+putkeep = putHelper' c_tcfdbputkeep
 
 -- | Concatenate a value at the end of the existing record.
 putcat :: (Key k, S.Storable v) => FDB -> k -> v -> IO Bool
-putcat =  liftPutFunc c_tcfdbputcat
+putcat =  putHelper' c_tcfdbputcat
 
 -- | Delete a record. 
 out :: (Key k) => FDB -> k -> IO Bool
