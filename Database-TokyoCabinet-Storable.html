@@ -114,9 +114,11 @@
 ><TD CLASS="decl"
 ><SPAN CLASS="keyword"
 >class</SPAN
-> <A HREF="/usr/local/share/doc/ghc/libraries/base/Text-Show.html#t%3AShow"
+> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Text-Show.html#t%3AShow"
 >Show</A
-> a =&gt; <A NAME="t%3AStorable"
+> a, <A HREF="/usr/local/share/doc/ghc/libraries/base/Text-Read.html#t%3ARead"
+>Read</A
+> a) =&gt; <A NAME="t%3AStorable"
 ></A
 ><B
 >Storable</B
@@ -158,22 +160,6 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
-><A NAME="v%3ApeekPtrLen"
-></A
-><B
->peekPtrLen</B
-> :: <A HREF="Database-TokyoCabinet-Storable.html#t%3APtrLen"
->PtrLen</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
->IO</A
-> a</TD
-></TR
-><TR
-><TD CLASS="s8"
-></TD
-></TR
-><TR
-><TD CLASS="decl"
 ><A NAME="v%3AwithPtrLenL"
 ></A
 ><B
@@ -201,6 +187,78 @@
 > -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > [a]</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3ApeekPtrLen"
+></A
+><B
+>peekPtrLen</B
+> :: <A HREF="Database-TokyoCabinet-Storable.html#t%3APtrLen"
+>PtrLen</A
+> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> a</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3AtoInt64"
+></A
+><B
+>toInt64</B
+> :: a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3AtoInt64L"
+></A
+><B
+>toInt64L</B
+> :: [a] -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+>Int64</A
+></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3AfromString"
+></A
+><B
+>fromString</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+> -&gt; a</TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v%3AfromStringL"
+></A
+><B
+>fromStringL</B
+> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+> -&gt; [a]</TD
 ></TR
 ></TABLE
 ></TD

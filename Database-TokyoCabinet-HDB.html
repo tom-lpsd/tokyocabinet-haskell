@@ -564,11 +564,11 @@
 >put</A
 > :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> b) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> v) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
-> -&gt; a -&gt; b -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; k -&gt; v -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
@@ -584,11 +584,11 @@
 >putkeep</A
 > :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> b) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> v) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
-> -&gt; a -&gt; b -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; k -&gt; v -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
@@ -604,11 +604,11 @@
 >putcat</A
 > :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> b) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> v) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
-> -&gt; a -&gt; b -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; k -&gt; v -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
@@ -624,11 +624,11 @@
 >putasync</A
 > :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> b) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> v) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
-> -&gt; a -&gt; b -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; k -&gt; v -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
@@ -644,9 +644,9 @@
 >out</A
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> k =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
-> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
@@ -662,15 +662,15 @@
 >get</A
 > :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> b) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> v) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
-> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
 >Maybe</A
-> b)</TD
+> v)</TD
 ></TR
 ><TR
 ><TD CLASS="s8"
@@ -682,9 +682,9 @@
 >vsiz</A
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> k =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
-> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
 >Maybe</A
@@ -718,13 +718,13 @@
 >iternext</A
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> k =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
 > -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
 >Maybe</A
-> a)</TD
+> k)</TD
 ></TR
 ><TR
 ><TD CLASS="s8"
@@ -736,15 +736,15 @@
 >fwmkeys</A
 > :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+> k1, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> b) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> k2) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
-> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+> -&gt; k1 -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
 > -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> [b]</TD
+> [k2]</TD
 ></TR
 ><TR
 ><TD CLASS="s8"
@@ -756,9 +756,9 @@
 >addint</A
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> k =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
-> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+> -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
 > -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
@@ -778,9 +778,9 @@
 >adddouble</A
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> k =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
-> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
+> -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
 >Double</A
 > -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
@@ -1975,11 +1975,11 @@
 >put</B
 > :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> b) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> v) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
-> -&gt; a -&gt; b -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; k -&gt; v -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
@@ -2021,11 +2021,11 @@
 >putkeep</B
 > :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> b) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> v) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
-> -&gt; a -&gt; b -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; k -&gt; v -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
@@ -2049,11 +2049,11 @@
 >putcat</B
 > :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> b) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> v) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
-> -&gt; a -&gt; b -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; k -&gt; v -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
@@ -2076,11 +2076,11 @@
 >putasync</B
 > :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> b) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> v) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
-> -&gt; a -&gt; b -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; k -&gt; v -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
@@ -2103,9 +2103,9 @@
 >out</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> k =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
-> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
@@ -2128,15 +2128,15 @@
 >get</B
 > :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> b) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> v) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
-> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
 >Maybe</A
-> b)</TD
+> v)</TD
 ></TR
 ><TR
 ><TD CLASS="doc"
@@ -2155,9 +2155,9 @@
 >vsiz</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> k =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
-> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
 >Maybe</A
@@ -2205,13 +2205,13 @@
 >iternext</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> k =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
 > -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
 >Maybe</A
-> a)</TD
+> k)</TD
 ></TR
 ><TR
 ><TD CLASS="doc"
@@ -2230,15 +2230,15 @@
 >fwmkeys</B
 > :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+> k1, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> b) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> k2) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
-> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+> -&gt; k1 -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
 > -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> [b]</TD
+> [k2]</TD
 ></TR
 ><TR
 ><TD CLASS="doc"
@@ -2257,9 +2257,9 @@
 >addint</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> k =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
-> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+> -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
 > -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
@@ -2287,9 +2287,9 @@
 >adddouble</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
+> k =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
 >HDB</A
-> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
+> -&gt; k -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
 >Double</A
 > -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
