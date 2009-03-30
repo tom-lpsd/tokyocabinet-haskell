@@ -157,7 +157,6 @@ Executable StorableTest
   Main-Is:              tests/StorableTest.hs
   Extra-libraries:      tokyocabinet
   Build-depends:        HUnit >= 1.2, base >= 4.0, directory >= 1.0
-  ghc-options:          -fhpc
   Extensions:           CPP, ForeignFunctionInterface,
                         EmptyDataDecls, TypeSynonymInstances
   Other-modules:
