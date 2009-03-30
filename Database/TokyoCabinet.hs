@@ -17,15 +17,12 @@ module Database.TokyoCabinet
 import Control.Monad.Trans (MonadIO)
 
 import Database.TokyoCabinet.Storable
-import Database.TokyoCabinet.FDB.Key
+import Database.TokyoCabinet.FDB.Key (ID(ID))
 import qualified Database.TokyoCabinet.HDB as H
 import qualified Database.TokyoCabinet.FDB as F
 import qualified Database.TokyoCabinet.BDB as B
 import qualified Database.TokyoCabinet.BDB.Cursor as C
 import qualified Database.TokyoCabinet.Error as E
-
-import Foreign.Ptr (castPtr)
-import Foreign.C.String (newCStringLen)
 
 import Data.Int
 
