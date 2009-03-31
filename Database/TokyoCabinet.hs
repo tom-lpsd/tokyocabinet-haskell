@@ -17,7 +17,7 @@ module Database.TokyoCabinet
 import Control.Monad.Trans (MonadIO)
 
 import Database.TokyoCabinet.Storable
-import Database.TokyoCabinet.FDB.Key (ID(ID))
+import Database.TokyoCabinet.FDB.Key (ID, toID)
 import qualified Database.TokyoCabinet.HDB as H
 import qualified Database.TokyoCabinet.FDB as F
 import qualified Database.TokyoCabinet.BDB as B
@@ -326,14 +326,14 @@ openModeToFOpenMode OTRUNC  = F.OTRUNC
 openModeToFOpenMode ONOLCK  = F.ONOLCK
 openModeToFOpenMode OLCKNB  = F.OLCKNB
 
+storableToKey :: (Storable a) => a -> ID
+storableToKey = toID . toInt64
+
 liftF2 :: (Storable b) => (a -> ID -> IO c) -> a -> b -> TCM c
 liftF2 f x y = TCM $ f x (storableToKey y)
 
 liftF3 :: (Storable b) => (a -> ID -> c -> IO d) -> a -> b -> c -> TCM d
 liftF3 f x y z = TCM $ f x (storableToKey y) z
-
-storableToKey :: (Storable a) => a -> ID
-storableToKey = ID . toInt64
 
 keyToStorable :: (Storable a) => String -> a
 keyToStorable = fromString
