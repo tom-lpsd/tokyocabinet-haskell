@@ -161,7 +161,7 @@ foreign import ccall safe "tchdbpath"
   c_tchdbpath :: Ptr HDB' -> IO CString
 
 foreign import ccall safe "tchdbrnum"
-  c_tchdbrnum :: Ptr HDB' -> IO Int64
+  c_tchdbrnum :: Ptr HDB' -> IO Word64
 
 foreign import ccall safe "tchdbfsiz"
-  c_tchdbfsiz :: Ptr HDB' -> IO Int64
+  c_tchdbfsiz :: Ptr HDB' -> IO Word64

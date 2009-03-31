@@ -25,6 +25,7 @@ import qualified Database.TokyoCabinet.BDB.Cursor as C
 import qualified Database.TokyoCabinet.Error as E
 
 import Data.Int
+import Data.Word
 
 -- $doc
 -- Basic Usage (sample code)
@@ -190,10 +191,10 @@ class TCDB a where
     path      :: a -> TCM (Maybe String)
 
     -- | Get the number of records.
-    rnum      :: a -> TCM Int64
+    rnum      :: a -> TCM Word64
 
     -- | Get the size of the database file.
-    size      :: a -> TCM Int64
+    size      :: a -> TCM Word64
 
     -- | Get the last happened error code.
     ecode     :: a -> TCM E.ECODE

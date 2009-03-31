@@ -249,11 +249,11 @@ path :: FDB -> IO (Maybe String)
 path = pathHelper c_tcfdbpath unTCFDB
 
 -- | Return the number of records in the database.
-rnum :: FDB -> IO Int64
+rnum :: FDB -> IO Word64
 rnum fdb = withForeignPtr (unTCFDB fdb) c_tcfdbrnum
 
 -- | Return the size of the database file.
-fsiz :: FDB -> IO Int64
+fsiz :: FDB -> IO Word64
 fsiz fdb = withForeignPtr (unTCFDB fdb) c_tcfdbfsiz
 
 keyToInt :: (Key k) => k -> IO Int64

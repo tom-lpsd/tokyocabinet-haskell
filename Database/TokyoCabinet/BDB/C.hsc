@@ -205,7 +205,7 @@ foreign import ccall safe "tcbdbpath"
   c_tcbdbpath :: Ptr BDB' -> IO CString
 
 foreign import ccall safe "tcbdbrnum"
-  c_tcbdbrnum :: Ptr BDB' -> IO Int64
+  c_tcbdbrnum :: Ptr BDB' -> IO Word64
 
 foreign import ccall safe "tcbdbfsiz"
-  c_tcbdbfsiz :: Ptr BDB' -> IO Int64
+  c_tcbdbfsiz :: Ptr BDB' -> IO Word64

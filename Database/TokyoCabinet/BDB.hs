@@ -46,6 +46,7 @@ module Database.TokyoCabinet.BDB
     ) where
 
 import Data.Int
+import Data.Word
 
 import Foreign.Ptr
 import Foreign.ForeignPtr
@@ -311,9 +312,9 @@ path :: BDB -> IO (Maybe String)
 path = pathHelper c_tcbdbpath unTCBDB
 
 -- | Return the number of records in the database.
-rnum :: BDB -> IO Int64
+rnum :: BDB -> IO Word64
 rnum bdb = withForeignPtr (unTCBDB bdb) c_tcbdbrnum
 
 -- | Return the size of the database file.
-fsiz :: BDB -> IO Int64
+fsiz :: BDB -> IO Word64
 fsiz bdb = withForeignPtr (unTCBDB bdb) c_tcbdbfsiz

@@ -49,6 +49,7 @@ import Foreign.Marshal (alloca)
 import Foreign.Marshal.Utils (maybePeek)
 
 import Data.Int
+import Data.Word
 
 import Database.TokyoCabinet.HDB.C
 import Database.TokyoCabinet.Error
@@ -249,9 +250,9 @@ path :: HDB -> IO (Maybe String)
 path = pathHelper c_tchdbpath unTCHDB
 
 -- | Return the number of records in the database.
-rnum :: HDB -> IO Int64
+rnum :: HDB -> IO Word64
 rnum hdb = withForeignPtr (unTCHDB hdb) c_tchdbrnum
 
 -- | Return the size of the database file.
-fsiz :: HDB -> IO Int64
+fsiz :: HDB -> IO Word64
 fsiz hdb = withForeignPtr (unTCHDB hdb) c_tchdbfsiz

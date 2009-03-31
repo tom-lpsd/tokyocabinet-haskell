@@ -193,7 +193,7 @@ foreign import ccall safe "tcfdbpath"
   c_tcfdbpath :: Ptr FDB' -> IO CString
 
 foreign import ccall safe "tcfdbrnum"
-  c_tcfdbrnum :: Ptr FDB' -> IO Int64
+  c_tcfdbrnum :: Ptr FDB' -> IO Word64
 
 foreign import ccall safe "tcfdbfsiz"
-  c_tcfdbfsiz :: Ptr FDB' -> IO Int64
+  c_tcfdbfsiz :: Ptr FDB' -> IO Word64
