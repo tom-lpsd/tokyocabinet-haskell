@@ -21,6 +21,10 @@ Description:
 Tested-With:    GHC
 Build-Type:     Simple
 
+Flag BuildTest
+  Description:  make tests and install it if True
+  Default:      False
+
 Library
   Build-Depends:        base >= 4.0, bytestring >= 0.9, mtl >= 1.1
   Exposed-modules:
@@ -47,3 +51,125 @@ Library
   Extra-lib-dirs:       /usr/local/lib
   Include-dirs:         /usr/local/include
   GHC-Options:          -Wall
+
+Executable ListTest
+  if flag(BuildTest)
+    Buildable:            True
+  else
+    Buildable:            False
+  Main-Is:              tests/ListTest.hs
+  Extra-libraries:      tokyocabinet
+  Build-depends:        HUnit >= 1.2
+  Extensions:           CPP, ForeignFunctionInterface,
+                        EmptyDataDecls, TypeSynonymInstances
+  Other-modules:
+    Database.TokyoCabinet.List
+    Database.TokyoCabinet.List.C
+
+Executable HDBTest
+  if flag(BuildTest)
+    Buildable:            True
+  else
+    Buildable:            False
+  Main-Is:              tests/HDBTest.hs
+  Extra-libraries:      tokyocabinet
+  Build-depends:        HUnit >= 1.2, base >= 4.0, directory >= 1.0
+  Extensions:           CPP, ForeignFunctionInterface,
+                        EmptyDataDecls, TypeSynonymInstances
+  Other-modules:
+    TestUtil
+    Database.TokyoCabinet.HDB
+    Database.TokyoCabinet.HDB.C
+    Database.TokyoCabinet.Error
+    Database.TokyoCabinet.List
+    Database.TokyoCabinet.List.C
+    Database.TokyoCabinet.Storable
+
+Executable BDBTest
+  if flag(BuildTest)
+    Buildable:            True
+  else
+    Buildable:            False
+  Main-Is:              tests/BDBTest.hs
+  Extra-libraries:      tokyocabinet
+  Build-depends:        HUnit >= 1.2, base >= 4.0, directory >= 1.0
+  Extensions:           CPP, ForeignFunctionInterface,
+                        EmptyDataDecls, TypeSynonymInstances
+  Other-modules:
+    TestUtil
+    Database.TokyoCabinet.BDB
+    Database.TokyoCabinet.BDB.C
+    Database.TokyoCabinet.BDB.Cursor
+    Database.TokyoCabinet.BDB.Cursor.C
+    Database.TokyoCabinet.Error
+    Database.TokyoCabinet.List
+    Database.TokyoCabinet.List.C
+    Database.TokyoCabinet.Storable
+
+Executable FDBTest
+  if flag(BuildTest)
+    Buildable:            True
+  else
+    Buildable:            False
+  Main-Is:              tests/FDBTest.hs
+  Extra-libraries:      tokyocabinet
+  Build-depends:        HUnit >= 1.2
+  Extensions:           CPP, ForeignFunctionInterface,
+                        EmptyDataDecls, TypeSynonymInstances
+  Other-modules:
+    Database.TokyoCabinet.FDB
+    Database.TokyoCabinet.FDB.C
+    Database.TokyoCabinet.Error
+    Database.TokyoCabinet.List
+    Database.TokyoCabinet.List.C
+    Database.TokyoCabinet.Storable
+
+Executable ADBTest
+  if flag(BuildTest)
+    Buildable:            True
+  else
+    Buildable:            False
+  Main-Is:              tests/ADBTest.hs
+  Extra-libraries:      tokyocabinet
+  Build-depends:        HUnit >= 1.2, base >= 4.0, directory >= 1.0
+  Extensions:           CPP, ForeignFunctionInterface,
+                        EmptyDataDecls, TypeSynonymInstances
+  Other-modules:
+    TestUtil
+    Database.TokyoCabinet.HDB
+    Database.TokyoCabinet.HDB.C
+    Database.TokyoCabinet.FDB
+    Database.TokyoCabinet.FDB.C
+    Database.TokyoCabinet.BDB
+    Database.TokyoCabinet.BDB.C
+    Database.TokyoCabinet.BDB.Cursor
+    Database.TokyoCabinet.BDB.Cursor.C
+    Database.TokyoCabinet.Error
+    Database.TokyoCabinet.List
+    Database.TokyoCabinet.List.C
+    Database.TokyoCabinet.Storable
+
+Executable StorableTest
+  if flag(BuildTest)
+    Buildable:            True
+  else
+    Buildable:            False
+  Main-Is:              tests/StorableTest.hs
+  Extra-libraries:      tokyocabinet
+  Build-depends:        HUnit >= 1.2, base >= 4.0, directory >= 1.0
+  Extensions:           CPP, ForeignFunctionInterface,
+                        EmptyDataDecls, TypeSynonymInstances
+  Other-modules:
+    TestUtil
+    Database.TokyoCabinet.HDB
+    Database.TokyoCabinet.HDB.C
+    Database.TokyoCabinet.FDB
+    Database.TokyoCabinet.FDB.C
+    Database.TokyoCabinet.BDB
+    Database.TokyoCabinet.BDB.C
+    Database.TokyoCabinet.BDB.Cursor
+    Database.TokyoCabinet.BDB.Cursor.C
+    Database.TokyoCabinet.Error
+    Database.TokyoCabinet.List
+    Database.TokyoCabinet.List.C
+    Database.TokyoCabinet.Storable
