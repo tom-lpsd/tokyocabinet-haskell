@@ -1,6 +1,6 @@
 Name:           tokyocabinet-haskell
 Version:        0.0.2
-Cabal-Version:  >= 1.6.0.2
+Cabal-Version:  >= 1.2
 License:        BSD3
 License-File:   LICENSE
 Author:         Tom Tsuruhara
