@@ -34,33 +34,31 @@ import Database.TokyoCabinet.Storable
 import Data.ByteString.Unsafe
 import qualified Data.ByteString as B
 
-data List = List { unTCList :: !(ForeignPtr LIST) }
-
-new :: IO List
+new :: IO (List a)
 new = c_tclistnew >>= newForeignPtr tclistFinalizer >>= return . List
 
-new2 :: Int -> IO List
+new2 :: Int -> IO (List a)
 new2 n = do
   l <- c_tclistnew2 (fromIntegral n)
   p <- newForeignPtr tclistFinalizer l
   return $ List p
 
-copy :: List -> IO List
+copy :: List a -> IO (List a)
 copy tcls =
     withForeignPtr (unTCList tcls) $ \p -> do
       l <- c_tclistdup p
       List `fmap` newForeignPtr tclistFinalizer l
 
-delete :: List -> IO ()
+delete :: List a -> IO ()
 delete tcls = finalizeForeignPtr (unTCList tcls)
 
-len :: List -> IO Int
+len :: List a -> IO Int
 len tcls =
     withForeignPtr (unTCList tcls) $ \p -> do
         n <- c_tclistnum p
         return $ fromIntegral n
 
-get :: (Storable a) => List -> Int -> IO (Maybe a)
+get :: (Storable a) => List a -> Int -> IO (Maybe a)
 get tcls index =
     withForeignPtr (unTCList tcls) $ \p ->
         alloca $ \sizbuf -> do
@@ -71,13 +69,13 @@ get tcls index =
                  copyBytes buf vp (fromIntegral siz)
                  peekPtrLen (buf, fromIntegral siz)
 
-push :: (Storable a) => List -> a -> IO ()
+push :: (Storable a) => List a -> a -> IO ()
 push tcls val =
     withForeignPtr (unTCList tcls) $ \p ->
         withPtrLen val $ \(vbuf, vsiz) ->
             c_tclistpush p (castPtr vbuf) (fromIntegral vsiz)
 
-pop :: (Storable a) => List -> IO (Maybe a)
+pop :: (Storable a) => List a -> IO (Maybe a)
 pop tcls =
     withForeignPtr (unTCList tcls) $ \p ->
         alloca $ \sizbuf -> do
@@ -86,13 +84,13 @@ pop tcls =
             do siz <- peek sizbuf
                peekPtrLen (vp, fromIntegral siz)
 
-unshift :: (Storable a) => List -> a -> IO ()
+unshift :: (Storable a) => List a -> a -> IO ()
 unshift tcls val =
     withForeignPtr (unTCList tcls) $ \p ->
         withPtrLen val $ \(vbuf, vsiz) ->
             c_tclistunshift p (castPtr vbuf) (fromIntegral vsiz)
 
-shift :: (Storable a) => List -> IO (Maybe a)
+shift :: (Storable a) => List a -> IO (Maybe a)
 shift tcls =
     withForeignPtr (unTCList tcls) $ \p ->
         alloca $ \sizbuf -> do
@@ -101,14 +99,14 @@ shift tcls =
             do siz <- peek sizbuf
                peekPtrLen (vp, fromIntegral siz)
 
-insert :: (Storable a) => List -> Int -> a -> IO ()
+insert :: (Storable a) => List a -> Int -> a -> IO ()
 insert tcls index val =
     withForeignPtr (unTCList tcls) $ \p ->
         withPtrLen val $ \(vbuf, vsiz) ->
             c_tclistinsert p (fromIntegral index) (castPtr vbuf)
                              (fromIntegral vsiz)
 
-remove :: (Storable a) => List -> Int -> IO (Maybe a)
+remove :: (Storable a) => List a -> Int -> IO (Maybe a)
 remove tcls index =
     withForeignPtr (unTCList tcls) $ \p ->
         alloca $ \sizbuf -> do
@@ -117,34 +115,34 @@ remove tcls index =
             do siz <- peek sizbuf
                peekPtrLen (vp, fromIntegral siz)
 
-over :: (Storable a) => List -> Int -> a -> IO ()
+over :: (Storable a) => List a -> Int -> a -> IO ()
 over tcls index val =
     withForeignPtr (unTCList tcls) $ \p ->
         withPtrLen val $ \(vbuf, vsiz) ->
             c_tclistover p (fromIntegral index) (castPtr vbuf)
                            (fromIntegral vsiz)
 
-sort :: List -> IO ()
+sort :: List a -> IO ()
 sort tcls = withForeignPtr (unTCList tcls) c_tclistsort
 
-lsearch :: (Storable a) => List -> a -> IO Int
+lsearch :: (Storable a) => List a -> a -> IO Int
 lsearch tcls key =
     withForeignPtr (unTCList tcls) $ \p ->
         withPtrLen key $ \(kbuf, ksiz) ->
             fmap fromIntegral $
                  c_tclistlsearch p (castPtr kbuf) (fromIntegral ksiz)
 
-bsearch :: (Storable a) => List -> a -> IO Int
+bsearch :: (Storable a) => List a -> a -> IO Int
 bsearch tcls key =
     withForeignPtr (unTCList tcls) $ \p ->
         withPtrLen key $ \(kbuf, ksiz) ->
             fmap fromIntegral $
                  c_tclistbsearch p (castPtr kbuf) (fromIntegral ksiz)
 
-clear :: List -> IO ()
+clear :: List a -> IO ()
 clear tcls = withForeignPtr (unTCList tcls) c_tclistclear
 
-dump :: List -> IO B.ByteString
+dump :: List a -> IO B.ByteString
 dump tcls =
     withForeignPtr (unTCList tcls) $ \p ->
         alloca $ \sizbuf -> do
@@ -152,7 +150,7 @@ dump tcls =
             size <- fromIntegral `fmap` peek sizbuf
             unsafePackCStringFinalizer (castPtr c_str) size (free c_str)
 
-load :: B.ByteString -> IO List
+load :: B.ByteString -> IO (List a)
 load bytes =
     unsafeUseAsCStringLen bytes $ \(buf, siz) -> do
       tclis <- c_tclistload (castPtr buf) (fromIntegral siz)

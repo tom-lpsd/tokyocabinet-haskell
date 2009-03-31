@@ -117,46 +117,55 @@ bsearch_test = do
   delete xs
 
 int_test = do
-  xs <- new
-  let num_int   = [ 1..10] :: [Int]
-      num_int8  = [11..20] :: [Int8]
-      num_int16 = [21..30] :: [Int16]
-      num_int32 = [31..40] :: [Int32]
-      num_int64 = [41..50] :: [Int64]
-  pushlist xs num_int
-  pushlist xs num_int8
-  pushlist xs num_int16
-  pushlist xs num_int32
-  pushlist xs num_int64
-  get xs 0  >>= (@?= (Just (num_int   !! 0)))
-  get xs 9  >>= (@?= (Just (num_int   !! 9)))
-  get xs 10 >>= (@?= (Just (num_int8  !! 0)))
-  get xs 19 >>= (@?= (Just (num_int8  !! 9)))
-  get xs 20 >>= (@?= (Just (num_int16 !! 0)))
-  get xs 29 >>= (@?= (Just (num_int16 !! 9)))
-  get xs 30 >>= (@?= (Just (num_int32 !! 0)))
-  get xs 39 >>= (@?= (Just (num_int32 !! 9)))
-  get xs 40 >>= (@?= (Just (num_int64 !! 0)))
-  get xs 49 >>= (@?= (Just (num_int64 !! 9)))
+  xs   <- new :: IO (List Int)
+  xs8  <- new :: IO (List Int8)
+  xs16 <- new :: IO (List Int16)
+  xs32 <- new :: IO (List Int32)
+  xs64 <- new :: IO (List Int64)
+  let num_int   = [ 1..10]
+      num_int8  = [11..20]
+      num_int16 = [21..30]
+      num_int32 = [31..40]
+      num_int64 = [41..50]
+  pushlist xs   num_int
+  pushlist xs8  num_int8
+  pushlist xs16 num_int16
+  pushlist xs32 num_int32
+  pushlist xs64 num_int64
+  get xs   0 >>= (@?= (Just (num_int   !! 0)))
+  get xs   9 >>= (@?= (Just (num_int   !! 9)))
+  get xs8  0 >>= (@?= (Just (num_int8  !! 0)))
+  get xs8  9 >>= (@?= (Just (num_int8  !! 9)))
+  get xs16 0 >>= (@?= (Just (num_int16 !! 0)))
+  get xs16 9 >>= (@?= (Just (num_int16 !! 9)))
+  get xs32 0 >>= (@?= (Just (num_int32 !! 0)))
+  get xs32 9 >>= (@?= (Just (num_int32 !! 9)))
+  get xs64 0 >>= (@?= (Just (num_int64 !! 0)))
+  get xs64 9 >>= (@?= (Just (num_int64 !! 9)))
     where
       pushlist xs ys = mapM_ (push xs) ys
 
 word_test = do
-  xs <- new
-  let num_word8   = [ 1..10] :: [Word8]
-      num_word16  = [11..20] :: [Word16]
-      num_word32  = [21..30] :: [Word32]
-      num_word64  = [31..40] :: [Word64]
-  pushlist xs num_word8
-  pushlist xs num_word16
-  pushlist xs num_word32
-  pushlist xs num_word64
-  get xs 0  >>= (@?= (Just (num_word8  !! 0)))
-  get xs 9  >>= (@?= (Just (num_word8  !! 9)))
-  get xs 10 >>= (@?= (Just (num_word16 !! 0)))
-  get xs 19 >>= (@?= (Just (num_word16 !! 9)))
-  get xs 20 >>= (@?= (Just (num_word32 !! 0)))
-  get xs 29 >>= (@?= (Just (num_word32 !! 9)))
+  xs8  <- new :: IO (List Word8)
+  xs16 <- new :: IO (List Word16)
+  xs32 <- new :: IO (List Word32)
+  xs64 <- new :: IO (List Word64)
+  let num_word8   = [ 1..10]
+      num_word16  = [11..20]
+      num_word32  = [21..30]
+      num_word64  = [31..40]
+  pushlist xs8  num_word8
+  pushlist xs16 num_word16
+  pushlist xs32 num_word32
+  pushlist xs64 num_word64
+  get xs8  0 >>= (@?= (Just (num_word8  !! 0)))
+  get xs8  9 >>= (@?= (Just (num_word8  !! 9)))
+  get xs16 0 >>= (@?= (Just (num_word16 !! 0)))
+  get xs16 9 >>= (@?= (Just (num_word16 !! 9)))
+  get xs32 0 >>= (@?= (Just (num_word32 !! 0)))
+  get xs32 9 >>= (@?= (Just (num_word32 !! 9)))
+  get xs64 0 >>= (@?= (Just (num_word64 !! 0)))
+  get xs64 9 >>= (@?= (Just (num_word64 !! 9)))
     where
       pushlist xs ys = mapM_ (push xs) ys
 

@@ -47,6 +47,8 @@ Library
     Database.TokyoCabinet.List
     Database.TokyoCabinet.List.C
     Database.TokyoCabinet.Storable
+    Database.TokyoCabinet.Sequence
+
   other-modules:
     Database.TokyoCabinet.Internal
   Extensions:           CPP, ForeignFunctionInterface,

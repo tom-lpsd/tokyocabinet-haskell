@@ -7,6 +7,9 @@ import Data.Word
 import Foreign.Ptr
 import Foreign.C.Types
 import Foreign.C.String
+import Foreign.ForeignPtr
+
+data List a = List { unTCList :: !(ForeignPtr LIST) }
 
 data LIST
 
