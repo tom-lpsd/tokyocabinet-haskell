@@ -11,10 +11,12 @@ import Database.TokyoCabinet.Storable
 class Sequence a where
     withList  :: (Storable s) => a s -> (Ptr LIST -> IO b) -> IO b
     peekList' :: (Storable s) => Ptr LIST -> IO (a s)
+    empty :: (Storable s) => IO (a s)
 
 instance Sequence List where
     withList xs action = withForeignPtr (unTCList xs) action
     peekList' tcls = List `fmap` newForeignPtr tclistFinalizer tcls
+    empty = List `fmap` (c_tclistnew >>= newForeignPtr tclistFinalizer)
 
 instance Sequence [] where
     withList xs action =
@@ -40,3 +42,4 @@ instance Sequence [] where
                      else do elm <- peekPtrLen (val, siz)
                              peekList'' lis (elm:acc)
 
+    empty = return []

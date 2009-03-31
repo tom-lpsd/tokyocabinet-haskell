@@ -50,11 +50,15 @@ import Data.Word
 
 import Foreign.Ptr
 import Foreign.ForeignPtr
+import Foreign.Storable (peek)
+import Foreign.Marshal (alloca)
 
 import Database.TokyoCabinet.Error
 import Database.TokyoCabinet.BDB.C
-import Database.TokyoCabinet.Internal
-import qualified Database.TokyoCabinet.Storable as S
+import Database.TokyoCabinet.List.C
+import Database.TokyoCabinet.Internal hiding (peekList')
+import Database.TokyoCabinet.Storable
+import Database.TokyoCabinet.Sequence
 
 -- $doc
 -- Example
@@ -156,57 +160,72 @@ close bdb = withForeignPtr (unTCBDB bdb) c_tcbdbclose
 -- be instance of Storable class.  Usually, we can use `String',
 -- `ByteString' for key, `String', `ByteString', `Int', `Double' for
 -- value.
-put :: (S.Storable k, S.Storable v) => BDB -> k -> v -> IO Bool
+put :: (Storable k, Storable v) => BDB -> k -> v -> IO Bool
 put = putHelper c_tcbdbput unTCBDB
 
 -- | Store a new record. If a record with the same key exists in the
 -- database, this function has no effect.
-putkeep :: (S.Storable k, S.Storable v) => BDB -> k -> v -> IO Bool
+putkeep :: (Storable k, Storable v) => BDB -> k -> v -> IO Bool
 putkeep = putHelper c_tcbdbputkeep unTCBDB
 
 -- | Concatenate a value at the end of the existing record.
-putcat :: (S.Storable k, S.Storable v) => BDB -> k -> v -> IO Bool
+putcat :: (Storable k, Storable v) => BDB -> k -> v -> IO Bool
 putcat = putHelper c_tcbdbputcat unTCBDB
 
 -- | Store a record with allowing duplication of keys. 
-putdup :: (S.Storable k, S.Storable v) => BDB -> k -> v -> IO Bool
+putdup :: (Storable k, Storable v) => BDB -> k -> v -> IO Bool
 putdup = putHelper c_tcbdbputdup unTCBDB
 
 -- | Store records with allowing duplication of keys. 
-putlist :: (S.Storable k, S.Storable v) => BDB -> k -> [v] -> IO Bool
-putlist bdb key vals = do
-  and `fmap` mapM (putdup bdb key) vals
+putlist :: (Storable k, Storable v, Sequence q) =>
+           BDB -> k -> q v -> IO Bool
+putlist bdb key vals =
+    withForeignPtr (unTCBDB bdb) $ \bdb' ->
+        withList vals $ \tcls ->
+            withPtrLen key $ \(kbuf, ksize) ->
+                alloca $ \sizbuf -> do
+                    num <- c_tclistnum tcls
+                    putlist' bdb' (kbuf, ksize) tcls sizbuf num
+    where
+      putlist' bdb' (kbuf, ksize) tcls sizbuf = put' 0
+          where
+            put' n num
+                | n < num = do vbuf  <- c_tclistval tcls n sizbuf
+                               vsize <- fromIntegral `fmap` peek sizbuf
+                               res <- c_tcbdbputdup bdb' kbuf ksize vbuf vsize
+                               if res then put' (n+1) num else return False
+                | otherwise = return True
 
 -- | Delete a record. If the key of duplicated records is specified,
 -- the first one is deleted. 
-out :: (S.Storable k) => BDB -> k -> IO Bool
+out :: (Storable k) => BDB -> k -> IO Bool
 out = outHelper c_tcbdbout unTCBDB
 
 -- | Delete records. If the key of duplicated records is specified,
 -- all of them are deleted.
-outlist :: (S.Storable k) => BDB -> k -> IO Bool
+outlist :: (Storable k) => BDB -> k -> IO Bool
 outlist = outHelper c_tcbdbout3 unTCBDB
 
 -- | Return the value of record. If the key of duplicated records is
 -- specified, the first one is returned.
-get :: (S.Storable k, S.Storable v) => BDB -> k -> IO (Maybe v)
+get :: (Storable k, Storable v) => BDB -> k -> IO (Maybe v)
 get = getHelper c_tcbdbget unTCBDB
 
 -- | Retrieve records. 
-getlist :: (S.Storable k, S.Storable v) => BDB -> k -> IO [v]
+getlist :: (Storable k, Storable v, Sequence q) => BDB -> k -> IO (q v)
 getlist bdb key =
     withForeignPtr (unTCBDB bdb) $ \bdb' ->
-        S.withPtrLen key $ \(kbuf, ksize) -> do
+        withPtrLen key $ \(kbuf, ksize) -> do
           ptr <- c_tcbdbget4 bdb' kbuf ksize
           if ptr == nullPtr
-            then return []
+            then empty
             else peekList' ptr
 
 -- | Return the number of records corresponding to a key. 
-vnum :: (S.Storable k) => BDB -> k -> IO (Maybe Int)
+vnum :: (Storable k) => BDB -> k -> IO (Maybe Int)
 vnum bdb key =
     withForeignPtr (unTCBDB bdb) $ \bdb' ->
-        S.withPtrLen key $ \(kbuf, ksize) -> do
+        withPtrLen key $ \(kbuf, ksize) -> do
             res <- c_tcbdbvnum bdb' kbuf ksize
             return $ if res == 0
                        then Nothing
@@ -214,11 +233,11 @@ vnum bdb key =
 
 -- | Return the size of the value of a record. If the key of duplicated
 -- records is specified, the first one is selected.
-vsiz :: (S.Storable k) => BDB -> k -> IO (Maybe Int)
+vsiz :: (Storable k) => BDB -> k -> IO (Maybe Int)
 vsiz = vsizHelper c_tcbdbvsiz unTCBDB
 
 -- | Return list of keys in the specified range.
-range :: (S.Storable k) =>
+range :: (Storable k, Sequence q) =>
          BDB     -- ^ BDB object
       -> Maybe k -- ^ the key of the beginning border. If it is
                  -- Nothing, the first record in the database is
@@ -229,7 +248,7 @@ range :: (S.Storable k) =>
       -> Bool    -- ^ whether the ending border is inclusive or not.
       -> Int     -- ^ the maximum number of keys to be fetched. If it
                  -- is negative value, no limit is specified.
-      -> IO [k]  -- ^ keys in the specified range.
+      -> IO (q k)  -- ^ keys in the specified range.
 range bdb bkey binc ekey einc maxn =
     withForeignPtr (unTCBDB bdb) $ \bdb' ->
         withPtrLen' bkey $ \(bkbuf, bksiz) ->
@@ -237,11 +256,11 @@ range bdb bkey binc ekey einc maxn =
             c_tcbdbrange bdb' bkbuf bksiz binc ekbuf eksiz einc
                              (fromIntegral maxn) >>= peekList'
     where
-      withPtrLen' (Just key) action = S.withPtrLen key action
+      withPtrLen' (Just key) action = withPtrLen key action
       withPtrLen' Nothing action = action (nullPtr, 0)
 
 -- | Return list of forward matched keys.
-fwmkeys :: (S.Storable k1, S.Storable k2) =>
+fwmkeys :: (Storable k1, Storable k2) =>
            BDB    -- ^ BDB object
         -> k1      -- ^ search string
         -> Int    -- ^ the maximum number of keys to be fetched. If it
@@ -251,7 +270,7 @@ fwmkeys = fwmHelper c_tcbdbfwmkeys unTCBDB
 
 -- | Increment the corresponding value. (The value specified by a key
 -- is treated as integer.)
-addint :: (S.Storable k) =>
+addint :: (Storable k) =>
           BDB   -- ^ BDB object.
        -> k     -- ^ Key.
        -> Int   -- ^ Amount of increment.
@@ -260,7 +279,7 @@ addint = addHelper c_tcbdbaddint unTCBDB fromIntegral fromIntegral (== cINT_MIN)
 
 -- | Increment the corresponding value. (The value specified by a key
 -- is treated as double.)
-adddouble :: (S.Storable k) =>
+adddouble :: (Storable k) =>
              BDB    -- ^ BDB object.
           -> k      -- ^ Key.
           -> Double -- ^ Amount of increment.
