@@ -199,7 +199,7 @@ getlist bdb key =
           ptr <- c_tcbdbget4 bdb' kbuf ksize
           if ptr == nullPtr
             then return []
-            else peekTCListAndFree ptr
+            else peekList' ptr
 
 -- | Return the number of records corresponding to a key. 
 vnum :: (S.Storable k) => BDB -> k -> IO (Maybe Int)
@@ -234,7 +234,7 @@ range bdb bkey binc ekey einc maxn =
         withPtrLen' bkey $ \(bkbuf, bksiz) ->
         withPtrLen' ekey $ \(ekbuf, eksiz) ->
             c_tcbdbrange bdb' bkbuf bksiz binc ekbuf eksiz einc
-                             (fromIntegral maxn) >>= peekTCListAndFree
+                             (fromIntegral maxn) >>= peekList'
     where
       withPtrLen' (Just key) action = S.withPtrLen key action
       withPtrLen' Nothing action = action (nullPtr, 0)

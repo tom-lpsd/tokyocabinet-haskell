@@ -13,20 +13,20 @@ import Foreign.Marshal.Utils (maybePeek)
 
 import Data.Word
 
-peekTCListAndFree :: (Storable a) => Ptr LIST -> IO [a]
-peekTCListAndFree list = do
-  vals <- peekTCList' list []
+peekList' :: (Storable a) => Ptr LIST -> IO [a]
+peekList' list = do
+  vals <- peekList'' list []
   c_tclistdel list
   return vals
  where
-   peekTCList' tclist acc = 
+   peekList'' tclist acc = 
        alloca $ \sizbuf ->
            do val <- c_tclistpop tclist sizbuf
               siz <- peek sizbuf
               if val == nullPtr
                 then return acc
                 else do elm <- peekPtrLen (val, siz)
-                        peekTCList' tclist (elm:acc)
+                        peekList'' tclist (elm:acc)
 
 type Lifter ptr tcdb = Ptr ptr -> tcdb
 type UnLifter tcdb fptr = tcdb -> ForeignPtr fptr
@@ -115,7 +115,7 @@ fwmHelper :: (Storable a, Storable b) =>
 fwmHelper c_fwm unlifter tcdb key maxn = 
     withForeignPtr (unlifter tcdb) $ \db ->
         withPtrLen key $ \(kbuf, ksiz) ->
-            c_fwm db kbuf ksiz (fromIntegral maxn) >>= peekTCListAndFree
+            c_fwm db kbuf ksiz (fromIntegral maxn) >>= peekList'
 
 vsizHelper :: (Storable a) =>
               FunVsiz p -> UnLifter tcdb p -> tcdb -> a -> IO (Maybe Int)
