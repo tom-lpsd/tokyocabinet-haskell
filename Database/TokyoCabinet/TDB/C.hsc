@@ -3,6 +3,7 @@ module Database.TokyoCabinet.TDB.C where
 
 import Data.Int
 import Data.Word
+import Data.Bits
 
 import Foreign.Ptr
 import Foreign.C.Types
@@ -61,6 +62,12 @@ indexTypeToCInt ITDECIMAL = #const TDBITDECIMAL
 indexTypeToCInt ITOPT     = #const TDBITOPT
 indexTypeToCInt ITVOID    = #const TDBITVOID
 indexTypeToCInt ITKEEP    = #const TDBITKEEP
+
+combineOpenMode :: [OpenMode] -> CInt
+combineOpenMode = foldr ((.|.) . openModeToCInt) 0
+
+combineTuningOption :: [TuningOption] -> Word8
+combineTuningOption = foldr ((.|.) . tuningOptionToWord8) 0
 
 data TDB'
 
