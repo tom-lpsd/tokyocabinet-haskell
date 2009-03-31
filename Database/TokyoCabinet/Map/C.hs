@@ -24,6 +24,9 @@ foreign import ccall safe "tcmapdup"
 foreign import ccall safe "tcmapdel"
   c_tcmapdel :: Ptr MAP -> IO ()
 
+foreign import ccall safe "&tcmapdel"
+  tcmapFinalizer :: FunPtr (Ptr MAP -> IO ())
+
 foreign import ccall safe "tcmapput"
   c_tcmapput :: Ptr MAP -> Ptr Word8 -> CInt -> Ptr Word8 -> CInt -> IO ()
 

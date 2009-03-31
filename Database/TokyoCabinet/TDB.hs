@@ -5,6 +5,7 @@ module Database.TokyoCabinet.TDB
     , OpenMode(..)
     , TuningOption(..)
     , IndexType(..)
+    , AssociativeList(..)
     , new
     , delete
     , ecode
@@ -40,10 +41,16 @@ module Database.TokyoCabinet.TDB
     ) where
 
 import Database.TokyoCabinet.TDB.C
-import Database.TokyoCabinet.Map
 import Database.TokyoCabinet.Error
 import Database.TokyoCabinet.Internal
 import Database.TokyoCabinet.Storable
+import Database.TokyoCabinet.Map
+    (
+      withMap
+    , peekMap
+    , Associative
+    , AssociativeList(..)
+    )
 
 import Data.Int
 import Data.Word
@@ -76,20 +83,26 @@ open = openHelper c_tctdbopen unTCTDB combineOpenMode
 close :: TDB -> IO Bool
 close tdb = withForeignPtr (unTCTDB tdb) c_tctdbclose
 
-put :: (Storable k, Associative m) => TDB -> k -> m -> IO Bool
-put = undefined
+put :: (Storable k, Storable v, Associative m) => TDB -> k -> m k v -> IO Bool
+put tdb key vals =
+    withForeignPtr (unTCTDB tdb) $ \tdb' ->
+        withPtrLen key $ \(kbuf, ksize) ->
+            withMap vals $ c_tctdbput tdb' kbuf ksize
 
-putkeep :: (Storable k, Associative m) => TDB -> k -> m -> IO Bool
+putkeep :: (Storable k, Storable v, Associative m) => TDB -> k -> m k v -> IO Bool
 putkeep = undefined
 
-putcat :: (Storable k, Associative m) => TDB -> k -> m -> IO Bool
+putcat :: (Storable k, Storable v, Associative m) => TDB -> k -> m k v -> IO Bool
 putcat = undefined
 
 out :: (Storable k) => TDB -> k -> IO Bool
-out = undefined
+out = outHelper c_tctdbout unTCTDB
 
-get :: (Storable k, Associative m) => TDB -> k -> IO (Maybe m)
-get = undefined
+get :: (Storable k, Storable v, Associative m) => TDB -> k -> IO (m k v)
+get tdb key =
+    withForeignPtr (unTCTDB tdb) $ \tdb' ->
+        withPtrLen key $ \(kbuf, ksize) ->
+            c_tctdbget tdb' kbuf ksize >>= peekMap
 
 vsiz :: (Storable k) => TDB -> k -> IO (Maybe Int)
 vsiz = undefined

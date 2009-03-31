@@ -8,7 +8,7 @@ import Foreign.ForeignPtr
 import Foreign.C.Types
 import Foreign.C.String
 import Foreign.Storable (peek)
-import Foreign.Marshal (alloca)
+import Foreign.Marshal (alloca, copyBytes, mallocBytes)
 import Foreign.Marshal.Utils (maybePeek)
 
 import Data.Word
@@ -37,7 +37,7 @@ type Checker a = a -> Bool
 type FunOpen p c_mode = Ptr p -> CString -> c_mode -> IO Bool
 type FunPath p = Ptr p -> IO CString
 type FunCopy p = Ptr p -> CString -> IO Bool
-type FunPut  p = Ptr p -> Ptr Word8 -> CInt -> Ptr Word8 -> CInt -> IO Bool
+type FunPut  p r = Ptr p -> Ptr Word8 -> CInt -> Ptr Word8 -> CInt -> IO r
 type FunGet  p = Ptr p -> Ptr Word8 -> CInt -> Ptr CInt -> IO (Ptr Word8)
 type FunOut  p = Ptr p -> Ptr Word8 -> CInt -> IO Bool
 type FunAdd  p n = Ptr p -> Ptr Word8 -> CInt -> n -> IO n
@@ -61,7 +61,7 @@ copyHelper c_copy unlifter tcdb fpath =
     withForeignPtr (unlifter tcdb) $ \db -> withCString fpath (c_copy db)
 
 putHelper :: (Storable a, Storable b) =>
-             FunPut p -> UnLifter tcdb p -> tcdb -> a -> b -> IO Bool
+             FunPut p r -> UnLifter tcdb p -> tcdb -> a -> b -> IO r
 putHelper c_put unlifter tcdb key val =
     withForeignPtr (unlifter tcdb) $ \db ->
         withPtrLen key $ \(kbuf, ksize) ->
@@ -77,6 +77,19 @@ getHelper c_get unlifter tcdb key =
               flip maybePeek vbuf $ \vp ->
                   do siz <- peek sizbuf
                      peekPtrLen (vp, siz)
+
+getHelper' :: (Storable a, Storable b) =>
+              FunGet p -> UnLifter tcdb p -> tcdb -> a -> IO (Maybe b)
+getHelper' c_get unlifter tcdb key =
+    withForeignPtr (unlifter tcdb) $ \db ->
+        withPtrLen key $ \(kbuf, ksiz) ->
+            alloca $ \sizbuf -> do
+              vbuf <- c_get db kbuf ksiz sizbuf
+              flip maybePeek vbuf $ \vp ->
+                  do siz <- peek sizbuf
+                     buf <- mallocBytes (fromIntegral siz)
+                     copyBytes buf vp (fromIntegral siz)
+                     peekPtrLen (buf, siz)
 
 outHelper :: (Storable a) =>
              FunOut p -> UnLifter tcdb p -> tcdb -> a -> IO Bool
