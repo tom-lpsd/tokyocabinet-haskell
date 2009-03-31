@@ -17,6 +17,7 @@ module Database.TokyoCabinet
 import Control.Monad.Trans (MonadIO)
 
 import Database.TokyoCabinet.Storable
+import Database.TokyoCabinet.Sequence
 import Database.TokyoCabinet.FDB.Key (ID, toID)
 import qualified Database.TokyoCabinet.HDB as H
 import qualified Database.TokyoCabinet.FDB as F
@@ -146,11 +147,11 @@ class TCDB a where
     iternext  :: (Storable v) => a -> TCM (Maybe v)
 
     -- | Get forward matching keys.
-    fwmkeys   :: (Storable k, Storable v) =>
+    fwmkeys   :: (Storable k, Storable v, Sequence q) =>
                  a   -- ^ database object
               -> k   -- ^ search string
               -> Int -- ^ the maximum number of keys to be fetched
-              -> TCM [v] -- ^ result keys
+              -> TCM (q v) -- ^ result keys
 
     -- | Add an integer to a record.
     addint    :: (Storable k) =>

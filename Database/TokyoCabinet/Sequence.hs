@@ -2,7 +2,7 @@ module Database.TokyoCabinet.Sequence where
 
 import Foreign.Ptr
 import Foreign.Storable (peek)
-import Foreign.Marshal (alloca)
+import Foreign.Marshal (alloca, mallocBytes, copyBytes)
 import Foreign.ForeignPtr
 
 import Database.TokyoCabinet.List.C
@@ -12,11 +12,28 @@ class Sequence a where
     withList  :: (Storable s) => a s -> (Ptr LIST -> IO b) -> IO b
     peekList' :: (Storable s) => Ptr LIST -> IO (a s)
     empty :: (Storable s) => IO (a s)
+    smap :: (Storable s1, Storable s2) => (s1 -> s2) -> a s1 -> IO (a s2)
 
 instance Sequence List where
     withList xs action = withForeignPtr (unTCList xs) action
     peekList' tcls = List `fmap` newForeignPtr tclistFinalizer tcls
     empty = List `fmap` (c_tclistnew >>= newForeignPtr tclistFinalizer)
+    smap f tcls =
+        withForeignPtr (unTCList tcls) $ \tcls' ->
+            alloca $ \sizbuf ->
+                do num <- c_tclistnum tcls'
+                   vals <- c_tclistnew
+                   loop tcls' 0 num sizbuf vals
+        where
+          loop tcls' n num sizbuf acc
+                | n < num = do vbuf <- c_tclistval tcls' n sizbuf
+                               vsiz <- peek sizbuf
+                               buf <- mallocBytes (fromIntegral vsiz)
+                               copyBytes buf vbuf (fromIntegral vsiz)
+                               val <- f `fmap` peekPtrLen (buf, vsiz)
+                               withPtrLen val $ uncurry (c_tclistpush acc)
+                               loop tcls' (n+1) num sizbuf acc
+                | otherwise = List `fmap` newForeignPtr tclistFinalizer acc
 
 instance Sequence [] where
     withList xs action =
@@ -43,3 +60,4 @@ instance Sequence [] where
                              peekList'' lis (elm:acc)
 
     empty = return []
+    smap f = return . (map f)

@@ -56,7 +56,7 @@ import Foreign.Marshal (alloca)
 import Database.TokyoCabinet.Error
 import Database.TokyoCabinet.BDB.C
 import Database.TokyoCabinet.List.C
-import Database.TokyoCabinet.Internal hiding (peekList')
+import Database.TokyoCabinet.Internal
 import Database.TokyoCabinet.Storable
 import Database.TokyoCabinet.Sequence
 
@@ -260,12 +260,12 @@ range bdb bkey binc ekey einc maxn =
       withPtrLen' Nothing action = action (nullPtr, 0)
 
 -- | Return list of forward matched keys.
-fwmkeys :: (Storable k1, Storable k2) =>
+fwmkeys :: (Storable k1, Storable k2, Sequence q) =>
            BDB    -- ^ BDB object
-        -> k1      -- ^ search string
+        -> k1     -- ^ search string
         -> Int    -- ^ the maximum number of keys to be fetched. If it
                   -- is negative value, no limit is specified.
-        -> IO [k2] -- ^ keys matches specified string (in forward matching).
+        -> IO (q k2) -- ^ keys matches specified string (in forward matching).
 fwmkeys = fwmHelper c_tcbdbfwmkeys unTCBDB
 
 -- | Increment the corresponding value. (The value specified by a key

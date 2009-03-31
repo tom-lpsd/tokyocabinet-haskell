@@ -41,7 +41,8 @@ import Database.TokyoCabinet.Error
 import Database.TokyoCabinet.FDB.C
 import Database.TokyoCabinet.FDB.Key
 import Database.TokyoCabinet.Internal
-import qualified Database.TokyoCabinet.Storable as S
+import Database.TokyoCabinet.Sequence
+import Database.TokyoCabinet.Storable
 
 import Foreign.Ptr
 import Foreign.ForeignPtr
@@ -123,25 +124,25 @@ close :: FDB -> IO Bool
 close fdb = withForeignPtr (unTCFDB fdb) c_tcfdbclose
 
 type FunPut' = Ptr FDB' -> Int64 -> Ptr Word8 -> CInt -> IO Bool
-putHelper' :: (Key k, S.Storable v) => FunPut' -> FDB -> k -> v -> IO Bool
+putHelper' :: (Key k, Storable v) => FunPut' -> FDB -> k -> v -> IO Bool
 putHelper' func fdb key val =
     withForeignPtr (unTCFDB fdb) $ \fdb' ->
-        S.withPtrLen val $ \(vbuf, vsize) -> do
+        withPtrLen val $ \(vbuf, vsize) -> do
           key' <- keyToInt key
           func fdb' key' vbuf vsize
 
 -- | Stora a record (key-value pair) on FDB.  Key type must be
 -- instance of Key class. Value type must be instance of Storable.
-put :: (Key k, S.Storable v) => FDB -> k -> v -> IO Bool
+put :: (Key k, Storable v) => FDB -> k -> v -> IO Bool
 put = putHelper' c_tcfdbput
 
 -- | Store a new record. If a record with the same key exists in the
 -- database, this function has no effect.
-putkeep :: (Key k, S.Storable v) => FDB -> k -> v -> IO Bool
+putkeep :: (Key k, Storable v) => FDB -> k -> v -> IO Bool
 putkeep = putHelper' c_tcfdbputkeep
 
 -- | Concatenate a value at the end of the existing record.
-putcat :: (Key k, S.Storable v) => FDB -> k -> v -> IO Bool
+putcat :: (Key k, Storable v) => FDB -> k -> v -> IO Bool
 putcat =  putHelper' c_tcfdbputcat
 
 -- | Delete a record. 
@@ -151,14 +152,14 @@ out fdb key =
         c_tcfdbout fdb' =<< keyToInt key
 
 -- | Return the value of record. 
-get :: (Key k, S.Storable v) => FDB -> k -> IO (Maybe v)
+get :: (Key k, Storable v) => FDB -> k -> IO (Maybe v)
 get fdb key =
     withForeignPtr (unTCFDB fdb) $ \fdb' ->
         alloca $ \sizbuf -> do
           key' <- keyToInt key
           vbuf  <- c_tcfdbget fdb' key' sizbuf
           vsize <- peek sizbuf
-          flip maybePeek vbuf $ \vbuf' -> S.peekPtrLen (vbuf', vsize)
+          flip maybePeek vbuf $ \vbuf' -> peekPtrLen (vbuf', vsize)
 
 -- | Return the byte size of value in a record.
 vsiz :: (Key k) => FDB -> k -> IO (Maybe Int)
@@ -200,8 +201,9 @@ range fdb lower upper maxn =
           return $ map (fromID . ID) keys
 
 -- | Return list of forward matched keys.
-fwmkeys :: (S.Storable k1, S.Storable k2) => FDB -> k1 -> Int -> IO [k2]
-fwmkeys fdb k maxn = map S.fromString `fmap` fwmkeys' fdb k maxn
+fwmkeys :: (Storable k1, Storable k2, Sequence q) =>
+           FDB -> k1 -> Int -> IO (q k2)
+fwmkeys fdb k maxn = smap fromString =<< fwmkeys' fdb k maxn
     where fwmkeys' = fwmHelper c_tcfdbrange4 unTCFDB
 
 -- | Increment the corresponding value. (The value specified by a key

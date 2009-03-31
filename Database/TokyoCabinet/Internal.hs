@@ -2,6 +2,7 @@ module Database.TokyoCabinet.Internal where
 
 import Database.TokyoCabinet.List.C
 import Database.TokyoCabinet.Storable
+import Database.TokyoCabinet.Sequence
 
 import Foreign.Ptr
 import Foreign.ForeignPtr
@@ -12,21 +13,6 @@ import Foreign.Marshal (alloca, copyBytes, mallocBytes)
 import Foreign.Marshal.Utils (maybePeek)
 
 import Data.Word
-
-peekList' :: (Storable a) => Ptr LIST -> IO [a]
-peekList' list = do
-  vals <- peekList'' list []
-  c_tclistdel list
-  return vals
- where
-   peekList'' tclist acc = 
-       alloca $ \sizbuf ->
-           do val <- c_tclistpop tclist sizbuf
-              siz <- peek sizbuf
-              if val == nullPtr
-                then return acc
-                else do elm <- peekPtrLen (val, siz)
-                        peekList'' tclist (elm:acc)
 
 type Lifter ptr tcdb = Ptr ptr -> tcdb
 type UnLifter tcdb fptr = tcdb -> ForeignPtr fptr
@@ -110,8 +96,8 @@ addHelper c_add unlifter cast_in cast_out check tcdb key num =
                        else Just $ cast_out sumval
 
 
-fwmHelper :: (Storable a, Storable b) =>
-             FunFwm p -> UnLifter tcdb p -> tcdb -> a -> Int -> IO [b]
+fwmHelper :: (Storable a, Storable b, Sequence q) =>
+             FunFwm p -> UnLifter tcdb p -> tcdb -> a -> Int -> IO (q b)
 fwmHelper c_fwm unlifter tcdb key maxn = 
     withForeignPtr (unlifter tcdb) $ \db ->
         withPtrLen key $ \(kbuf, ksiz) ->
