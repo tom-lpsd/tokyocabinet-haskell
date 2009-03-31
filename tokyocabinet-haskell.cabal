@@ -13,7 +13,7 @@ Description:
   Tokyo Cabinet is a modern implementation of DBM.
   For more about Tokyo Cabinet, see <http://tokyocabinet.sourceforge.net/index.html>.
 
-  This module provides `tokyocabinet.idl compliant' naive interface. 
+  This package provides `tokyocabinet.idl compliant' naive interfaces. 
   See, <http://tokyocabinet.sourceforge.net/tokyocabinet.idl>.
   
   Map interface and TDB have not supported yet.
