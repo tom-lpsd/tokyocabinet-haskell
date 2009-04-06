@@ -1,9 +1,6 @@
 module Database.TokyoCabinet.Map
     (
-      Associative
-    , AssociativeList(..)
-    , withMap
-    , peekMap
+      Map
     , new
     , new2
     , dup
@@ -37,97 +34,85 @@ import Database.TokyoCabinet.Error (cINT_MIN)
 
 import Data.Word
 
-import Foreign.Ptr
 import Foreign.ForeignPtr
+import Foreign.Storable (peek)
+import Foreign.Marshal (alloca, mallocBytes)
+import Foreign.Marshal.Utils (maybePeek, copyBytes)
 
 import Data.ByteString (ByteString)
 
-data Map = Map { unMap :: !(ForeignPtr MAP) }
-
-class Associative a where
-    toList   :: (Storable k, Storable v) => a k v -> [(k, v)]
-    fromList :: (Storable k, Storable v) => [(k, v)] -> a k v
-
-newtype AssociativeList k v = AL [(k, v)] deriving (Eq, Ord, Show)
-
-instance Associative AssociativeList where
-    toList (AL xs) = xs
-    fromList = AL
-
-withMap :: (Storable k, Storable v, Associative a) => a k v -> (Ptr MAP -> IO b) -> IO b
-withMap amap action = do m <- new
-                         mapM_ (uncurry $ put m) (toList amap)
-                         result <- withForeignPtr (unMap m) action
-                         delete m
-                         return result
-
-peekMap :: (Storable k, Storable v, Associative a) => Ptr MAP -> IO (a k v)
-peekMap = undefined
-
-new :: IO Map
+new :: IO (Map k v)
 new = Map `fmap` (c_tcmapnew >>= newForeignPtr tcmapFinalizer)
 
-new2 :: Word32 -> IO Map
+new2 :: Word32 -> IO (Map k v)
 new2 num = Map `fmap` (c_tcmapnew2 num >>= newForeignPtr tcmapFinalizer)
 
-dup :: Map -> IO Map
+dup :: Map k v -> IO (Map k v)
 dup m =
     withForeignPtr (unMap m) $ \m' ->
         Map `fmap` (c_tcmapdup m' >>= newForeignPtr tcmapFinalizer)
 
-delete :: Map -> IO ()
+delete :: Map k v -> IO ()
 delete m = finalizeForeignPtr (unMap m)
 
-put :: (Storable k, Storable v) => Map -> k -> v -> IO ()
+put :: (Storable k, Storable v) => Map k v -> k -> v -> IO ()
 put = putHelper c_tcmapput unMap
 
-putkeep :: (Storable k, Storable v) => Map -> k -> v -> IO Bool
+putkeep :: (Storable k, Storable v) => Map k v -> k -> v -> IO Bool
 putkeep = putHelper c_tcmapputkeep unMap
 
-putcat :: (Storable k, Storable v) => Map -> k -> v -> IO ()
+putcat :: (Storable k, Storable v) => Map k v -> k -> v -> IO ()
 putcat = putHelper c_tcmapputcat unMap
 
-out :: (Storable k) => Map -> k -> IO Bool
+out :: (Storable k) => Map k v -> k -> IO Bool
 out = outHelper c_tcmapout unMap
 
-get :: (Storable k, Storable v) => Map -> k -> IO (Maybe v)
+get :: (Storable k, Storable v) => Map k v -> k -> IO (Maybe v)
 get = getHelper' c_tcmapget unMap
 
-move :: (Storable k) => Map -> k -> Bool -> IO Bool
+move :: (Storable k) => Map k v -> k -> Bool -> IO Bool
 move = undefined
 
-iterinit :: Map -> IO ()
+iterinit :: Map k v -> IO ()
 iterinit m = withForeignPtr (unMap m) c_tcmapiterinit
 
-iternext :: (Storable k) => Map -> IO (Maybe k)
-iternext = undefined
+iternext :: (Storable k) => Map k v -> IO (Maybe k)
+iternext m =
+    withForeignPtr (unMap m) $ \p ->
+        alloca $ \sizbuf -> do
+            vbuf <- c_tcmapiternext p sizbuf
+            flip maybePeek vbuf $ \vp ->
+                do siz <- peek sizbuf
+                   buf <- mallocBytes (fromIntegral siz)
+                   copyBytes buf vp (fromIntegral siz)
+                   peekPtrLen (buf, siz)
 
-rnum :: Map -> IO Word64
+rnum :: Map k v -> IO Word64
 rnum m = withForeignPtr (unMap m) c_tcmaprnum
 
-msiz :: Map -> IO Word64
+msiz :: Map k v -> IO Word64
 msiz m = withForeignPtr (unMap m) c_tcmapmsiz
 
-keys :: (Storable k) => Map -> IO [k]
+keys :: (Storable k) => Map k v -> IO [k]
 keys = undefined
 
-vals :: (Storable v) => Map -> IO [v]
+vals :: (Storable v) => Map k v -> IO [v]
 vals = undefined
 
-addint :: (Storable k) => Map -> k -> Int -> IO (Maybe Int)
+addint :: (Storable k) => Map k v -> k -> Int -> IO (Maybe Int)
 addint = addHelper c_tcmapaddint unMap fromIntegral fromIntegral (== cINT_MIN)
 
-adddouble :: (Storable k) => Map -> k -> Double -> IO (Maybe Double)
+adddouble :: (Storable k) => Map k v -> k -> Double -> IO (Maybe Double)
 adddouble = addHelper c_tcmapadddouble unMap realToFrac realToFrac isNaN
 
-clear :: Map -> IO ()
+clear :: Map k v -> IO ()
 clear m = withForeignPtr (unMap m) c_tcmapclear
 
-cutfront :: Map -> Int -> IO ()
+cutfront :: Map k v -> Int -> IO ()
 cutfront = undefined
 
-dump :: Map -> Int -> IO ByteString
+dump :: Map k v -> Int -> IO ByteString
 dump = undefined
 
-load :: ByteString -> IO Map
+load :: ByteString -> IO (Map k v)
 load = undefined

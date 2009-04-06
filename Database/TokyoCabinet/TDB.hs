@@ -5,7 +5,7 @@ module Database.TokyoCabinet.TDB
     , OpenMode(..)
     , TuningOption(..)
     , IndexType(..)
-    , AssociativeList(..)
+    , AssocList(..)
     , new
     , delete
     , ecode
@@ -44,13 +44,7 @@ import Database.TokyoCabinet.TDB.C
 import Database.TokyoCabinet.Error
 import Database.TokyoCabinet.Internal
 import Database.TokyoCabinet.Storable
-import Database.TokyoCabinet.Map
-    (
-      withMap
-    , peekMap
-    , Associative
-    , AssociativeList(..)
-    )
+import Database.TokyoCabinet.Associative
 
 import Data.Int
 import Data.Word
@@ -102,7 +96,7 @@ get :: (Storable k, Storable v, Associative m) => TDB -> k -> IO (m k v)
 get tdb key =
     withForeignPtr (unTCTDB tdb) $ \tdb' ->
         withPtrLen key $ \(kbuf, ksize) ->
-            c_tctdbget tdb' kbuf ksize >>= peekMap
+            c_tctdbget tdb' kbuf ksize >>= peekMap'
 
 vsiz :: (Storable k) => TDB -> k -> IO (Maybe Int)
 vsiz = undefined

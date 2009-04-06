@@ -7,8 +7,11 @@ import Data.Word
 import Foreign.Ptr
 import Foreign.C.Types
 import Foreign.C.String
+import Foreign.ForeignPtr
 
 import Database.TokyoCabinet.List.C
+
+data Map k v = Map { unMap :: !(ForeignPtr MAP) }
 
 data MAP
 
