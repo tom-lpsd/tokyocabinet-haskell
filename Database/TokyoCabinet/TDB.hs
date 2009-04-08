@@ -101,19 +101,19 @@ close tdb = withForeignPtr (unTCTDB tdb) c_tctdbclose
 
 type FunPut' = Ptr TDB' -> Ptr Word8 -> CInt -> Ptr MAP -> IO Bool
 putHelper' :: (Storable k, Storable v, Associative m) =>
-              FunPut' -> TDB -> k -> m k v -> IO Bool
+              FunPut' -> TDB -> v -> m k v -> IO Bool
 putHelper' c_putfunc tdb key vals =
     withForeignPtr (unTCTDB tdb) $ \tdb' ->
         withPtrLen key $ \(kbuf, ksize) ->
             withMap vals $ c_putfunc tdb' kbuf ksize
 
-put :: (Storable k, Storable v, Associative m) => TDB -> k -> m k v -> IO Bool
+put :: (Storable k, Storable v, Associative m) => TDB -> v -> m k v -> IO Bool
 put = putHelper' c_tctdbput
 
-putkeep :: (Storable k, Storable v, Associative m) => TDB -> k -> m k v -> IO Bool
+putkeep :: (Storable k, Storable v, Associative m) => TDB -> v -> m k v -> IO Bool
 putkeep = putHelper' c_tctdbputkeep
 
-putcat :: (Storable k, Storable v, Associative m) => TDB -> k -> m k v -> IO Bool
+putcat :: (Storable k, Storable v, Associative m) => TDB -> v -> m k v -> IO Bool
 putcat = putHelper' c_tctdbputcat
 
 out :: (Storable k) => TDB -> k -> IO Bool
