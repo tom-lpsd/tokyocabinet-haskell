@@ -29,6 +29,7 @@ type FunOut  p = Ptr p -> Ptr Word8 -> CInt -> IO Bool
 type FunAdd  p n = Ptr p -> Ptr Word8 -> CInt -> n -> IO n
 type FunFwm  p = Ptr p -> Ptr Word8 -> CInt -> CInt -> IO (Ptr LIST)
 type FunVsiz p =  Ptr p -> Ptr Word8 -> CInt -> IO CInt
+type FunIterNext p = Ptr p -> Ptr CInt -> IO (Ptr Word8)
 
 openHelper :: FunOpen p c_mode -> UnLifter tcdb p
            -> Combiner mode c_mode -> tcdb -> String -> [mode] -> IO Bool
@@ -112,3 +113,13 @@ vsizHelper c_vsiz unlifter tcdb key =
           return $ if vsize == -1
                      then Nothing
                      else Just (fromIntegral vsize)
+
+iternextHelper :: (Storable k) =>
+                  FunIterNext p -> UnLifter tcdb p -> tcdb -> IO (Maybe k)
+iternextHelper c_iternext unlifter tcdb =
+    withForeignPtr (unlifter tcdb) $ \p ->
+        alloca $ \sizbuf -> do
+            vbuf <- c_iternext p sizbuf
+            flip maybePeek vbuf $ \vp ->
+                do siz <- peek sizbuf
+                   peekPtrLen (vp, siz)

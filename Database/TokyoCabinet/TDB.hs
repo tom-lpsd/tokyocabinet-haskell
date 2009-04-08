@@ -40,6 +40,7 @@ module Database.TokyoCabinet.TDB
     , genuid
     ) where
 
+import Database.TokyoCabinet.Map.C
 import Database.TokyoCabinet.TDB.C
 import Database.TokyoCabinet.Error
 import Database.TokyoCabinet.Internal
@@ -49,7 +50,10 @@ import Database.TokyoCabinet.Associative
 import Data.Int
 import Data.Word
 
+import Foreign.Ptr
 import Foreign.ForeignPtr
+import Foreign.C.Types
+import Foreign.C.String
 
 data TDB = TDB { unTCTDB :: !(ForeignPtr TDB') }
 
@@ -62,14 +66,32 @@ delete tdb = finalizeForeignPtr (unTCTDB tdb)
 ecode :: TDB -> IO ECODE
 ecode tdb = cintToError `fmap` withForeignPtr (unTCTDB tdb) c_tctdbecode
 
-tune :: TDB -> Int64 -> Int8 -> Int8 -> [TuningOption] -> IO Bool
-tune = undefined
+-- | Set the tuning parameters.
+tune :: TDB   -- ^ TDB object
+     -> Int64 -- ^ the number of elements of the bucket array
+     -> Int8  -- ^ the size of record alignment by power of 2
+     -> Int8  -- ^ the maximum number of elements of the free block pool by power of 2
+     -> [TuningOption] -- ^ options
+     -> IO Bool -- ^ if successful, the return value is True.
+tune tdb bnum apow fpow opts =
+    withForeignPtr (unTCTDB tdb) $ \tdb' ->
+        c_tctdbtune tdb' bnum apow fpow (combineTuningOption opts)
 
-setcache :: TDB -> Int32 -> Int32 -> Int32 -> IO Bool
-setcache = undefined
+-- | Set the caching parameters of a table database object.
+setcache :: TDB   -- ^ TDB object
+         -> Int32 -- ^ the maximum number of records to be cached
+         -> Int32 -- ^ the maximum number of leaf nodes to be cached
+         -> Int32 -- ^ the maximum number of non-leaf nodes to be cached
+         -> IO Bool -- ^ if successful, the return value is True.
+setcache tdb rcnum lcnum ncnum =
+    withForeignPtr (unTCTDB tdb) $ \tdb' ->
+        c_tctdbsetcache tdb' rcnum lcnum ncnum
 
-setxmsiz :: TDB -> Int64 -> IO Bool
-setxmsiz = undefined
+-- | Set the size of the extra mapped memory of a table database object.
+setxmsiz :: TDB     -- ^ TDB object
+         -> Int64   -- ^ the size of the extra mapped memory
+         -> IO Bool -- ^ if successful, the return value is True.
+setxmsiz tdb xmsiz = withForeignPtr (unTCTDB tdb) (flip c_tctdbsetxmsiz xmsiz)
 
 open :: TDB -> String -> [OpenMode] -> IO Bool
 open = openHelper c_tctdbopen unTCTDB combineOpenMode
@@ -77,17 +99,22 @@ open = openHelper c_tctdbopen unTCTDB combineOpenMode
 close :: TDB -> IO Bool
 close tdb = withForeignPtr (unTCTDB tdb) c_tctdbclose
 
-put :: (Storable k, Storable v, Associative m) => TDB -> k -> m k v -> IO Bool
-put tdb key vals =
+type FunPut' = Ptr TDB' -> Ptr Word8 -> CInt -> Ptr MAP -> IO Bool
+putHelper' :: (Storable k, Storable v, Associative m) =>
+              FunPut' -> TDB -> k -> m k v -> IO Bool
+putHelper' c_putfunc tdb key vals =
     withForeignPtr (unTCTDB tdb) $ \tdb' ->
         withPtrLen key $ \(kbuf, ksize) ->
-            withMap vals $ c_tctdbput tdb' kbuf ksize
+            withMap vals $ c_putfunc tdb' kbuf ksize
+
+put :: (Storable k, Storable v, Associative m) => TDB -> k -> m k v -> IO Bool
+put = putHelper' c_tctdbput
 
 putkeep :: (Storable k, Storable v, Associative m) => TDB -> k -> m k v -> IO Bool
-putkeep = undefined
+putkeep = putHelper' c_tctdbputkeep
 
 putcat :: (Storable k, Storable v, Associative m) => TDB -> k -> m k v -> IO Bool
-putcat = undefined
+putcat = putHelper' c_tctdbputcat
 
 out :: (Storable k) => TDB -> k -> IO Bool
 out = outHelper c_tctdbout unTCTDB
@@ -99,55 +126,67 @@ get tdb key =
             c_tctdbget tdb' kbuf ksize >>= peekMap'
 
 vsiz :: (Storable k) => TDB -> k -> IO (Maybe Int)
-vsiz = undefined
+vsiz = vsizHelper c_tctdbvsiz unTCTDB
 
 iterinit :: TDB -> IO Bool
-iterinit = undefined
+iterinit tdb = withForeignPtr (unTCTDB tdb) c_tctdbiterinit
 
 iternext :: (Storable k) => TDB -> IO (Maybe k)
-iternext = undefined
+iternext = iternextHelper c_tctdbiternext unTCTDB
 
 fwmkeys :: (Storable k1, Storable k2) => TDB -> k1 -> Int -> IO [k2]
-fwmkeys = undefined
+fwmkeys = fwmHelper c_tctdbfwmkeys unTCTDB
 
 addint :: (Storable k) => TDB -> k -> Int -> IO (Maybe Int)
-addint = undefined
+addint = addHelper c_tctdbaddint unTCTDB fromIntegral fromIntegral (== cINT_MIN)
 
 adddouble :: (Storable k) => TDB -> k -> Double -> IO (Maybe Double)
-adddouble = undefined
+adddouble = addHelper c_tctdbadddouble unTCTDB realToFrac realToFrac isNaN
 
 sync :: TDB -> IO Bool
-sync = undefined
+sync tdb = withForeignPtr (unTCTDB tdb) c_tctdbsync
 
-optimize :: TDB -> Int64 -> Int8 -> Int8 -> [TuningOption] -> IO Bool
-optimize = undefined
+optimize :: TDB   -- ^ TDB object                                                         
+         -> Int64 -- ^ the number of elements of the bucket array                         
+         -> Int8  -- ^ the size of record alignment by power of 2                         
+         -> Int8  -- ^ the maximum number of elements of the free block pool by power of 2
+         -> [TuningOption] -- ^ options
+         -> IO Bool -- ^ if successful, the return value is True.
+optimize tdb bnum apow fpow opts =
+    withForeignPtr (unTCTDB tdb) $ \tdb' ->
+        c_tctdboptimize tdb' bnum apow fpow (combineTuningOption opts)
 
 vanish :: TDB -> IO Bool
-vanish = undefined
+vanish tdb = withForeignPtr (unTCTDB tdb) c_tctdbvanish
 
 copy :: TDB -> String -> IO Bool
-copy = undefined
+copy = copyHelper c_tctdbcopy unTCTDB
 
 tranbegin :: TDB -> IO Bool
-tranbegin = undefined
+tranbegin tdb = withForeignPtr (unTCTDB tdb) c_tctdbtranbegin
 
 trancommit :: TDB -> IO Bool
-trancommit = undefined
+trancommit tdb = withForeignPtr (unTCTDB tdb) c_tctdbtrancommit
 
 tranabort :: TDB -> IO Bool
-tranabort = undefined
+tranabort tdb = withForeignPtr (unTCTDB tdb) c_tctdbtranabort
 
-path :: TDB -> IO String
-path = undefined
+path :: TDB -> IO (Maybe String)
+path = pathHelper c_tctdbpath unTCTDB
 
 rnum :: TDB -> IO Word64
-rnum = undefined
+rnum tdb = withForeignPtr (unTCTDB tdb) c_tctdbrnum
 
 fsiz :: TDB -> IO Word64
-fsiz = undefined
+fsiz tdb = withForeignPtr (unTCTDB tdb) c_tctdbfsiz
 
 setindex :: TDB -> String -> IndexType -> IO Bool
-setindex = undefined
+setindex tdb name itype =
+    withForeignPtr (unTCTDB tdb) $ \tdb' ->
+        withCString name $ \c_name ->
+            c_tctdbsetindex tdb' c_name (indexTypeToCInt itype)
 
-genuid :: TDB -> IO Int64
-genuid = undefined
+genuid :: TDB -> IO (Maybe Int64)
+genuid tdb = withForeignPtr (unTCTDB tdb) $ \tdb' -> do
+               uid <- c_tctdbgenuid tdb'
+               return $ if uid == (-1) then Nothing else Just uid

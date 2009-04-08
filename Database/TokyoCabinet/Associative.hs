@@ -23,6 +23,7 @@ instance Associative AssocList where
            result <- withForeignPtr (unMap m) action
            delete m
            return result
+    peekMap' ptr | ptr == nullPtr = return (AssocList [])
     peekMap' ptr = do m <- Map `fmap` newForeignPtr tcmapFinalizer ptr
                       iterinit m
                       AssocList `fmap` accumulate m []

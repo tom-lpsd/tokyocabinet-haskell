@@ -43,10 +43,8 @@ module Database.TokyoCabinet.HDB
     )
     where
 
-import Foreign.Storable (peek)
+
 import Foreign.ForeignPtr
-import Foreign.Marshal (alloca)
-import Foreign.Marshal.Utils (maybePeek)
 
 import Data.Int
 import Data.Word
@@ -187,13 +185,7 @@ iterinit hdb = withForeignPtr (unTCHDB hdb) c_tchdbiterinit
 
 -- | Return the next key of the iterator of a HDB object.
 iternext :: (Storable k) => HDB -> IO (Maybe k)
-iternext hdb =
-    withForeignPtr (unTCHDB hdb) $ \p ->
-        alloca $ \sizbuf -> do
-            vbuf <- c_tchdbiternext p sizbuf
-            flip maybePeek vbuf $ \vp ->
-                do siz <- peek sizbuf
-                   peekPtrLen (vp, siz)
+iternext = iternextHelper c_tchdbiternext unTCHDB
 
 -- | Return list of forward matched keys.
 fwmkeys :: (Storable k1, Storable k2, Sequence q) =>
