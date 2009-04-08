@@ -103,4 +103,4 @@ foreign import ccall safe "tcmapdump"
   c_tcmapdump :: Ptr MAP -> Ptr CInt -> IO (Ptr Word8)
 
 foreign import ccall safe "tcmapload"
-  c_tcmapload :: Ptr Word8 -> Ptr CInt -> IO (Ptr MAP)
+  c_tcmapload :: Ptr Word8 -> CInt -> IO (Ptr MAP)
