@@ -33,3 +33,7 @@ instance Associative AssocList where
                                   Just k -> do (Just v) <- get m k
                                                ((k, v):) `fmap` accumulate m acc
                                   _ -> return acc
+
+instance Associative Map where
+    withMap m action = withForeignPtr (unMap m) action
+    peekMap' ptr = Map `fmap` newForeignPtr tcmapFinalizer ptr
