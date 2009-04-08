@@ -36,4 +36,5 @@ instance Associative AssocList where
 
 instance Associative Map where
     withMap m action = withForeignPtr (unMap m) action
+    peekMap' ptr | ptr == nullPtr = new
     peekMap' ptr = Map `fmap` newForeignPtr tcmapFinalizer ptr
