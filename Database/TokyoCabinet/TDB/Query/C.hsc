@@ -4,9 +4,11 @@ module Database.TokyoCabinet.TDB.Query.C where
 import Data.Word
 
 import Foreign.Ptr
+import Foreign.ForeignPtr
 import Foreign.C.Types
 import Foreign.C.String
 
+import Database.TokyoCabinet.TDB.C
 import Database.TokyoCabinet.Map.C
 import Database.TokyoCabinet.List.C
 
@@ -75,10 +77,13 @@ ptToCInt QPPUT  = #const TDBQPPUT
 ptToCInt QPOUT  = #const TDBQPOUT
 ptToCInt QPSTOP = #const TDBQPSTOP
 
+data TDBQRY = TDBQRY { unTDBQRY :: !(ForeignPtr QRY)
+                     , unTDBOBJ :: TDB }
+
 data QRY
 
 foreign import ccall safe "tctdbqrynew"
-  c_tctdbqrynew :: IO (Ptr QRY)
+  c_tctdbqrynew :: Ptr TDB' -> IO (Ptr QRY)
 
 foreign import ccall safe "tctdbqrydel"
   c_tctdbqrydel :: Ptr QRY -> IO ()

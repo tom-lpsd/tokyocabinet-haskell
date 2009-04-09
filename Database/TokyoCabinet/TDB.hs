@@ -55,8 +55,6 @@ import Foreign.ForeignPtr
 import Foreign.C.Types
 import Foreign.C.String
 
-data TDB = TDB { unTCTDB :: !(ForeignPtr TDB') }
-
 new :: IO TDB
 new = TDB `fmap` (c_tctdbnew >>= newForeignPtr tctdbFinalizer)
 

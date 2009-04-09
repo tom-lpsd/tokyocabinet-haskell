@@ -40,6 +40,7 @@ Library
     Database.TokyoCabinet.FDB.Key
     Database.TokyoCabinet.TDB
     Database.TokyoCabinet.TDB.C
+    Database.TokyoCabinet.TDB.Query
     Database.TokyoCabinet.TDB.Query.C
     Database.TokyoCabinet.Error
     Database.TokyoCabinet.Map

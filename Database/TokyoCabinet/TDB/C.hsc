@@ -6,6 +6,7 @@ import Data.Word
 import Data.Bits
 
 import Foreign.Ptr
+import Foreign.ForeignPtr
 import Foreign.C.Types
 import Foreign.C.String
 
@@ -68,6 +69,8 @@ combineOpenMode = foldr ((.|.) . openModeToCInt) 0
 
 combineTuningOption :: [TuningOption] -> Word8
 combineTuningOption = foldr ((.|.) . tuningOptionToWord8) 0
+
+data TDB = TDB { unTCTDB :: !(ForeignPtr TDB') }
 
 data TDB'
 
