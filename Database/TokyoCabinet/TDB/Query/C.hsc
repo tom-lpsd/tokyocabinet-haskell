@@ -44,6 +44,7 @@ data OrderType =
 data PostTreatment =
     QPPUT  |
     QPOUT  |
+    QPNOP  |
     QPSTOP
     deriving (Eq, Ord, Show)
 
@@ -73,6 +74,7 @@ orderToCInt QONUMASC  = #const TDBQONUMASC
 orderToCInt QONUMDESC = #const TDBQONUMDESC
 
 ptToCInt :: PostTreatment -> CInt
+ptToCInt QPNOP  = 0
 ptToCInt QPPUT  = #const TDBQPPUT
 ptToCInt QPOUT  = #const TDBQPOUT
 ptToCInt QPSTOP = #const TDBQPSTOP
@@ -106,11 +108,16 @@ foreign import ccall safe "tctdbqrysearch"
 foreign import ccall safe "tctdbqrysearchout"
   c_tctdbqrysearchout :: Ptr QRY -> IO Bool
 
+foreign import ccall safe "tctdbqryhint"
+  c_tctdbqryhint :: Ptr QRY -> IO CString
+
+type TDBQRYPROC' = Ptr Word8 -> CInt -> Ptr MAP -> Ptr Word8 -> IO CInt
+
 foreign import ccall safe "tctdbqryproc"
   c_tctdbqryproc :: Ptr QRY
-                 -> FunPtr (Ptr Word8 -> CInt -> Ptr MAP -> Ptr Word8)
+                 -> FunPtr TDBQRYPROC'
                  -> Ptr Word8
                  -> IO Bool
 
-foreign import ccall safe "tctdbqryhint"
-  c_tctdbqryhint :: Ptr QRY -> IO CString
+foreign import ccall "wrapper"
+  mkProc :: TDBQRYPROC' -> IO (FunPtr TDBQRYPROC')

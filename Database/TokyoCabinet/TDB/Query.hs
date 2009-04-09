@@ -11,6 +11,7 @@ module Database.TokyoCabinet.TDB.Query
     , search
     , searchout
     , hint
+    , proc
     ) where
 
 import Data.Word
@@ -19,10 +20,14 @@ import Foreign.C.String
 
 import Foreign.Ptr
 import Foreign.ForeignPtr
-import Foreign.Storable (pokeByteOff)
+import Foreign.Storable (pokeByteOff, peek)
+import Foreign.Marshal (mallocBytes, alloca)
+import Foreign.Marshal.Utils (copyBytes)
 
 import Database.TokyoCabinet.Storable
 import Database.TokyoCabinet.Sequence
+import Database.TokyoCabinet.Associative
+import Database.TokyoCabinet.Map.C
 import Database.TokyoCabinet.TDB.C
 import Database.TokyoCabinet.TDB.Query.C
 
@@ -63,3 +68,41 @@ searchout qry = withForeignPtr (unTDBQRY qry) c_tctdbqrysearchout
 
 hint :: TDBQRY -> IO String
 hint qry = withForeignPtr (unTDBQRY qry) $ \qry' -> c_tctdbqryhint qry' >>= peekCString
+
+proc :: (Storable k, Storable v, Associative m) =>
+        TDBQRY -> (v -> m k v -> IO (Maybe (m k v), PostTreatment)) -> IO Bool
+proc qry proc' =
+    withForeignPtr (unTDBQRY qry) $ \qry' ->
+        do proc''' <- mkProc proc''
+           c_tctdbqryproc qry' proc''' nullPtr
+    where
+      proc'' :: TDBQRYPROC'
+      proc'' pkbuf pksiz m _ = do
+        buf <- mallocBytes (fromIntegral pksiz)
+        copyBytes buf pkbuf (fromIntegral pksiz)
+        pkey <- peekPtrLen (buf, fromIntegral pksiz)
+        m' <- c_tcmapdup m
+        m'' <- peekMap' m'
+        (nm, pt) <- proc' pkey m''
+        case nm of
+          Nothing -> return ()
+          Just nm' -> withMap nm' $ \nm'' ->
+                      do c_tcmapclear m
+                         c_tcmapiterinit nm''
+                         alloca $ \buf' ->
+                             alloca $ \buf'' -> do
+                                 k <- c_tcmapiternext nm'' buf'
+                                 ksiz <- peek buf'
+                                 v <- c_tcmapget nm'' k ksiz buf''
+                                 vsiz <- peek buf''
+                                 c_tcmapput m k ksiz v vsiz                  
+        return $ ptToCInt pt
+
+
+{-
+proc :: TDBQRY -> TDBQRYPROC' -> IO Bool
+proc qry proc' =
+    withForeignPtr (unTDBQRY qry) $ \qry' ->
+        do proc'' <- mkProc proc'
+           c_tctdbqryproc qry' proc'' nullPtr
+-}
