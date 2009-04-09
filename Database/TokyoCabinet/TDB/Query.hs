@@ -70,39 +70,38 @@ hint :: TDBQRY -> IO String
 hint qry = withForeignPtr (unTDBQRY qry) $ \qry' -> c_tctdbqryhint qry' >>= peekCString
 
 proc :: (Storable k, Storable v, Associative m) =>
-        TDBQRY -> (v -> m k v -> IO (Maybe (m k v), PostTreatment)) -> IO Bool
-proc qry proc' =
+        TDBQRY -> (v -> m k v -> IO (PostTreatment m k v)) -> IO Bool
+proc qry callback =
     withForeignPtr (unTDBQRY qry) $ \qry' ->
-        do proc''' <- mkProc proc''
-           c_tctdbqryproc qry' proc''' nullPtr
+        do cb <- mkProc proc'
+           c_tctdbqryproc qry' cb nullPtr
     where
-      proc'' :: TDBQRYPROC'
-      proc'' pkbuf pksiz m _ = do
-        buf <- mallocBytes (fromIntegral pksiz)
-        copyBytes buf pkbuf (fromIntegral pksiz)
-        pkey <- peekPtrLen (buf, fromIntegral pksiz)
-        m' <- c_tcmapdup m
-        m'' <- peekMap' m'
-        (nm, pt) <- proc' pkey m''
-        case nm of
-          Nothing -> return ()
-          Just nm' -> withMap nm' $ \nm'' ->
-                      do c_tcmapclear m
-                         c_tcmapiterinit nm''
-                         alloca $ \buf' ->
-                             alloca $ \buf'' -> do
-                                 k <- c_tcmapiternext nm'' buf'
-                                 ksiz <- peek buf'
-                                 v <- c_tcmapget nm'' k ksiz buf''
-                                 vsiz <- peek buf''
-                                 c_tcmapput m k ksiz v vsiz                  
-        return $ ptToCInt pt
+      proc' :: TDBQRYPROC'
+      proc' pkbuf pksiz m _ = do
+        let siz = fromIntegral pksiz
+        pbuf <- mallocBytes siz
+        copyBytes pbuf pkbuf siz
+        pkey <- peekPtrLen (pbuf, pksiz)
+        pt <- c_tcmapdup m >>= peekMap' >>= callback pkey
+        case pt of
+          QPPUT m' -> withMap m' (flip copyMap m)
+          _ -> return ()
+        return (ptToCInt pt)
 
+      copyMap :: Ptr MAP -> Ptr MAP -> IO ()
+      copyMap msrc mdist =
+          do c_tcmapclear mdist
+             c_tcmapiterinit msrc
+             storeKeyValue msrc mdist
 
-{-
-proc :: TDBQRY -> TDBQRYPROC' -> IO Bool
-proc qry proc' =
-    withForeignPtr (unTDBQRY qry) $ \qry' ->
-        do proc'' <- mkProc proc'
-           c_tctdbqryproc qry' proc'' nullPtr
--}
+      storeKeyValue :: Ptr MAP -> Ptr MAP -> IO ()
+      storeKeyValue msrc mdist =
+          alloca $ \sizbuf -> do
+              kbuf <- c_tcmapiternext msrc sizbuf
+              if kbuf == nullPtr
+                then return ()
+                else do ksiz <- peek sizbuf
+                        vbuf <- c_tcmapget msrc kbuf ksiz sizbuf
+                        vsiz <- peek sizbuf
+                        c_tcmapput mdist kbuf ksiz vbuf vsiz
+                        storeKeyValue msrc mdist

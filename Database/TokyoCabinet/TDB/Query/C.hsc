@@ -41,8 +41,8 @@ data OrderType =
     QONUMDESC
     deriving (Eq, Ord, Show)
 
-data PostTreatment =
-    QPPUT  |
+data PostTreatment m k v =
+    QPPUT (m k v) |
     QPOUT  |
     QPNOP  |
     QPSTOP
@@ -73,11 +73,11 @@ orderToCInt QOSTRDESC = #const TDBQOSTRDESC
 orderToCInt QONUMASC  = #const TDBQONUMASC
 orderToCInt QONUMDESC = #const TDBQONUMDESC
 
-ptToCInt :: PostTreatment -> CInt
+ptToCInt :: PostTreatment m k v -> CInt
 ptToCInt QPNOP  = 0
-ptToCInt QPPUT  = #const TDBQPPUT
 ptToCInt QPOUT  = #const TDBQPOUT
 ptToCInt QPSTOP = #const TDBQPSTOP
+ptToCInt (QPPUT _) = #const TDBQPPUT
 
 data TDBQRY = TDBQRY { unTDBQRY :: !(ForeignPtr QRY)
                      , unTDBOBJ :: TDB }
