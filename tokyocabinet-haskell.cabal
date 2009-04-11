@@ -75,6 +75,22 @@ Executable ListTest
     Database.TokyoCabinet.List
     Database.TokyoCabinet.List.C
 
+Executable MapTest
+  if flag(BuildTest)
+    Buildable:            True
+  else
+    Buildable:            False
+  Main-Is:              tests/MapTest.hs
+  Extra-libraries:      tokyocabinet
+  Build-depends:        HUnit >= 1.2
+  GHC-Options:          -fhpc
+  Extensions:           CPP, ForeignFunctionInterface,
+                        EmptyDataDecls, TypeSynonymInstances
+  Other-modules:
+    Database.TokyoCabinet.Error
+    Database.TokyoCabinet.Map
+    Database.TokyoCabinet.Map.C
+
 Executable HDBTest
   if flag(BuildTest)
     Buildable:            True
