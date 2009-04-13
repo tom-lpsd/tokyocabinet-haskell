@@ -8,6 +8,7 @@ module Database.TokyoCabinet.BDB
     , ECODE(..)
     , OpenMode(..)
     , TuningOption(..)
+    , CMP(..)
     -- * Basic API (tokyocabinet.idl compliant)
     , new
     , delete
@@ -16,6 +17,7 @@ module Database.TokyoCabinet.BDB
     , tune
     , setcache
     , setxmsiz
+    , setcmpfunc
     , open
     , close
     , put
@@ -47,6 +49,8 @@ module Database.TokyoCabinet.BDB
 
 import Data.Int
 import Data.Word
+import Data.ByteString (ByteString)
+import Data.ByteString.Unsafe (unsafePackCStringLen)
 
 import Foreign.Ptr
 import Foreign.ForeignPtr
@@ -106,6 +110,12 @@ import Database.TokyoCabinet.Sequence
 -- @
 --
 
+data CMP = CMPLEXICAL |
+           CMPDECIMAL |
+           CMPINT32 |
+           CMPINT64 |
+           CMP (ByteString -> ByteString -> Ordering)
+
 -- | Create a B+ tree database object. 
 new :: IO BDB
 new = BDB `fmap` (c_tcbdbnew >>= newForeignPtr tcbdbFinalizer)
@@ -147,6 +157,30 @@ setcache bdb lcnum ncnum =
 setxmsiz :: BDB -> Int64 -> IO Bool
 setxmsiz bdb xmsiz =
     withForeignPtr (unTCBDB bdb) $ \bdb' -> c_tcbdbsetxmsiz bdb' xmsiz
+
+-- | Set the custom comparison function of a B+ tree database object.
+setcmpfunc :: BDB -> CMP -> IO Bool
+setcmpfunc bdb CMPLEXICAL =
+    withForeignPtr (unTCBDB bdb) $ flip c_tcbdbsetcmpfunc c_tccmplexical
+setcmpfunc bdb CMPDECIMAL =
+    withForeignPtr (unTCBDB bdb) $ flip c_tcbdbsetcmpfunc c_tccmpdecimal
+setcmpfunc bdb CMPINT32 =
+    withForeignPtr (unTCBDB bdb) $ flip c_tcbdbsetcmpfunc c_tccmpint32
+setcmpfunc bdb CMPINT64 =
+    withForeignPtr (unTCBDB bdb) $ flip c_tcbdbsetcmpfunc c_tccmpint64
+setcmpfunc bdb (CMP func) =
+    withForeignPtr (unTCBDB bdb) $ \bdb' ->
+        do cmpfunc <- mkCMP mycmpfunc
+           c_tcbdbsetcmpfunc bdb' cmpfunc
+        where
+          mycmpfunc :: TCCMP'
+          mycmpfunc k1buf k1siz k2buf k2siz _ =
+              do key1 <- unsafePackCStringLen (k1buf, fromIntegral k1siz)
+                 key2 <- unsafePackCStringLen (k2buf, fromIntegral k2siz)
+                 case func key1 key2 of
+                   LT -> return (-1)
+                   EQ -> return 0
+                   GT -> return 1
 
 -- | Open BDB database file.
 open :: BDB -> String -> [OpenMode] -> IO Bool

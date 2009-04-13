@@ -57,7 +57,7 @@ tuningOptionToWord8 TEXCODEC = #const BDBTEXCODEC
 combineTuningOption :: [TuningOption] -> Word8
 combineTuningOption = foldr ((.|.) . tuningOptionToWord8) 0
 
-type TCCMP = Ptr CChar -> CInt -> Ptr CChar -> CInt -> Ptr Word8 -> CInt
+type TCCMP' = Ptr CChar -> CInt -> Ptr CChar -> CInt -> Ptr Word8 -> IO CInt
 
 data BDB'
 
@@ -77,7 +77,7 @@ foreign import ccall safe "tcbdbsetmutex"
   c_tcbdbsetmutex :: Ptr BDB' -> IO Bool
 
 foreign import ccall safe "tcbdbsetcmpfunc"
-  c_tcbdbsetcmpfunc :: Ptr BDB' -> FunPtr TCCMP -> IO Bool
+  c_tcbdbsetcmpfunc :: Ptr BDB' -> FunPtr TCCMP' -> IO Bool
 
 foreign import ccall safe "tcbdbtune"
   c_tcbdbtune ::
@@ -209,3 +209,18 @@ foreign import ccall safe "tcbdbrnum"
 
 foreign import ccall safe "tcbdbfsiz"
   c_tcbdbfsiz :: Ptr BDB' -> IO Word64
+
+foreign import ccall safe "tcutil.h &tccmplexical"
+  c_tccmplexical :: FunPtr TCCMP'
+
+foreign import ccall safe "tcutil.h &tccmpdecimal"
+  c_tccmpdecimal :: FunPtr TCCMP'
+
+foreign import ccall safe "tcutil.h &tccmpint32"
+  c_tccmpint32 :: FunPtr TCCMP'
+
+foreign import ccall safe "tcutil.h &tccmpint64"
+  c_tccmpint64 :: FunPtr TCCMP'
+
+foreign import ccall "wrapper"
+  mkCMP :: TCCMP' -> IO (FunPtr TCCMP')
