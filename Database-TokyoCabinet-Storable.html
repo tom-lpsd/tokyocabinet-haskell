@@ -21,7 +21,7 @@
 ><IMG SRC="haskell_icon.gif" WIDTH="16" HEIGHT="16" ALT=" "
 ></TD
 ><TD CLASS="title"
->tokyocabinet-haskell-0.0.1: Haskell binding of Tokyo Cabinet</TD
+>tokyocabinet-haskell-0.0.3: Haskell binding of Tokyo Cabinet</TD
 ><TD CLASS="topbut"
 ><A HREF="index.html"
 >Contents</A
@@ -70,15 +70,17 @@
 ><TD CLASS="decl"
 ><SPAN CLASS="keyword"
 >type</SPAN
-> <A NAME="t%3APtrLen"
+> <A NAME="t:PtrLen"
+><A NAME="t%3APtrLen"
+></A
 ></A
 ><B
 >PtrLen</B
-> = (<A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
+> = (<A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Foreign-Ptr.html#t%3APtr"
 >Ptr</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
 >Word8</A
->, <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+>, <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
 >CInt</A
 >)</TD
 ></TR
@@ -88,21 +90,23 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:liftPL"
 ><A NAME="v%3AliftPL"
+></A
 ></A
 ><B
 >liftPL</B
-> ::  (a -&gt; (<A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-String.html#t%3ACStringLen"
+> ::  (a -&gt; (<A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Foreign-C-String.html#t%3ACStringLen"
 >CStringLen</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> b) -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> b) -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > b) -&gt; a -&gt; (<A HREF="Database-TokyoCabinet-Storable.html#t%3APtrLen"
 >PtrLen</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> b) -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> b) -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > b</TD
 ></TR
@@ -114,11 +118,13 @@
 ><TD CLASS="decl"
 ><SPAN CLASS="keyword"
 >class</SPAN
-> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Text-Show.html#t%3AShow"
+> (<A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Text-Show.html#t%3AShow"
 >Show</A
-> a, <A HREF="/usr/local/share/doc/ghc/libraries/base/Text-Read.html#t%3ARead"
+> a, <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Text-Read.html#t%3ARead"
 >Read</A
-> a) =&gt; <A NAME="t%3AStorable"
+> a) =&gt; <A NAME="t:Storable"
+><A NAME="t%3AStorable"
+></A
 ></A
 ><B
 >Storable</B
@@ -142,15 +148,17 @@
 ><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:withPtrLen"
 ><A NAME="v%3AwithPtrLen"
+></A
 ></A
 ><B
 >withPtrLen</B
 > ::  a -&gt; (<A HREF="Database-TokyoCabinet-Storable.html#t%3APtrLen"
 >PtrLen</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> b) -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> b) -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > b</TD
 ></TR
@@ -160,15 +168,17 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:withPtrLenL"
 ><A NAME="v%3AwithPtrLenL"
+></A
 ></A
 ><B
 >withPtrLenL</B
 > ::  [a] -&gt; (<A HREF="Database-TokyoCabinet-Storable.html#t%3APtrLen"
 >PtrLen</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> b) -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> b) -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > b</TD
 ></TR
@@ -178,13 +188,15 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:peekPtrLenL"
 ><A NAME="v%3ApeekPtrLenL"
+></A
 ></A
 ><B
 >peekPtrLenL</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3APtrLen"
 >PtrLen</A
-> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > [a]</TD
 ></TR
@@ -194,13 +206,15 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:peekPtrLen"
 ><A NAME="v%3ApeekPtrLen"
+></A
 ></A
 ><B
 >peekPtrLen</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3APtrLen"
 >PtrLen</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > a</TD
 ></TR
@@ -210,11 +224,13 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:toInt64"
 ><A NAME="v%3AtoInt64"
+></A
 ></A
 ><B
 >toInt64</B
-> :: a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+> :: a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
 >Int64</A
 ></TD
 ></TR
@@ -224,11 +240,13 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:toInt64L"
 ><A NAME="v%3AtoInt64L"
+></A
 ></A
 ><B
 >toInt64L</B
-> :: [a] -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+> :: [a] -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
 >Int64</A
 ></TD
 ></TR
@@ -238,11 +256,13 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:fromString"
 ><A NAME="v%3AfromString"
+></A
 ></A
 ><B
 >fromString</B
-> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+> :: <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
 >String</A
 > -&gt; a</TD
 ></TR
@@ -252,11 +272,13 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:fromStringL"
 ><A NAME="v%3AfromStringL"
+></A
 ></A
 ><B
 >fromStringL</B
-> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+> :: <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
 >String</A
 > -&gt; [a]</TD
 ></TR
@@ -280,7 +302,7 @@
 ><TD CLASS="decl"
 ><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AChar"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AChar"
 >Char</A
 ></TD
 ></TR
@@ -288,7 +310,7 @@
 ><TD CLASS="decl"
 ><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
 >Double</A
 ></TD
 ></TR
@@ -296,7 +318,7 @@
 ><TD CLASS="decl"
 ><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AFloat"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AFloat"
 >Float</A
 ></TD
 ></TR
@@ -304,7 +326,7 @@
 ><TD CLASS="decl"
 ><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
 ></TD
 ></TR
@@ -312,7 +334,7 @@
 ><TD CLASS="decl"
 ><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt8"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt8"
 >Int8</A
 ></TD
 ></TR
@@ -320,7 +342,7 @@
 ><TD CLASS="decl"
 ><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt16"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt16"
 >Int16</A
 ></TD
 ></TR
@@ -328,7 +350,7 @@
 ><TD CLASS="decl"
 ><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt32"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt32"
 >Int32</A
 ></TD
 ></TR
@@ -336,7 +358,7 @@
 ><TD CLASS="decl"
 ><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
 >Int64</A
 ></TD
 ></TR
@@ -344,7 +366,7 @@
 ><TD CLASS="decl"
 ><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord8"
 >Word8</A
 ></TD
 ></TR
@@ -352,7 +374,7 @@
 ><TD CLASS="decl"
 ><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord16"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord16"
 >Word16</A
 ></TD
 ></TR
@@ -360,7 +382,7 @@
 ><TD CLASS="decl"
 ><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord32"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord32"
 >Word32</A
 ></TD
 ></TR
@@ -368,7 +390,7 @@
 ><TD CLASS="decl"
 ><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord64"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord64"
 >Word64</A
 ></TD
 ></TR
@@ -376,7 +398,7 @@
 ><TD CLASS="decl"
 ><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACInt"
 >CInt</A
 ></TD
 ></TR
@@ -384,7 +406,7 @@
 ><TD CLASS="decl"
 ><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACFloat"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACFloat"
 >CFloat</A
 ></TD
 ></TR
@@ -392,7 +414,7 @@
 ><TD CLASS="decl"
 ><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACDouble"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Foreign-C-Types.html#t%3ACDouble"
 >CDouble</A
 ></TD
 ></TR
@@ -400,7 +422,7 @@
 ><TD CLASS="decl"
 ><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/bytestring/Data-ByteString-Lazy-Internal.html#t%3AByteString"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/bytestring/Data-ByteString-Lazy-Internal.html#t%3AByteString"
 >ByteString</A
 ></TD
 ></TR
@@ -408,13 +430,13 @@
 ><TD CLASS="decl"
 ><A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/bytestring/Data-ByteString-Internal.html#t%3AByteString"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/bytestring/Data-ByteString-Internal.html#t%3AByteString"
 >ByteString</A
 ></TD
 ></TR
 ><TR
 ><TD CLASS="decl"
->(<A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Storable.html#t%3AStorable"
+>(<A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Foreign-Storable.html#t%3AStorable"
 >Storable</A
 > a, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
@@ -435,17 +457,19 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:withPtrLenForFStorable"
 ><A NAME="v%3AwithPtrLenForFStorable"
+></A
 ></A
 ><B
 >withPtrLenForFStorable</B
-> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Storable.html#t%3AStorable"
+> :: <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Foreign-Storable.html#t%3AStorable"
 >Storable</A
 > a =&gt; a -&gt; (<A HREF="Database-TokyoCabinet-Storable.html#t%3APtrLen"
 >PtrLen</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> b) -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> b) -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > b</TD
 ></TR
@@ -455,15 +479,17 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:peekPtrLenForFStorable"
 ><A NAME="v%3ApeekPtrLenForFStorable"
+></A
 ></A
 ><B
 >peekPtrLenForFStorable</B
-> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Storable.html#t%3AStorable"
+> :: <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Foreign-Storable.html#t%3AStorable"
 >Storable</A
 > a =&gt; <A HREF="Database-TokyoCabinet-Storable.html#t%3APtrLen"
 >PtrLen</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > a</TD
 ></TR
@@ -473,17 +499,19 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:withPtrLenLForFStorable"
 ><A NAME="v%3AwithPtrLenLForFStorable"
+></A
 ></A
 ><B
 >withPtrLenLForFStorable</B
-> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Storable.html#t%3AStorable"
+> :: <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Foreign-Storable.html#t%3AStorable"
 >Storable</A
 > a =&gt; [a] -&gt; (<A HREF="Database-TokyoCabinet-Storable.html#t%3APtrLen"
 >PtrLen</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> b) -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> b) -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > b</TD
 ></TR
@@ -493,15 +521,17 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:peekPtrLenLForFStorable"
 ><A NAME="v%3ApeekPtrLenLForFStorable"
+></A
 ></A
 ><B
 >peekPtrLenLForFStorable</B
-> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/Foreign-Storable.html#t%3AStorable"
+> :: <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Foreign-Storable.html#t%3AStorable"
 >Storable</A
 > a =&gt; <A HREF="Database-TokyoCabinet-Storable.html#t%3APtrLen"
 >PtrLen</A
-> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > [a]</TD
 ></TR
@@ -513,7 +543,7 @@
 ><TD CLASS="botbar"
 >Produced by <A HREF="http://www.haskell.org/haddock/"
 >Haddock</A
-> version 2.4.1</TD
+> version 2.4.2</TD
 ></TR
 ></TABLE
 ></BODY

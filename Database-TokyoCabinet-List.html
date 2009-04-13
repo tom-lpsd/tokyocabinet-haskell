@@ -21,7 +21,7 @@
 ><IMG SRC="haskell_icon.gif" WIDTH="16" HEIGHT="16" ALT=" "
 ></TD
 ><TD CLASS="title"
->tokyocabinet-haskell-0.0.1: Haskell binding of Tokyo Cabinet</TD
+>tokyocabinet-haskell-0.0.3: Haskell binding of Tokyo Cabinet</TD
 ><TD CLASS="topbut"
 ><A HREF="index.html"
 >Contents</A
@@ -68,15 +68,17 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:new"
 ><A NAME="v%3Anew"
+></A
 ></A
 ><B
 >new</B
-> :: <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> ::  <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> <A HREF="Database-TokyoCabinet-List.html#t%3ATCList"
->TCList</A
-></TD
+> (<A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+> a)</TD
 ></TR
 ><TR
 ><TD CLASS="s15"
@@ -84,17 +86,19 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:new2"
 ><A NAME="v%3Anew2"
+></A
 ></A
 ><B
 >new2</B
-> :: <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+> ::  <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> <A HREF="Database-TokyoCabinet-List.html#t%3ATCList"
->TCList</A
-></TD
+> (<A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+> a)</TD
 ></TR
 ><TR
 ><TD CLASS="s15"
@@ -102,17 +106,19 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:copy"
 ><A NAME="v%3Acopy"
+></A
 ></A
 ><B
 >copy</B
-> :: <A HREF="Database-TokyoCabinet-List.html#t%3ATCList"
->TCList</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> ::  <A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+> a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> <A HREF="Database-TokyoCabinet-List.html#t%3ATCList"
->TCList</A
-></TD
+> (<A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+> a)</TD
 ></TR
 ><TR
 ><TD CLASS="s15"
@@ -120,15 +126,19 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:delete"
 ><A NAME="v%3Adelete"
+></A
 ></A
 ><B
 >delete</B
-> :: <A HREF="Database-TokyoCabinet-List.html#t%3ATCList"
->TCList</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> ::  <A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+> a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> ()</TD
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
 ></TR
 ><TR
 ><TD CLASS="s15"
@@ -136,15 +146,17 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:len"
 ><A NAME="v%3Alen"
+></A
 ></A
 ><B
 >len</B
-> :: <A HREF="Database-TokyoCabinet-List.html#t%3ATCList"
->TCList</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> ::  <A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+> a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
 ></TD
 ></TR
@@ -154,19 +166,21 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:get"
 ><A NAME="v%3Aget"
+></A
 ></A
 ><B
 >get</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a =&gt; <A HREF="Database-TokyoCabinet-List.html#t%3ATCList"
->TCList</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+> a =&gt; <A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+> a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+> (<A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
 >Maybe</A
 > a)</TD
 ></TR
@@ -176,17 +190,21 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:push"
 ><A NAME="v%3Apush"
+></A
 ></A
 ><B
 >push</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a =&gt; <A HREF="Database-TokyoCabinet-List.html#t%3ATCList"
->TCList</A
-> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> a =&gt; <A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+> a -&gt; a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> ()</TD
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
 ></TR
 ><TR
 ><TD CLASS="s15"
@@ -194,17 +212,19 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:pop"
 ><A NAME="v%3Apop"
+></A
 ></A
 ><B
 >pop</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a =&gt; <A HREF="Database-TokyoCabinet-List.html#t%3ATCList"
->TCList</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> a =&gt; <A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+> a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+> (<A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
 >Maybe</A
 > a)</TD
 ></TR
@@ -214,17 +234,21 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:unshift"
 ><A NAME="v%3Aunshift"
+></A
 ></A
 ><B
 >unshift</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a =&gt; <A HREF="Database-TokyoCabinet-List.html#t%3ATCList"
->TCList</A
-> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> a =&gt; <A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+> a -&gt; a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> ()</TD
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
 ></TR
 ><TR
 ><TD CLASS="s15"
@@ -232,17 +256,19 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:shift"
 ><A NAME="v%3Ashift"
+></A
 ></A
 ><B
 >shift</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a =&gt; <A HREF="Database-TokyoCabinet-List.html#t%3ATCList"
->TCList</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> a =&gt; <A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+> a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+> (<A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
 >Maybe</A
 > a)</TD
 ></TR
@@ -252,19 +278,23 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:insert"
 ><A NAME="v%3Ainsert"
+></A
 ></A
 ><B
 >insert</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a =&gt; <A HREF="Database-TokyoCabinet-List.html#t%3ATCList"
->TCList</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+> a =&gt; <A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+> a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
-> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> ()</TD
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
 ></TR
 ><TR
 ><TD CLASS="s15"
@@ -272,19 +302,21 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:remove"
 ><A NAME="v%3Aremove"
+></A
 ></A
 ><B
 >remove</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a =&gt; <A HREF="Database-TokyoCabinet-List.html#t%3ATCList"
->TCList</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+> a =&gt; <A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+> a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> (<A HREF="/usr/local/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
+> (<A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
 >Maybe</A
 > a)</TD
 ></TR
@@ -294,19 +326,23 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:over"
 ><A NAME="v%3Aover"
+></A
 ></A
 ><B
 >over</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a =&gt; <A HREF="Database-TokyoCabinet-List.html#t%3ATCList"
->TCList</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+> a =&gt; <A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+> a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
-> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> ()</TD
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
 ></TR
 ><TR
 ><TD CLASS="s15"
@@ -314,15 +350,19 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:sort"
 ><A NAME="v%3Asort"
+></A
 ></A
 ><B
 >sort</B
-> :: <A HREF="Database-TokyoCabinet-List.html#t%3ATCList"
->TCList</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> ::  <A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+> a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> ()</TD
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
 ></TR
 ><TR
 ><TD CLASS="s15"
@@ -330,17 +370,19 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:lsearch"
 ><A NAME="v%3Alsearch"
+></A
 ></A
 ><B
 >lsearch</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a =&gt; <A HREF="Database-TokyoCabinet-List.html#t%3ATCList"
->TCList</A
-> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> a =&gt; <A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+> a -&gt; a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
 ></TD
 ></TR
@@ -350,17 +392,19 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:bsearch"
 ><A NAME="v%3Absearch"
+></A
 ></A
 ><B
 >bsearch</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> a =&gt; <A HREF="Database-TokyoCabinet-List.html#t%3ATCList"
->TCList</A
-> -&gt; a -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> a =&gt; <A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+> a -&gt; a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
 ></TD
 ></TR
@@ -370,15 +414,19 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:clear"
 ><A NAME="v%3Aclear"
+></A
 ></A
 ><B
 >clear</B
-> :: <A HREF="Database-TokyoCabinet-List.html#t%3ATCList"
->TCList</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> ::  <A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+> a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> ()</TD
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Unit.html#t%3A%28%29"
+>()</A
+></TD
 ></TR
 ><TR
 ><TD CLASS="s15"
@@ -386,15 +434,17 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:dump"
 ><A NAME="v%3Adump"
+></A
 ></A
 ><B
 >dump</B
-> :: <A HREF="Database-TokyoCabinet-List.html#t%3ATCList"
->TCList</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> ::  <A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+> a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> <A HREF="/usr/local/share/doc/ghc/libraries/bytestring/Data-ByteString-Internal.html#t%3AByteString"
+> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/bytestring/Data-ByteString-Internal.html#t%3AByteString"
 >ByteString</A
 ></TD
 ></TR
@@ -404,17 +454,19 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
+><A NAME="v:load"
 ><A NAME="v%3Aload"
+></A
 ></A
 ><B
 >load</B
-> :: <A HREF="/usr/local/share/doc/ghc/libraries/bytestring/Data-ByteString-Internal.html#t%3AByteString"
+> ::  <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/bytestring/Data-ByteString-Internal.html#t%3AByteString"
 >ByteString</A
-> -&gt; <A HREF="/usr/local/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> <A HREF="Database-TokyoCabinet-List.html#t%3ATCList"
->TCList</A
-></TD
+> (<A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+> a)</TD
 ></TR
 ><TR
 ><TD CLASS="s15"
@@ -424,11 +476,40 @@
 ><TD CLASS="decl"
 ><SPAN CLASS="keyword"
 >data</SPAN
->  <A NAME="t%3ATCList"
+>  <A NAME="t:List"
+><A NAME="t%3AList"
+></A
 ></A
 ><B
->TCList</B
->  </TD
+>List</B
+> a </TD
+></TR
+><TR
+><TD CLASS="body"
+><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
+><TR
+><TD CLASS="section4"
+><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:List')" ALT="show/hide"
+> Instances</TD
+></TR
+><TR
+><TD CLASS="body"
+><DIV ID="i:List" STYLE="display:block;"
+><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
+><TR
+><TD CLASS="decl"
+><A HREF="Database-TokyoCabinet-Sequence.html#t%3ASequence"
+>Sequence</A
+> <A HREF="Database-TokyoCabinet-List.html#t%3AList"
+>List</A
+></TD
+></TR
+></TABLE
+></DIV
+></TD
+></TR
+></TABLE
+></TD
 ></TR
 ><TR
 ><TD CLASS="s15"
@@ -438,7 +519,7 @@
 ><TD CLASS="botbar"
 >Produced by <A HREF="http://www.haskell.org/haddock/"
 >Haddock</A
-> version 2.4.1</TD
+> version 2.4.2</TD
 ></TR
 ></TABLE
 ></BODY
