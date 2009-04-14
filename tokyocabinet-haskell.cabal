@@ -84,7 +84,6 @@ Executable MapTest
   Main-Is:              tests/MapTest.hs
   Extra-libraries:      tokyocabinet
   Build-depends:        HUnit >= 1.2
-  GHC-Options:          -fhpc
   Extensions:           CPP, ForeignFunctionInterface,
                         EmptyDataDecls, TypeSynonymInstances
   Other-modules:
@@ -149,6 +148,27 @@ Executable FDBTest
     Database.TokyoCabinet.List
     Database.TokyoCabinet.List.C
     Database.TokyoCabinet.Storable
+
+Executable TDBTest
+  if flag(BuildTest)
+    Buildable:            True
+  else
+    Buildable:            False
+  Main-Is:              tests/TDBTest.hs
+  Extra-libraries:      tokyocabinet
+  Build-depends:        HUnit >= 1.2
+  Extensions:           CPP, ForeignFunctionInterface,
+                        EmptyDataDecls, TypeSynonymInstances
+  Other-modules:
+    Database.TokyoCabinet.TDB
+    Database.TokyoCabinet.TDB.C
+    Database.TokyoCabinet.Error
+    Database.TokyoCabinet.Map
+    Database.TokyoCabinet.Map.C
+    Database.TokyoCabinet.List
+    Database.TokyoCabinet.List.C
+    Database.TokyoCabinet.Storable
+    Database.TokyoCabinet.Associative
 
 Executable ADBTest
   if flag(BuildTest)
