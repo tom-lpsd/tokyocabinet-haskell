@@ -171,6 +171,29 @@ Executable TDBTest
     Database.TokyoCabinet.Storable
     Database.TokyoCabinet.Associative
 
+Executable TDBQRYTest
+  if flag(BuildTest)
+    Buildable:            True
+  else
+    Buildable:            False
+  Main-Is:              tests/TDBQRYTest.hs
+  Extra-libraries:      tokyocabinet
+  Build-depends:        HUnit >= 1.2
+  Extensions:           CPP, ForeignFunctionInterface,
+                        EmptyDataDecls, TypeSynonymInstances
+  Other-modules:
+    Database.TokyoCabinet.TDB
+    Database.TokyoCabinet.TDB.C
+    Database.TokyoCabinet.TDB.Query
+    Database.TokyoCabinet.TDB.Query.C
+    Database.TokyoCabinet.Error
+    Database.TokyoCabinet.Map
+    Database.TokyoCabinet.Map.C
+    Database.TokyoCabinet.List
+    Database.TokyoCabinet.List.C
+    Database.TokyoCabinet.Storable
+    Database.TokyoCabinet.Associative
+
 Executable ADBTest
   if flag(BuildTest)
     Buildable:            True

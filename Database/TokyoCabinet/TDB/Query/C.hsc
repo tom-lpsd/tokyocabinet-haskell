@@ -2,6 +2,7 @@
 module Database.TokyoCabinet.TDB.Query.C where
 
 import Data.Word
+import Data.Bits
 
 import Foreign.Ptr
 import Foreign.ForeignPtr
@@ -30,8 +31,8 @@ data Condition =
     QCNUMLE   |
     QCNUMBT   |
     QCNUMOREQ |
-    QCNEGATE  |
-    QCNOIDX
+    QCNEGATE Condition |
+    QCNOIDX  Condition
     deriving (Eq, Ord, Show)
 
 data OrderType =
@@ -64,8 +65,8 @@ condToCInt QCNUMLT   = #const TDBQCNUMLT
 condToCInt QCNUMLE   = #const TDBQCNUMLE
 condToCInt QCNUMBT   = #const TDBQCNUMBT
 condToCInt QCNUMOREQ = #const TDBQCNUMOREQ
-condToCInt QCNEGATE  = #const TDBQCNEGATE
-condToCInt QCNOIDX   = #const TDBQCNOIDX
+condToCInt (QCNEGATE c) = (#const TDBQCNEGATE) .|. (condToCInt c)
+condToCInt (QCNOIDX  c) = (#const TDBQCNOIDX) .|. (condToCInt c)
 
 orderToCInt :: OrderType -> CInt
 orderToCInt QOSTRASC  = #const TDBQOSTRASC
