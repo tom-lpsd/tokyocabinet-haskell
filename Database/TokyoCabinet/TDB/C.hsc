@@ -38,7 +38,7 @@ data IndexType =
     ITDECIMAL |
     ITOPT     |
     ITVOID    |
-    ITKEEP
+    ITKEEP IndexType
     deriving (Eq, Ord, Show)
 
 openModeToCInt :: OpenMode -> CInt
@@ -62,7 +62,7 @@ indexTypeToCInt ITLEXICAL = #const TDBITLEXICAL
 indexTypeToCInt ITDECIMAL = #const TDBITDECIMAL
 indexTypeToCInt ITOPT     = #const TDBITOPT
 indexTypeToCInt ITVOID    = #const TDBITVOID
-indexTypeToCInt ITKEEP    = #const TDBITKEEP
+indexTypeToCInt (ITKEEP ixt) = (#const TDBITKEEP) .|. (indexTypeToCInt ixt)
 
 combineOpenMode :: [OpenMode] -> CInt
 combineOpenMode = foldr ((.|.) . openModeToCInt) 0
