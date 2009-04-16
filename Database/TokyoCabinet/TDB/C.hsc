@@ -15,14 +15,23 @@ import Database.TokyoCabinet.List.C
 
 #include <tctdb.h>
 
+-- | Represents open mode
 data OpenMode =
-    OREADER |
-    OWRITER |
-    OCREAT  |
-    OTRUNC  |
-    ONOLCK  |
-    OLCKNB  |
-    OTSYNC
+    OREADER | -- ^ read only mode
+    OWRITER | -- ^ write mode
+    OCREAT  | -- ^ if this value is included in open mode list, open
+              -- function creates a new database if not exist.
+    OTRUNC  | -- ^ if this value is included in open mode list, open
+              -- function creates a new database regardless if one
+              -- exists
+    ONOLCK  | -- ^ if this value is included in open mode list, open
+              -- function opens the database file without file locking
+    OLCKNB  | -- ^ if this value is included in open mode list, open
+              -- function opens the database file with locking
+              -- performed without blocking.
+    OTSYNC    -- ^ if this value is included in open mode list, every
+              -- transaction synchronizes updated contents with the
+              -- device
     deriving (Eq, Ord, Show)
 
 data TuningOption =
@@ -33,12 +42,13 @@ data TuningOption =
     TEXCODEC
     deriving (Eq, Ord, Show)
 
+-- | Represents the index type
 data IndexType =
-    ITLEXICAL |
-    ITDECIMAL |
-    ITOPT     |
-    ITVOID    |
-    ITKEEP IndexType
+    ITLEXICAL | -- ^ for lexical string
+    ITDECIMAL | -- ^ for decimal string
+    ITOPT     | -- ^ the index is optimized
+    ITVOID    | -- ^ the index is removed
+    ITKEEP IndexType -- ^ if the index exists, setindex function merely returns failure
     deriving (Eq, Ord, Show)
 
 openModeToCInt :: OpenMode -> CInt
