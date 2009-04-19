@@ -53,6 +53,11 @@ samples = [ ("1", AssocList [("foo", "1"), ("bar", "2")])
           , ("2", AssocList [("foo", "1"), ("bar", "3")])
           , ("3", AssocList [("foo", "2"), ("bar", "1")]) ]
 
+samples' :: [(String, String)]
+samples' = [ ("1", "foo\0" ++ "1\0bar\0" ++ "2")
+           , ("2", "foo\0" ++ "1\0bar\0" ++ "3")
+           , ("3", "foo\0" ++ "2\0bar\0" ++ "1") ]
+
 test_put =
     withoutFile dbname $ \fn -> do
       withOpenedTDB fn $ \tdb ->
@@ -66,6 +71,18 @@ test_put =
           where
             hd = snd (head samples)
 
+test_put' =
+    withoutFile dbname $ \fn -> do
+      withOpenedTDB fn $ \tdb ->
+          do all id `fmap` mapM (uncurry $ put' tdb) samples' @? "put'"
+             get' tdb "1" >>= (Just hd @=?)
+             putkeep' tdb "4" ("foo\0" ++ "10\0bar\0" ++ "20") @? "putkeep'"
+             putkeep' tdb "1" ("foo\0" ++ "10\0bar\0" ++ "20")
+             get' tdb "1" >>= (Just hd @=?)
+             putcat' tdb "1" ("baz\0" ++ "3") @? "putcat'"
+             get' tdb "1" >>= (Just ("foo\0" ++ "1\0bar\0" ++ "2\0baz\0" ++ "3") @=?)
+          where
+            hd = snd (head samples')
 test_out =
     withoutFile dbname $ \fn -> do
       withOpenedTDB fn $ \tdb ->
@@ -170,6 +187,7 @@ tests = test [
         , "open close"  ~: test_open_close
         , "util" ~: test_util
         , "put" ~: test_put
+        , "put'" ~: test_put'
         , "out" ~: test_out
         , "transaction" ~: test_txn
         , "iterate" ~: test_iter
