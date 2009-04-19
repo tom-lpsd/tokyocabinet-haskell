@@ -8,6 +8,7 @@ module Database.TokyoCabinet
     , TCDB(..)
     , H.HDB
     , F.FDB
+    , T.TDB
     , BDB
     -- * Error Code
     , E.ECODE(..)
