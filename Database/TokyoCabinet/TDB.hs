@@ -18,10 +18,14 @@ module Database.TokyoCabinet.TDB
     , open
     , close
     , put
+    , put'
     , putkeep
+    , putkeep'
     , putcat
+    , putcat'
     , out
     , get
+    , get'
     , vsiz
     , iterinit
     , iternext
@@ -48,6 +52,7 @@ import Database.TokyoCabinet.Error
 import Database.TokyoCabinet.Internal
 import Database.TokyoCabinet.Storable
 import Database.TokyoCabinet.Associative
+import Database.TokyoCabinet.Sequence
 
 import Data.Int
 import Data.Word
@@ -116,13 +121,28 @@ putHelper' c_putfunc tdb key vals =
 put :: (Storable k, Storable v, Associative m) => TDB -> v -> m k v -> IO Bool
 put = putHelper' c_tctdbput
 
+-- | Store a string record into a table database object with a zero
+-- separated column string.
+put' :: (Storable k, Storable v) => TDB -> k -> v -> IO Bool
+put' = putHelper c_tctdbput2 unTCTDB
+
 -- | Store a new record into a table database object.
 putkeep :: (Storable k, Storable v, Associative m) => TDB -> v -> m k v -> IO Bool
 putkeep = putHelper' c_tctdbputkeep
 
+-- | Store a new string record into a table database object with a
+-- zero separated column string.
+putkeep' :: (Storable k, Storable v) => TDB -> k -> v -> IO Bool
+putkeep' = putHelper c_tctdbputkeep2 unTCTDB
+
 -- | Concatenate columns of the existing record in a table database object.
 putcat :: (Storable k, Storable v, Associative m) => TDB -> v -> m k v -> IO Bool
 putcat = putHelper' c_tctdbputcat
+
+-- | Concatenate columns in a table database object with a zero
+-- separated column string.
+putcat' :: (Storable k, Storable v) => TDB -> k -> v -> IO Bool
+putcat' = putHelper c_tctdbputcat2 unTCTDB
 
 -- | Remove a record of a table database object.
 out :: (Storable k) => TDB -> k -> IO Bool
@@ -134,6 +154,11 @@ get tdb key =
     withForeignPtr (unTCTDB tdb) $ \tdb' ->
         withPtrLen key $ \(kbuf, ksize) ->
             c_tctdbget tdb' kbuf ksize >>= peekMap'
+
+-- | Retrieve a record in a table database object as a zero separated
+-- column string.
+get' :: (Storable k, Storable v) => TDB -> k -> IO (Maybe v)
+get' = getHelper c_tctdbget2 unTCTDB
 
 -- | Get the size of the value of a record in a table database object.
 vsiz :: (Storable k) => TDB -> k -> IO (Maybe Int)
@@ -148,7 +173,7 @@ iternext :: (Storable k) => TDB -> IO (Maybe k)
 iternext = iternextHelper c_tctdbiternext unTCTDB
 
 -- | Get forward matching primary keys in a table database object.
-fwmkeys :: (Storable k1, Storable k2) => TDB -> k1 -> Int -> IO [k2]
+fwmkeys :: (Storable k1, Storable k2, Sequence q) => TDB -> k1 -> Int -> IO (q k2)
 fwmkeys = fwmHelper c_tctdbfwmkeys unTCTDB
 
 -- | Add an integer to a column of a record in a table database object.

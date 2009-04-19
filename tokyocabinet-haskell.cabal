@@ -1,5 +1,5 @@
 Name:           tokyocabinet-haskell
-Version:        0.0.3
+Version:        0.0.4
 Cabal-Version:  >= 1.2
 License:        BSD3
 License-File:   LICENSE
@@ -30,7 +30,7 @@ Flag BuildTest
 Library
   Build-Depends:        base >= 4.0, bytestring >= 0.9, mtl >= 1.1
   Exposed-modules:
-    Database.TokyoCabinet,
+    Database.TokyoCabinet
     Database.TokyoCabinet.HDB
     Database.TokyoCabinet.HDB.C
     Database.TokyoCabinet.BDB
@@ -206,6 +206,9 @@ Executable ADBTest
                         EmptyDataDecls, TypeSynonymInstances
   Other-modules:
     TestUtil
+    Database.TokyoCabinet
+    Database.TokyoCabinet.TDB
+    Database.TokyoCabinet.TDB.C
     Database.TokyoCabinet.HDB
     Database.TokyoCabinet.HDB.C
     Database.TokyoCabinet.FDB
@@ -214,10 +217,16 @@ Executable ADBTest
     Database.TokyoCabinet.BDB.C
     Database.TokyoCabinet.BDB.Cursor
     Database.TokyoCabinet.BDB.Cursor.C
+    Database.TokyoCabinet.TDB
+    Database.TokyoCabinet.TDB.C
+    Database.TokyoCabinet.Map
+    Database.TokyoCabinet.Map.C
     Database.TokyoCabinet.Error
     Database.TokyoCabinet.List
     Database.TokyoCabinet.List.C
     Database.TokyoCabinet.Storable
+    Database.TokyoCabinet.Sequence
+    Database.TokyoCabinet.Associative
 
 Executable StorableTest
   if flag(BuildTest)
@@ -239,6 +248,8 @@ Executable StorableTest
     Database.TokyoCabinet.BDB.C
     Database.TokyoCabinet.BDB.Cursor
     Database.TokyoCabinet.BDB.Cursor.C
+    Database.TokyoCabinet.TDB
+    Database.TokyoCabinet.TDB.C
     Database.TokyoCabinet.Error
     Database.TokyoCabinet.List
     Database.TokyoCabinet.List.C

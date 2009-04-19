@@ -21,6 +21,7 @@ import Database.TokyoCabinet.Sequence
 import Database.TokyoCabinet.FDB.Key (ID, toID)
 import qualified Database.TokyoCabinet.HDB as H
 import qualified Database.TokyoCabinet.FDB as F
+import qualified Database.TokyoCabinet.TDB as T
 import qualified Database.TokyoCabinet.BDB as B
 import qualified Database.TokyoCabinet.BDB.Cursor as C
 import qualified Database.TokyoCabinet.Error as E
@@ -367,3 +368,36 @@ instance TCDB F.FDB where
     size              = lift   F.fsiz
     ecode             = lift   F.ecode
     defaultExtension  = const ".tcf"
+
+openModeToTOpenMode :: OpenMode -> T.OpenMode
+openModeToTOpenMode OREADER = T.OREADER
+openModeToTOpenMode OWRITER = T.OWRITER
+openModeToTOpenMode OCREAT  = T.OCREAT
+openModeToTOpenMode OTRUNC  = T.OTRUNC
+openModeToTOpenMode ONOLCK  = T.ONOLCK
+openModeToTOpenMode OLCKNB  = T.OLCKNB
+
+instance TCDB T.TDB where
+    new               = TCM   T.new
+    delete            = lift  T.delete
+    open tc name mode = TCM $ T.open tc name (map openModeToTOpenMode mode)
+    close             = lift  T.close
+    put               = lift3 T.put'
+    putkeep           = lift3 T.putkeep'
+    putcat            = lift3 T.putcat'
+    get               = lift2 T.get'
+    out               = lift2 T.out
+    vsiz              = lift2 T.vsiz
+    iterinit          = lift  T.iterinit
+    iternext          = lift  T.iternext
+    fwmkeys           = lift3 T.fwmkeys
+    addint            = lift3 T.addint
+    adddouble         = lift3 T.adddouble
+    sync              = lift  T.sync
+    vanish            = lift  T.vanish
+    copy              = lift2 T.copy
+    path              = lift  T.path
+    rnum              = lift  T.rnum
+    size              = lift  T.fsiz
+    ecode             = lift  T.ecode
+    defaultExtension  = const ".tct"

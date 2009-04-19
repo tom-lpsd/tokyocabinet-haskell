@@ -151,7 +151,7 @@ foreign import ccall safe "tctdbget"
   c_tctdbget :: Ptr TDB' -> Ptr Word8 -> CInt -> IO (Ptr MAP)
 
 foreign import ccall safe "tctdbget2"
-  c_tctdbget2 :: Ptr TDB' -> Ptr Word8 -> CInt -> Ptr CInt -> IO CString
+  c_tctdbget2 :: Ptr TDB' -> Ptr Word8 -> CInt -> Ptr CInt -> IO (Ptr Word8)
 
 foreign import ccall safe "tctdbget3"
   c_tctdbget3 :: Ptr TDB' -> CString -> IO CString
