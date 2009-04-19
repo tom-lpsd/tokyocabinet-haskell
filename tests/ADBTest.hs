@@ -35,6 +35,9 @@ hdb = tcdb
 fdb :: (FDB -> TCM a) -> TCM a
 fdb = tcdb
 
+tdb :: (TDB -> TCM a) -> TCM a
+tdb = tcdb
+
 bbdb :: (B.BDB -> TCM a) -> TCM a
 bbdb = tcdb
 
@@ -244,6 +247,14 @@ tests = test [
         , "util HDB" ~: (runTCM $ hdb test_util)
         , "util FDB" ~: (runTCM $ fdb test_util)
         , "util B.BDB" ~: (runTCM $ bbdb test_util)
+        , "new delete TDB" ~: (runTCM $ tdb test_new_delete)
+        , "ecode TDB" ~: (runTCM $ tdb test_ecode)
+        , "open close TDB" ~: (runTCM $ tdb test_open_close)
+        , "iterate TDB" ~: (runTCM $ tdb test_iterate)
+        , "fwmkeys B.BDB" ~: (runTCM $ bbdb test_fwmkeys)
+        , "vanish TDB" ~: (runTCM $ tdb test_vanish)
+        , "path TDB" ~: (runTCM $ tdb test_path)
+        , "util TDB" ~: (runTCM $ tdb test_util)
         ]
 
 main = runTestTT tests
