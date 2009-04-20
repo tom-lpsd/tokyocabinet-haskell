@@ -19,19 +19,14 @@ import Database.TokyoCabinet.List.C
 data OpenMode =
     OREADER | -- ^ read only mode
     OWRITER | -- ^ write mode
-    OCREAT  | -- ^ if this value is included in open mode list, open
-              -- function creates a new database if not exist.
-    OTRUNC  | -- ^ if this value is included in open mode list, open
-              -- function creates a new database regardless if one
-              -- exists
-    ONOLCK  | -- ^ if this value is included in open mode list, open
-              -- function opens the database file without file locking
-    OLCKNB  | -- ^ if this value is included in open mode list, open
-              -- function opens the database file with locking
-              -- performed without blocking.
-    OTSYNC    -- ^ if this value is included in open mode list, every
-              -- transaction synchronizes updated contents with the
-              -- device
+    OCREAT  | -- ^ if this value is included in open mode list, `open
+              -- function' creates a new database if not exist.
+    OTRUNC  | -- ^ creates a new database regardless if one exists
+    ONOLCK  | -- ^ open the database file without file locking
+    OLCKNB  | -- ^ open the database file with locking performed
+              -- without blocking.
+    OTSYNC    -- ^ every transaction synchronizes updated contents
+              -- with the device
     deriving (Eq, Ord, Show)
 
 data TuningOption =

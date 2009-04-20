@@ -2,6 +2,7 @@
 -- <http://tokyocabinet.sourceforge.net/spex-en.html#tctdbapi> for details
 module Database.TokyoCabinet.TDB
     (
+    -- $doc
       TDB
     , ECODE(..)
     , OpenMode(..)
@@ -61,6 +62,63 @@ import Foreign.Ptr
 import Foreign.ForeignPtr
 import Foreign.C.Types
 import Foreign.C.String
+
+-- $doc
+-- Example
+--
+-- @
+--  import Control.Monad (unless)
+--  import Database.TokyoCabinet.TDB
+--  import Database.TokyoCabinet.TDB.Query hiding (new)
+--  import qualified Database.TokyoCabinet.Map as M
+--  import qualified Database.TokyoCabinet.TDB.Query as Q (new)
+-- @
+--
+-- @
+--  data Profile = Profile { name :: String
+--                         , age  :: Int } deriving Show
+-- @
+--
+-- @
+--  insertProfile :: TDB -> Profile -> IO Bool
+--  insertProfile tdb profile =
+--      do m <- M.new
+--         M.put m \"name\" (name profile)
+--         M.put m \"age\" (show . age $ profile)
+--         Just pk <- genuid tdb
+--         put tdb (show pk) m
+-- @
+--
+-- @
+--  main :: IO ()
+--  main = do t <- new
+--            open t \"foo.tct\" [OWRITER, OCREAT] >>= err t
+-- @
+--
+-- @
+--            mapM_ (insertProfile t) [ Profile \"tom\" 23
+--                                    , Profile \"bob\" 24
+--                                    , Profile \"alice\" 20 ]
+-- @
+--
+-- @
+--            q <- Q.new t
+--            addcond q \"age\" QCNUMGE \"23\"
+--            setorder q \"name\" QOSTRASC
+--            proc q $ \pk cols -> do
+--              Just name <- M.get cols \"name\"
+--              putStrLn name
+--              M.put cols \"name\" (name ++ \"!\")
+--              return (QPPUT cols)
+-- @
+--
+-- @
+--            close t >>= err t
+--            return ()
+--      where
+--        err tdb = flip unless $ ecode tdb >>= error . show
+-- @
+--
 
 -- | Create the new table database object.
 new :: IO TDB
