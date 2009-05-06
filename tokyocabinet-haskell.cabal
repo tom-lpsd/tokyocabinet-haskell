@@ -1,5 +1,5 @@
 Name:           tokyocabinet-haskell
-Version:        0.0.4
+Version:        0.0.5
 Cabal-Version:  >= 1.2
 License:        BSD3
 License-File:   LICENSE
@@ -33,6 +33,8 @@ Library
     Database.TokyoCabinet
     Database.TokyoCabinet.HDB
     Database.TokyoCabinet.HDB.C
+    Database.TokyoCabinet.ADB
+    Database.TokyoCabinet.ADB.C
     Database.TokyoCabinet.BDB
     Database.TokyoCabinet.BDB.C
     Database.TokyoCabinet.BDB.Cursor
