@@ -1,260 +1,194 @@
 module Main where
 
-import TestUtil
 import Test.HUnit hiding (path)
-import Database.TokyoCabinet
-import qualified Database.TokyoCabinet.BDB as B
+import TestUtil
+import Database.TokyoCabinet.ADB
 
 import Data.Maybe (catMaybes)
 import Data.List (sort)
-
 import Control.Monad
-import Control.Exception
-import Control.Monad.Trans (liftIO)
 
-withoutFileM :: String -> (String -> TCM a) -> TCM a
-withoutFileM fn action = liftIO $ bracket (setupFile fn) teardownFile
-                         (runTCM . action)
+dbname :: String
+dbname = "+"
 
-withOpenedTC :: (TCDB tc) => String -> tc -> (tc -> TCM a) -> TCM a
-withOpenedTC name tc action = do
-  open tc name [OREADER, OWRITER, OCREAT]
-  res <- action tc
-  close tc
+withOpenedADB :: String -> (ADB -> IO a) -> IO a
+withOpenedADB name action = do
+  a <- new
+  open a name
+  res <- action a
+  close a
   return res
 
-tcdb :: (TCDB tc) => (tc -> TCM a) -> TCM a
-tcdb = (new >>=)
+test_new_delete = new >>= delete
 
-bdb :: (BDB -> TCM a) -> TCM a
-bdb = tcdb
+{-
+test_open_close =
+    withoutFile dbname $ \fn -> do
+      adb <- new
+      not `fmap` open adb fn [OREADER] @? "file does not exist"
+      open adb fn [OREADER, OWRITER, OCREAT] @? "open"
+      close adb @? "close"
+      not `fmap` close adb @? "cannot close closed file"
 
-hdb :: (HDB -> TCM a) -> TCM a
-hdb = tcdb
+test_putxx =
+    withoutFile dbname $ \fn ->
+        withOpenedADB fn $ \adb -> do
+          put adb "foo" "bar"
+          get adb "foo" >>= (Just "bar" @=?)
+          putkeep adb "foo" "baz"
+          get adb "foo" >>= (Just "bar" @=?)
+          putcat adb "foo" "baz"
+          get adb "foo" >>= (Just "barbaz" @=?)
+          putasync adb "bar" "baz"
+          sync adb
+          get adb "bar" >>= (Just "baz" @=?)
 
-fdb :: (FDB -> TCM a) -> TCM a
-fdb = tcdb
+test_out =
+    withoutFile dbname $ \fn ->
+        withOpenedADB fn $ \adb -> do
+          put adb "foo" "bar"
+          get adb "foo" >>= (Just "bar" @=?)
+          out adb "foo" @? "out succeeded"
+          get adb "foo" >>= ((Nothing :: Maybe String) @=?)
 
-tdb :: (TDB -> TCM a) -> TCM a
-tdb = tcdb
+test_put_get =
+    withoutFile dbname $ \fn ->
+        withOpenedADB fn $ \adb -> do
+          put adb "1" "foo"
+          put adb "2" "bar"
+          put adb "3" "baz"
+          get adb "1" >>= (Just "foo" @=?)
+          get adb "2" >>= (Just "bar" @=?)
+          get adb "3" >>= (Just "baz" @=?)
 
-bbdb :: (B.BDB -> TCM a) -> TCM a
-bbdb = tcdb
+test_vsiz =
+    withoutFile dbname $ \fn ->
+        withOpenedADB fn $ \adb -> do
+          put adb "foo" "bar"
+          vsiz adb "foo" >>= (Just 3 @=?)
+          vsiz adb "bar" >>= ((Nothing :: Maybe Int) @=?)
 
-dbname tc = "foo" ++ (defaultExtension tc)
-
-test_new_delete tc = delete tc
-
-e @=?: a = liftIO $ e @=? a
-e @?=: a = liftIO $ e @?= a
-e @?: msg = liftIO $ runTCM e @? msg
-
-test_ecode tc =
-    withoutFileM (dbname tc) $ \fn -> do
-        open tc fn [OREADER]
-        ecode tc >>= (ENOFILE @=?:)
-
-test_open_close tc =
-    withoutFileM (dbname tc) $ \fn -> do
-      not `liftM` open tc fn [OREADER] @?: "file does not exist"
-      open tc fn [OREADER, OWRITER, OCREAT] @?: "open"
-      close tc @?: "close"
-      not `liftM` close tc @?: "cannot close closed file"
-
-test_putxx tc =
-    withoutFileM (dbname tc) $ \fn ->
-        withOpenedTC fn tc $ \tc' -> do
-          put tc' "1" "bar"
-          get tc' "1" >>= (Just "bar" @=?:)
-          putkeep tc' "1" "baz"
-          get tc' "1" >>= (Just "bar" @=?:)
-          putcat tc' "1" "baz"
-          get tc' "1" >>= (Just "barbaz" @=?:)
-
-test_out tc =
-    withoutFileM (dbname tc) $ \fn ->
-        withOpenedTC fn tc $ \tc' -> do
-          put tc' "1" "bar"
-          get tc' "1" >>= (Just "bar" @=?:)
-          out tc' "1" @?: "out succeeded"
-          get tc' "1" >>= ((Nothing :: Maybe String) @=?:)
-
-test_put_get tc =
-    withoutFileM (dbname tc) $ \fn ->
-        withOpenedTC fn tc $ \tc' -> do
-          put tc' "1" "foo"
-          put tc' "2" "bar"
-          put tc' "3" "baz"
-          get tc' "1" >>= (Just "foo" @=?:)
-          get tc' "2" >>= (Just "bar" @=?:)
-          get tc' "3" >>= (Just "baz" @=?:)
-
-test_vsiz tc =
-    withoutFileM (dbname tc) $ \fn ->
-        withOpenedTC fn tc $ \tc' -> do
-          put tc' "1" "bar"
-          vsiz tc' "1" >>= (Just 3 @=?:)
-          vsiz tc' "2" >>= ((Nothing :: Maybe Int) @=?:)
-
-test_iterate tc =
-    withoutFileM (dbname tc) $ \fn ->
-        withOpenedTC fn tc $ \tc' -> do
-          let keys = [1..3] :: [Int]
+test_iterate =
+    withoutFile dbname $ \fn ->
+        withOpenedADB fn $ \adb -> do
+          let keys = [1, 2, 3] :: [Int]
               vals = ["foo", "bar", "baz"]
-          zipWithM_ (put tc') keys vals
-          iterinit tc'
-          keys' <- sequence $ replicate (length keys) (iternext tc')
-          (sort $ catMaybes keys') @?=: (sort keys)
+          zipWithM_ (put adb) keys vals
+          iterinit adb
+          keys' <- sequence $ replicate (length keys) (iternext adb)
+          (sort $ catMaybes keys') @?= (sort keys)
 
-test_fwmkeys tc =
-    withoutFileM (dbname tc) $ \fn ->
-        withOpenedTC fn tc $ \tc' -> do
-          mapM_ (uncurry (put tc')) ([ ("foo", 100)
+test_fwmkeys =
+    withoutFile dbname $ \fn ->
+        withOpenedADB fn $ \adb -> do
+          mapM_ (uncurry (put adb)) ([ ("foo", 100)
                                      , ("bar", 200)
                                      , ("baz", 201)
                                      , ("jkl", 300)] :: [(String, Int)])
-          fwmkeys tc' "ba" 10 >>= (["bar", "baz"] @=?:) . sort
-          fwmkeys tc' "ba" 1 >>= (["bar"] @=?:)
-          fwmkeys tc' "" 10 >>= (["bar", "baz", "foo", "jkl"] @=?:) . sort
+          fwmkeys adb "ba" 10 >>= (["bar", "baz"] @=?) . sort
+          fwmkeys adb "ba" 1 >>= (["bar"] @=?)
+          fwmkeys adb "" 10 >>= (["bar", "baz", "foo", "jkl"] @=?) . sort
 
-test_fwmkeys_fdb tc =
-    withoutFileM (dbname tc) $ \fn ->
-        withOpenedTC fn tc $ \tc' -> do
-          zipWithM_ (put tc') ([1..10] :: [Int]) ([100, 200..1000] :: [Int])
-          fwmkeys tc' "[min,max]" 10 >>= (([1..10] :: [Int]) @=?:)
-
-test_addint tc =
-    withoutFileM (dbname tc) $ \fn ->
-        withOpenedTC fn tc $ \tc' -> do
+test_addint =
+    withoutFile dbname $ \fn ->
+        withOpenedADB fn $ \adb -> do
           let ini = 32 :: Int
-          put tc' "100" ini
-          get tc' "100" >>= (Just ini @=?:)
-          addint tc' "100" 3
-          get tc' "100" >>= (Just (ini+3) @=?:)
-          addint tc' "200" 1 >>= (Just 1 @=?:)
-          put tc' "200" "foo"
-          addint tc' "200" 1 >>= (Nothing @=?:)
+          put adb "foo" ini
+          get adb "foo" >>= (Just ini @=?)
+          addint adb "foo" 3
+          get adb "foo" >>= (Just (ini+3) @=?)
+          addint adb "bar" 1 >>= (Just 1 @=?)
+          put adb "bar" "foo"
+          addint adb "bar" 1 >>= (Nothing @=?)
 
-test_adddouble tc =
-    withoutFileM (dbname tc) $ \fn ->
-        withOpenedTC fn tc $ \tc' -> do
+test_adddouble =
+    withoutFile dbname $ \fn ->
+        withOpenedADB fn $ \adb -> do
           let ini = 0.003 :: Double
-          put tc' "100" ini
-          get tc' "100" >>= (Just ini @=?:)
-          adddouble tc' "100" 0.3
-          (get tc' "100" >>= (return . isIn (ini+0.3))) @?: "isIn"
-          adddouble tc' "200" 0.5 >>= (Just 0.5 @=?:)
-          put tc' "200" "foo"
-          adddouble tc' "200" 1.2 >>= (Nothing @=?:)
+          put adb "foo" ini
+          get adb "foo" >>= (Just ini @=?)
+          adddouble adb "foo" 0.3
+          (get adb "foo" >>= (isIn (ini+0.3))) @? "isIn"
+          adddouble adb "bar" 0.5 >>= (Just 0.5 @=?)
+          put adb "bar" "foo"
+          adddouble adb "bar" 1.2 >>= (Nothing @=?)
     where
       margin = 1e-30
-      isIn :: Double -> (Maybe Double) -> Bool
+      isIn :: Double -> (Maybe Double) -> IO Bool
       isIn expected (Just actual) =
           let diff = expected - actual
-          in abs diff <= margin
+          in return $ abs diff <= margin
 
-test_vanish tc =
-    withoutFileM (dbname tc) $ \fn ->
-        withOpenedTC fn tc $ \tc' -> do
-            put tc' "100" "111"
-            put tc' "200" "222"
-            put tc' "300" "333"
-            rnum tc' >>= (3 @=?:)
-            vanish tc'
-            rnum tc' >>= (0 @=?:)
+test_vanish =
+    withoutFile dbname $ \fn ->
+        withOpenedADB fn $ \adb -> do
+            put adb "foo" "111"
+            put adb "bar" "222"
+            put adb "baz" "333"
+            rnum adb >>= (3 @=?)
+            vanish adb
+            rnum adb >>= (0 @=?)
 
-test_copy tc =
-    withoutFileM (dbname tc) $ \fns ->    
-        withoutFileM ("bar" ++ defaultExtension tc) $ \fnd ->
-            withOpenedTC fns tc $ \tc' -> do
-                put tc' "100" "bar"
-                copy tc' fnd
-                close tc'
-                open tc' fns [OREADER]
-                get tc' "100" >>= (Just "bar" @=?:)
+test_copy =
+    withoutFile dbname $ \fns ->
+        withoutFile "bar.tch" $ \fnd ->
+            withOpenedADB fns $ \adb -> do
+                put adb "foo" "bar"
+                copy adb fnd
+                close adb
+                open adb fns [OREADER]
+                get adb "foo" >>= (Just "bar" @=?)
 
-test_path tc =
-    withoutFileM (dbname tc) $ \fn ->
-        withOpenedTC fn tc $ \tc' ->
-            path tc' >>= (Just (dbname tc) @=?:)
+test_txn =
+    withoutFile dbname $ \fn ->
+        withOpenedADB fn $ \adb -> do
+          tranbegin adb
+          put adb "foo" "bar"
+          get adb "foo" >>= (Just "bar" @=?)
+          tranabort adb
+          get adb "foo" >>= ((Nothing :: Maybe String) @=?)
+          tranbegin adb
+          put adb "foo" "baz"
+          get adb "foo" >>= (Just "baz" @=?)
+          trancommit adb
+          get adb "foo" >>= (Just "baz" @=?)
 
-test_util tc =
-    withoutFileM (dbname tc) $ \fn -> do
-      open tc fn [OWRITER, OCREAT]
-      path tc >>= (Just fn @=?:)
-      rnum tc >>= (0 @=?:)
-      ((> 0) `liftM` size tc) @?: "fsiz"
-      sync tc @?: "sync"
-      close tc
+test_path =
+    withoutFile dbname $ \fn ->
+        withOpenedADB fn $ \adb ->
+            path adb >>= (Just dbname @=?)
+
+test_util =
+    withoutFile dbname $ \fn -> do
+      adb <- new
+      setcache adb 1000000 @? "setcache"
+      setxmsiz adb 1000000 @? "setxmsiz"
+      tune adb 150000 5 11 [TLARGE, TBZIP] @? "tune"
+      open adb fn [OREADER, OWRITER, OCREAT]
+      path adb >>= (Just fn @=?)
+      rnum adb >>= (0 @=?)
+      ((> 0) `fmap` fsiz adb) @? "fsiz"
+      sync adb @? "sync"
+      optimize adb 0 (-1) (-1) [] @? "optimize"
+      close adb
+-}
 
 tests = test [
-          "new delete BDB" ~: (runTCM $ bdb test_new_delete)
-        , "new delete HDB" ~: (runTCM $ hdb test_new_delete)
-        , "new delete FDB" ~: (runTCM $ fdb test_new_delete)
-        , "new delete B.BDB" ~: (runTCM $ bbdb test_new_delete)
-        , "ecode BDB" ~: (runTCM $ bdb test_ecode)
-        , "ecode HDB" ~: (runTCM $ hdb test_ecode)
-        , "ecode FDB" ~: (runTCM $ fdb test_ecode)
-        , "ecode B.BDB" ~: (runTCM $ bbdb test_ecode)
-        , "open close BDB" ~: (runTCM $ bdb test_open_close)
-        , "open close HDB" ~: (runTCM $ hdb test_open_close)
-        , "open close FDB" ~: (runTCM $ fdb test_open_close)
-        , "open close B.BDB" ~: (runTCM $ bbdb test_open_close)
-        , "putxxx BDB" ~: (runTCM $ bdb test_putxx)
-        , "putxxx HDB" ~: (runTCM $ hdb test_putxx)
-        , "putxxx FDB" ~: (runTCM $ fdb test_putxx)
-        , "putxxx B.BDB" ~: (runTCM $ bbdb test_putxx)
-        , "out BDB" ~: (runTCM $ bdb test_out)
-        , "out HDB" ~: (runTCM $ hdb test_out)
-        , "out FDB" ~: (runTCM $ fdb test_out)
-        , "out B.BDB" ~: (runTCM $ bbdb test_out)
-        , "put get BDB" ~: (runTCM $ bdb test_put_get)
-        , "put get HDB" ~: (runTCM $ hdb test_put_get)
-        , "put get FDB" ~: (runTCM $ fdb test_put_get)
-        , "put get B.BDB" ~: (runTCM $ bbdb test_put_get)
-        , "vsiz BDB" ~: (runTCM $ bdb test_vsiz)
-        , "vsiz HDB" ~: (runTCM $ hdb test_vsiz)
-        , "vsiz FDB" ~: (runTCM $ fdb test_vsiz)
-        , "vsiz B.BDB" ~: (runTCM $ bbdb test_vsiz)
-        , "iterate BDB" ~: (runTCM $ bdb test_iterate)
-        , "iterate HDB" ~: (runTCM $ hdb test_iterate)
-        , "iterate FDB" ~: (runTCM $ fdb test_iterate)
-        , "fwmkeys BDB" ~: (runTCM $ bdb test_fwmkeys)
-        , "fwmkeys HDB" ~: (runTCM $ hdb test_fwmkeys)
-        , "fwmkeys FDB" ~: (runTCM $ fdb test_fwmkeys_fdb)
-        , "fwmkeys B.BDB" ~: (runTCM $ bbdb test_fwmkeys)
-        , "addint BDB" ~: (runTCM $ bdb test_addint)
-        , "addint HDB" ~: (runTCM $ hdb test_addint)
-        , "addint FDB" ~: (runTCM $ fdb test_addint)
-        , "addint B.BDB" ~: (runTCM $ bbdb test_addint)
-        , "adddouble BDB" ~: (runTCM $ bdb test_adddouble)
-        , "adddouble HDB" ~: (runTCM $ hdb test_adddouble)
-        , "adddouble FDB" ~: (runTCM $ fdb test_adddouble)
-        , "adddouble B.BDB" ~: (runTCM $ bbdb test_adddouble)
-        , "vanish BDB" ~: (runTCM $ bdb test_vanish)
-        , "vanish HDB" ~: (runTCM $ hdb test_vanish)
-        , "vanish FDB" ~: (runTCM $ fdb test_vanish)
-        , "vanish B.BDB" ~: (runTCM $ bbdb test_vanish)
-        , "copy BDB" ~: (runTCM $ bdb test_copy)
-        , "copy HDB" ~: (runTCM $ hdb test_copy)
-        , "copy FDB" ~: (runTCM $ fdb test_copy)
-        , "copy B.BDB" ~: (runTCM $ bbdb test_copy)
-        , "path BDB" ~: (runTCM $ bdb test_path)
-        , "path HDB" ~: (runTCM $ hdb test_path)
-        , "path FDB" ~: (runTCM $ fdb test_path)
-        , "path B.BDB" ~: (runTCM $ bbdb test_path)
-        , "util BDB" ~: (runTCM $ bdb test_util)
-        , "util HDB" ~: (runTCM $ hdb test_util)
-        , "util FDB" ~: (runTCM $ fdb test_util)
-        , "util B.BDB" ~: (runTCM $ bbdb test_util)
-        , "new delete TDB" ~: (runTCM $ tdb test_new_delete)
-        , "ecode TDB" ~: (runTCM $ tdb test_ecode)
-        , "open close TDB" ~: (runTCM $ tdb test_open_close)
-        , "iterate TDB" ~: (runTCM $ tdb test_iterate)
-        , "fwmkeys B.BDB" ~: (runTCM $ bbdb test_fwmkeys)
-        , "vanish TDB" ~: (runTCM $ tdb test_vanish)
-        , "path TDB" ~: (runTCM $ tdb test_path)
-        , "util TDB" ~: (runTCM $ tdb test_util)
+          "new delete" ~: test_new_delete
+--        , "open close"  ~: test_open_close
+--        , "put get" ~: test_put_get
+--        , "out" ~: test_out
+--        , "putxx" ~: test_putxx
+--        , "copy" ~: test_copy
+--        , "transaction" ~: test_txn
+--        , "fwmkeys" ~: test_fwmkeys
+--        , "path" ~: test_path
+--        , "addint" ~: test_addint
+--        , "adddouble" ~: test_adddouble
+--        , "util" ~: test_util
+--        , "vsiz" ~: test_vsiz
+--        , "vanish" ~: test_vanish
+--        , "iterate" ~: test_iterate
         ]
 
 main = runTestTT tests

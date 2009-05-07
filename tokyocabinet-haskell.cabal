@@ -207,6 +207,26 @@ Executable ADBTest
   Build-depends:        HUnit >= 1.2, base >= 4.0, directory >= 1.0
   Extensions:           CPP, ForeignFunctionInterface,
                         EmptyDataDecls, TypeSynonymInstances
+  GHC-Options:          -fhpc
+  Other-modules:
+    TestUtil
+    Database.TokyoCabinet.ADB
+    Database.TokyoCabinet.ADB.C
+    Database.TokyoCabinet.Error
+    Database.TokyoCabinet.List
+    Database.TokyoCabinet.List.C
+    Database.TokyoCabinet.Storable
+
+Executable TCDBTest
+  if flag(BuildTest)
+    Buildable:            True
+  else
+    Buildable:            False
+  Main-Is:              tests/TCDBTest.hs
+  Extra-libraries:      tokyocabinet
+  Build-depends:        HUnit >= 1.2, base >= 4.0, directory >= 1.0
+  Extensions:           CPP, ForeignFunctionInterface,
+                        EmptyDataDecls, TypeSynonymInstances
   Other-modules:
     TestUtil
     Database.TokyoCabinet
