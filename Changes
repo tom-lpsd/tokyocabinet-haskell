@@ -1,0 +1,10 @@
+Revision history for tokyocabinet-haskell package.
+
+0.0.5  Sat May 09 06:00:00 UTC 2009
+  - added ADB interface.
+
+0.0.4  Mon Apr 27 14:01:17 UTC 2009
+  - added TDB and TDBQRY support.
+
+0.0.1  Tue Mar 31 01:32:18 UTC 2009
+  - initial release
