@@ -4,7 +4,6 @@ module Database.TokyoCabinet.ADB
     (
     -- $doc
       ADB
-    , ECODE(..)
     , new
     , delete
     , open
@@ -39,7 +38,7 @@ import Foreign.C.String
 import Foreign.ForeignPtr
 
 import Database.TokyoCabinet.ADB.C
-import Database.TokyoCabinet.Error
+import Database.TokyoCabinet.Error (cINT_MIN)
 import Database.TokyoCabinet.Internal
 import Database.TokyoCabinet.Storable
 import Database.TokyoCabinet.Sequence
