@@ -170,7 +170,7 @@ test_copy tc =
                 put tc' "100" "bar"
                 copy tc' fnd
                 close tc'
-                open tc' fns [OREADER]
+                open tc' fnd [OREADER]
                 get tc' "100" >>= (Just "bar" @=?:)
 
 test_path tc =

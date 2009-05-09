@@ -155,7 +155,7 @@ test_copy =
                 put fdb "1" "bar"
                 copy fdb fnd
                 close fdb
-                open fdb fns [OREADER]
+                open fdb fnd [OREADER]
                 get fdb "1" >>= (Just "bar" @=?)
 
 test_path =

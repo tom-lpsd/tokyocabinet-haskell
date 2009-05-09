@@ -198,7 +198,7 @@ test_copy =
                 put bdb "foo" "bar"
                 copy bdb fnd
                 close bdb
-                open bdb fns [OREADER]
+                open bdb fnd [OREADER]
                 get bdb "foo" >>= (Just "bar" @=?)
 
 test_txn =

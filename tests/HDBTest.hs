@@ -143,7 +143,7 @@ test_copy =
                 put hdb "foo" "bar"
                 copy hdb fnd
                 close hdb
-                open hdb fns [OREADER]
+                open hdb fnd [OREADER]
                 get hdb "foo" >>= (Just "bar" @=?)
 
 test_txn =
