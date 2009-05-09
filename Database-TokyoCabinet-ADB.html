@@ -4,12 +4,12 @@
 ><HEAD
 ><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8"
 ><TITLE
->Database.TokyoCabinet.HDB</TITLE
+>Database.TokyoCabinet.ADB</TITLE
 ><LINK HREF="haddock.css" REL="stylesheet" TYPE="text/css"
 ><SCRIPT SRC="haddock-util.js" TYPE="text/javascript"
 ></SCRIPT
 ><SCRIPT TYPE="text/javascript"
->window.onload = function () {setSynopsis("mini_Database-TokyoCabinet-HDB.html")};</SCRIPT
+>window.onload = function () {setSynopsis("mini_Database-TokyoCabinet-ADB.html")};</SCRIPT
 ></HEAD
 ><BODY
 ><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
@@ -40,34 +40,7 @@
 ><TR
 ><TD
 ><FONT SIZE="6"
->Database.TokyoCabinet.HDB</FONT
-></TD
-></TR
-></TABLE
-></TD
-></TR
-><TR
-><TD CLASS="s15"
-></TD
-></TR
-><TR
-><TD
-><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
-><TR
-><TD CLASS="section4"
-><B
->Contents</B
-></TD
-></TR
-><TR
-><TD
-><DL
-><DT
-><A HREF="#1"
->Basic API (tokyocabinet.idl compliant)
-</A
-></DT
-></DL
+>Database.TokyoCabinet.ADB</FONT
 ></TD
 ></TR
 ></TABLE
@@ -83,9 +56,9 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Interface to Hash based DBM. See also,
- <A HREF="http://tokyocabinet.sourceforge.net/spex-en.html#tchdbapi"
->http://tokyocabinet.sourceforge.net/spex-en.html#tchdbapi</A
+>Interface to TC's Abstract DataBase. See also,
+ <A HREF="http://tokyocabinet.sourceforge.net/spex-en.html#tcadbapi"
+>http://tokyocabinet.sourceforge.net/spex-en.html#tcadbapi</A
 > for details
 </TD
 ></TR
@@ -108,8 +81,8 @@
 ><TD CLASS="decl"
 ><SPAN CLASS="keyword"
 >data</SPAN
->  <A HREF="#t%3AHDB"
->HDB</A
+>  <A HREF="#t%3AADB"
+>ADB</A
 > </TD
 ></TR
 ><TR
@@ -286,132 +259,12 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
-><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
-><TR
-><TD CLASS="decl"
-><SPAN CLASS="keyword"
->data</SPAN
->  <A HREF="#t%3AOpenMode"
->OpenMode</A
->  </TD
-></TR
-><TR
-><TD CLASS="body"
-><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
-><TR
-><TD CLASS="decl"
->= <A HREF="#v%3AOREADER"
->OREADER</A
-></TD
-></TR
-><TR
-><TD CLASS="decl"
->| <A HREF="#v%3AOWRITER"
->OWRITER</A
-></TD
-></TR
-><TR
-><TD CLASS="decl"
->| <A HREF="#v%3AOCREAT"
->OCREAT</A
-></TD
-></TR
-><TR
-><TD CLASS="decl"
->| <A HREF="#v%3AOTRUNC"
->OTRUNC</A
-></TD
-></TR
-><TR
-><TD CLASS="decl"
->| <A HREF="#v%3AONOLCK"
->ONOLCK</A
-></TD
-></TR
-><TR
-><TD CLASS="decl"
->| <A HREF="#v%3AOLCKNB"
->OLCKNB</A
-></TD
-></TR
-><TR
-><TD CLASS="decl"
->| <A HREF="#v%3AOTSYNC"
->OTSYNC</A
-></TD
-></TR
-></TABLE
-></TD
-></TR
-></TABLE
-></TD
-></TR
-><TR
-><TD CLASS="s8"
-></TD
-></TR
-><TR
-><TD CLASS="decl"
-><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
-><TR
-><TD CLASS="decl"
-><SPAN CLASS="keyword"
->data</SPAN
->  <A HREF="#t%3ATuningOption"
->TuningOption</A
->  </TD
-></TR
-><TR
-><TD CLASS="body"
-><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
-><TR
-><TD CLASS="decl"
->= <A HREF="#v%3ATLARGE"
->TLARGE</A
-></TD
-></TR
-><TR
-><TD CLASS="decl"
->| <A HREF="#v%3ATDEFLATE"
->TDEFLATE</A
-></TD
-></TR
-><TR
-><TD CLASS="decl"
->| <A HREF="#v%3ATBZIP"
->TBZIP</A
-></TD
-></TR
-><TR
-><TD CLASS="decl"
->| <A HREF="#v%3ATTCBS"
->TTCBS</A
-></TD
-></TR
-><TR
-><TD CLASS="decl"
->| <A HREF="#v%3ATEXCODEC"
->TEXCODEC</A
-></TD
-></TR
-></TABLE
-></TD
-></TR
-></TABLE
-></TD
-></TR
-><TR
-><TD CLASS="s8"
-></TD
-></TR
-><TR
-><TD CLASS="decl"
 ><A HREF="#v%3Anew"
 >new</A
 > :: <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 ></TD
 ></TR
 ><TR
@@ -422,8 +275,8 @@
 ><TD CLASS="decl"
 ><A HREF="#v%3Adelete"
 >delete</A
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Unit.html#t%3A%28%29"
@@ -436,105 +289,13 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
-><A HREF="#v%3Aecode"
->ecode</A
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
-> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
->IO</A
-> <A HREF="Database-TokyoCabinet-HDB.html#t%3AECODE"
->ECODE</A
-></TD
-></TR
-><TR
-><TD CLASS="s8"
-></TD
-></TR
-><TR
-><TD CLASS="decl"
-><A HREF="#v%3Aerrmsg"
->errmsg</A
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AECODE"
->ECODE</A
-> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
->String</A
-></TD
-></TR
-><TR
-><TD CLASS="s8"
-></TD
-></TR
-><TR
-><TD CLASS="decl"
-><A HREF="#v%3Atune"
->tune</A
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
-> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
->Int64</A
-> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt8"
->Int8</A
-> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt8"
->Int8</A
-> -&gt; [<A HREF="Database-TokyoCabinet-HDB.html#t%3ATuningOption"
->TuningOption</A
->] -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
->IO</A
-> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
->Bool</A
-></TD
-></TR
-><TR
-><TD CLASS="s8"
-></TD
-></TR
-><TR
-><TD CLASS="decl"
-><A HREF="#v%3Asetcache"
->setcache</A
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
-> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt32"
->Int32</A
-> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
->IO</A
-> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
->Bool</A
-></TD
-></TR
-><TR
-><TD CLASS="s8"
-></TD
-></TR
-><TR
-><TD CLASS="decl"
-><A HREF="#v%3Asetxmsiz"
->setxmsiz</A
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
-> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
->Int64</A
-> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
->IO</A
-> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
->Bool</A
-></TD
-></TR
-><TR
-><TD CLASS="s8"
-></TD
-></TR
-><TR
-><TD CLASS="decl"
 ><A HREF="#v%3Aopen"
 >open</A
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
 >String</A
-> -&gt; [<A HREF="Database-TokyoCabinet-HDB.html#t%3AOpenMode"
->OpenMode</A
->] -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
@@ -548,8 +309,8 @@
 ><TD CLASS="decl"
 ><A HREF="#v%3Aclose"
 >close</A
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -568,8 +329,8 @@
 >Storable</A
 > k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> v) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> v) =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; k -&gt; v -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -588,8 +349,8 @@
 >Storable</A
 > k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> v) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> v) =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; k -&gt; v -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -608,28 +369,8 @@
 >Storable</A
 > k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> v) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
-> -&gt; k -&gt; v -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
->IO</A
-> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
->Bool</A
-></TD
-></TR
-><TR
-><TD CLASS="s8"
-></TD
-></TR
-><TR
-><TD CLASS="decl"
-><A HREF="#v%3Aputasync"
->putasync</A
-> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
->Storable</A
-> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
->Storable</A
-> v) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> v) =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; k -&gt; v -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -646,8 +387,8 @@
 >out</A
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> k =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> k =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; k -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -666,8 +407,8 @@
 >Storable</A
 > k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> v) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> v) =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; k -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > (<A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
@@ -684,8 +425,8 @@
 >vsiz</A
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> k =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> k =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; k -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > (<A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
@@ -702,8 +443,8 @@
 ><TD CLASS="decl"
 ><A HREF="#v%3Aiterinit"
 >iterinit</A
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -720,8 +461,8 @@
 >iternext</A
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> k =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> k =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > (<A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
@@ -742,8 +483,8 @@
 >Storable</A
 > k2, <A HREF="Database-TokyoCabinet-Sequence.html#t%3ASequence"
 >Sequence</A
-> q) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> q) =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; k1 -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
@@ -760,8 +501,8 @@
 >addint</A
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> k =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> k =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; k -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
@@ -782,8 +523,8 @@
 >adddouble</A
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> k =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> k =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; k -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
 >Double</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
@@ -802,8 +543,8 @@
 ><TD CLASS="decl"
 ><A HREF="#v%3Async"
 >sync</A
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -818,17 +559,11 @@
 ><TD CLASS="decl"
 ><A HREF="#v%3Aoptimize"
 >optimize</A
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
-> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
->Int64</A
-> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt8"
->Int8</A
-> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt8"
->Int8</A
-> -&gt; [<A HREF="Database-TokyoCabinet-HDB.html#t%3ATuningOption"
->TuningOption</A
->] -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
+> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
@@ -842,8 +577,8 @@
 ><TD CLASS="decl"
 ><A HREF="#v%3Avanish"
 >vanish</A
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -858,8 +593,8 @@
 ><TD CLASS="decl"
 ><A HREF="#v%3Acopy"
 >copy</A
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
 >String</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
@@ -876,8 +611,8 @@
 ><TD CLASS="decl"
 ><A HREF="#v%3Atranbegin"
 >tranbegin</A
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -892,8 +627,8 @@
 ><TD CLASS="decl"
 ><A HREF="#v%3Atrancommit"
 >trancommit</A
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -908,8 +643,8 @@
 ><TD CLASS="decl"
 ><A HREF="#v%3Atranabort"
 >tranabort</A
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -924,8 +659,8 @@
 ><TD CLASS="decl"
 ><A HREF="#v%3Apath"
 >path</A
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > (<A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
@@ -942,8 +677,8 @@
 ><TD CLASS="decl"
 ><A HREF="#v%3Arnum"
 >rnum</A
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord64"
@@ -956,15 +691,39 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
-><A HREF="#v%3Afsiz"
->fsiz</A
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+><A HREF="#v%3Asize"
+>size</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord64"
 >Word64</A
 ></TD
+></TR
+><TR
+><TD CLASS="s8"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A HREF="#v%3Amisc"
+>misc</A
+> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> a, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> b, <A HREF="Database-TokyoCabinet-Sequence.html#t%3ASequence"
+>Sequence</A
+> q1, <A HREF="Database-TokyoCabinet-Sequence.html#t%3ASequence"
+>Sequence</A
+> q2) =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
+> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+> -&gt; q1 a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> (q2 b)</TD
 ></TR
 ></TABLE
 ></TD
@@ -988,44 +747,45 @@
 </P
 ><PRE
 >
-    import Control.Monad
-    import Database.TokyoCabinet.HDB
+   import Control.Monad
+   import Database.TokyoCabinet.ADB
 </PRE
 ><PRE
 >
-    main = do hdb &lt;- new
-              -- open the database
-              open hdb &quot;casket.tch&quot; [OWRITER, OCREAT] &gt;&gt;= err hdb
-              -- store records
-              puts hdb [(&quot;foo&quot;, &quot;hop&quot;), (&quot;bar&quot;, &quot;step&quot;), (&quot;baz&quot;, &quot;jump&quot;)] &gt;&gt;=
-                       err hdb . (all id)
-              -- retrieve records
-              get_print hdb &quot;foo&quot;
-              -- traverse records
-              iterinit hdb
-              iter hdb &gt;&gt;= mapM_ (k -&gt; putStr (k++&quot;:&quot;) &gt;&gt; get_print hdb k)
-              -- close the database
-              close hdb &gt;&gt;= err hdb
-        where
-          puts :: HDB -&gt; [(String, String)] -&gt; IO [Bool]
-          puts hdb = mapM (uncurry $ put hdb)
+   main = do adb &lt;- new
+             -- open the abstract database object
+             -- &quot;+&quot; means that the database will be an on-memory tree database
+             open adb &quot;+&quot; &gt;&gt;= err adb &quot;open failed&quot;
+             -- store records
+             puts adb [(&quot;foo&quot;, &quot;hop&quot;), (&quot;bar&quot;, &quot;step&quot;), (&quot;baz&quot;, &quot;jump&quot;)] &gt;&gt;=
+                      err adb &quot;put failed&quot; . (all id)
+             -- retrieve records
+             get_print adb &quot;foo&quot;
+             -- traverse records
+             iterinit adb
+             iter adb &gt;&gt;= mapM_ (k -&gt; putStr (k++&quot;:&quot;) &gt;&gt; get_print adb k)
+             -- close the database
+             close adb &gt;&gt;= err adb &quot;close failed&quot;
+       where
+         puts :: ADB -&gt; [(String, String)] -&gt; IO [Bool]
+         puts adb = mapM (uncurry $ put adb)
 </PRE
 ><PRE
 >
-          get_print :: HDB -&gt; String -&gt; IO ()
-          get_print hdb key = get hdb key &gt;&gt;=
-                              maybe (error &quot;something goes wrong&quot;) putStrLn
+         get_print :: ADB -&gt; String -&gt; IO ()
+         get_print adb key = get adb key &gt;&gt;=
+                             maybe (error &quot;something goes wrong&quot;) putStrLn
 </PRE
 ><PRE
->  
-          err :: HDB -&gt; Bool -&gt; IO ()
-          err hdb = flip unless $ ecode hdb &gt;&gt;= error . show
+>
+         err :: ADB -&gt; String -&gt; Bool -&gt; IO ()
+         err adb msg = flip unless $ error msg
 </PRE
 ><PRE
->    
-          iter :: HDB -&gt; IO [String]
-          iter hdb = iternext hdb &gt;&gt;=
-                     maybe (return []) (x -&gt; return . (x:) =&lt;&lt; iter hdb)
+>
+         iter :: ADB -&gt; IO [String]
+         iter adb = iternext adb &gt;&gt;=
+                    maybe (return []) (x -&gt; return . (x:) =&lt;&lt; iter adb)
 </PRE
 ></TD
 ></TR
@@ -1037,40 +797,13 @@
 ><TD CLASS="decl"
 ><SPAN CLASS="keyword"
 >data</SPAN
->  <A NAME="t:HDB"
-><A NAME="t%3AHDB"
+>  <A NAME="t:ADB"
+><A NAME="t%3AADB"
 ></A
 ></A
 ><B
->HDB</B
+>ADB</B
 >  </TD
-></TR
-><TR
-><TD CLASS="body"
-><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
-><TR
-><TD CLASS="section4"
-><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:HDB')" ALT="show/hide"
-> Instances</TD
-></TR
-><TR
-><TD CLASS="body"
-><DIV ID="i:HDB" STYLE="display:block;"
-><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
-><TR
-><TD CLASS="decl"
-><A HREF="Database-TokyoCabinet.html#t%3ATCDB"
->TCDB</A
-> <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-></TD
 ></TR
 ><TR
 ><TD CLASS="s15"
@@ -1431,7 +1164,7 @@
 ><TD CLASS="decl"
 ><A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Eq.html#t%3AEq"
 >Eq</A
-> <A HREF="Database-TokyoCabinet-HDB.html#t%3AECODE"
+> <A HREF="Database-TokyoCabinet-ADB.html#t%3AECODE"
 >ECODE</A
 ></TD
 ></TR
@@ -1439,7 +1172,7 @@
 ><TD CLASS="decl"
 ><A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Ord.html#t%3AOrd"
 >Ord</A
-> <A HREF="Database-TokyoCabinet-HDB.html#t%3AECODE"
+> <A HREF="Database-TokyoCabinet-ADB.html#t%3AECODE"
 >ECODE</A
 ></TD
 ></TR
@@ -1447,7 +1180,7 @@
 ><TD CLASS="decl"
 ><A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Text-Show.html#t%3AShow"
 >Show</A
-> <A HREF="Database-TokyoCabinet-HDB.html#t%3AECODE"
+> <A HREF="Database-TokyoCabinet-ADB.html#t%3AECODE"
 >ECODE</A
 ></TD
 ></TR
@@ -1456,301 +1189,6 @@
 ></TD
 ></TR
 ></TABLE
-></TD
-></TR
-><TR
-><TD CLASS="s15"
-></TD
-></TR
-><TR
-><TD CLASS="decl"
-><SPAN CLASS="keyword"
->data</SPAN
->  <A NAME="t:OpenMode"
-><A NAME="t%3AOpenMode"
-></A
-></A
-><B
->OpenMode</B
->  </TD
-></TR
-><TR
-><TD CLASS="body"
-><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
-><TR
-><TD CLASS="section4"
->Constructors</TD
-></TR
-><TR
-><TD CLASS="body"
-><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
-><TR
-><TD CLASS="arg"
-><A NAME="v:OREADER"
-><A NAME="v%3AOREADER"
-></A
-></A
-><B
->OREADER</B
-></TD
-><TD CLASS="rdoc"
-></TD
-></TR
-><TR
-><TD CLASS="arg"
-><A NAME="v:OWRITER"
-><A NAME="v%3AOWRITER"
-></A
-></A
-><B
->OWRITER</B
-></TD
-><TD CLASS="rdoc"
-></TD
-></TR
-><TR
-><TD CLASS="arg"
-><A NAME="v:OCREAT"
-><A NAME="v%3AOCREAT"
-></A
-></A
-><B
->OCREAT</B
-></TD
-><TD CLASS="rdoc"
-></TD
-></TR
-><TR
-><TD CLASS="arg"
-><A NAME="v:OTRUNC"
-><A NAME="v%3AOTRUNC"
-></A
-></A
-><B
->OTRUNC</B
-></TD
-><TD CLASS="rdoc"
-></TD
-></TR
-><TR
-><TD CLASS="arg"
-><A NAME="v:ONOLCK"
-><A NAME="v%3AONOLCK"
-></A
-></A
-><B
->ONOLCK</B
-></TD
-><TD CLASS="rdoc"
-></TD
-></TR
-><TR
-><TD CLASS="arg"
-><A NAME="v:OLCKNB"
-><A NAME="v%3AOLCKNB"
-></A
-></A
-><B
->OLCKNB</B
-></TD
-><TD CLASS="rdoc"
-></TD
-></TR
-><TR
-><TD CLASS="arg"
-><A NAME="v:OTSYNC"
-><A NAME="v%3AOTSYNC"
-></A
-></A
-><B
->OTSYNC</B
-></TD
-><TD CLASS="rdoc"
-></TD
-></TR
-></TABLE
-></TD
-></TR
-><TR
-><TD CLASS="section4"
-><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:OpenMode')" ALT="show/hide"
-> Instances</TD
-></TR
-><TR
-><TD CLASS="body"
-><DIV ID="i:OpenMode" STYLE="display:block;"
-><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
-><TR
-><TD CLASS="decl"
-><A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Eq.html#t%3AEq"
->Eq</A
-> <A HREF="Database-TokyoCabinet-HDB.html#t%3AOpenMode"
->OpenMode</A
-></TD
-></TR
-><TR
-><TD CLASS="decl"
-><A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Ord.html#t%3AOrd"
->Ord</A
-> <A HREF="Database-TokyoCabinet-HDB.html#t%3AOpenMode"
->OpenMode</A
-></TD
-></TR
-><TR
-><TD CLASS="decl"
-><A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Text-Show.html#t%3AShow"
->Show</A
-> <A HREF="Database-TokyoCabinet-HDB.html#t%3AOpenMode"
->OpenMode</A
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-></TD
-></TR
-><TR
-><TD CLASS="s15"
-></TD
-></TR
-><TR
-><TD CLASS="decl"
-><SPAN CLASS="keyword"
->data</SPAN
->  <A NAME="t:TuningOption"
-><A NAME="t%3ATuningOption"
-></A
-></A
-><B
->TuningOption</B
->  </TD
-></TR
-><TR
-><TD CLASS="body"
-><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
-><TR
-><TD CLASS="section4"
->Constructors</TD
-></TR
-><TR
-><TD CLASS="body"
-><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
-><TR
-><TD CLASS="arg"
-><A NAME="v:TLARGE"
-><A NAME="v%3ATLARGE"
-></A
-></A
-><B
->TLARGE</B
-></TD
-><TD CLASS="rdoc"
-></TD
-></TR
-><TR
-><TD CLASS="arg"
-><A NAME="v:TDEFLATE"
-><A NAME="v%3ATDEFLATE"
-></A
-></A
-><B
->TDEFLATE</B
-></TD
-><TD CLASS="rdoc"
-></TD
-></TR
-><TR
-><TD CLASS="arg"
-><A NAME="v:TBZIP"
-><A NAME="v%3ATBZIP"
-></A
-></A
-><B
->TBZIP</B
-></TD
-><TD CLASS="rdoc"
-></TD
-></TR
-><TR
-><TD CLASS="arg"
-><A NAME="v:TTCBS"
-><A NAME="v%3ATTCBS"
-></A
-></A
-><B
->TTCBS</B
-></TD
-><TD CLASS="rdoc"
-></TD
-></TR
-><TR
-><TD CLASS="arg"
-><A NAME="v:TEXCODEC"
-><A NAME="v%3ATEXCODEC"
-></A
-></A
-><B
->TEXCODEC</B
-></TD
-><TD CLASS="rdoc"
-></TD
-></TR
-></TABLE
-></TD
-></TR
-><TR
-><TD CLASS="section4"
-><IMG SRC="minus.gif" CLASS="coll" ONCLICK="toggle(this,'i:TuningOption')" ALT="show/hide"
-> Instances</TD
-></TR
-><TR
-><TD CLASS="body"
-><DIV ID="i:TuningOption" STYLE="display:block;"
-><TABLE CLASS="vanilla" CELLSPACING="1" CELLPADDING="0"
-><TR
-><TD CLASS="decl"
-><A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Eq.html#t%3AEq"
->Eq</A
-> <A HREF="Database-TokyoCabinet-HDB.html#t%3ATuningOption"
->TuningOption</A
-></TD
-></TR
-><TR
-><TD CLASS="decl"
-><A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Ord.html#t%3AOrd"
->Ord</A
-> <A HREF="Database-TokyoCabinet-HDB.html#t%3ATuningOption"
->TuningOption</A
-></TD
-></TR
-><TR
-><TD CLASS="decl"
-><A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Text-Show.html#t%3AShow"
->Show</A
-> <A HREF="Database-TokyoCabinet-HDB.html#t%3ATuningOption"
->TuningOption</A
-></TD
-></TR
-></TABLE
-></DIV
-></TD
-></TR
-></TABLE
-></TD
-></TR
-><TR
-><TD CLASS="s15"
-></TD
-></TR
-><TR
-><TD CLASS="section1"
-><A NAME="1"
-><A NAME="1"
->Basic API (tokyocabinet.idl compliant)
-</A
-></A
 ></TD
 ></TR
 ><TR
@@ -1767,13 +1205,13 @@
 >new</B
 > :: <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
-> <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 ></TD
 ></TR
 ><TR
 ><TD CLASS="doc"
->Create a Hash database object. 
+>Create a Abstract database object. 
 </TD
 ></TR
 ><TR
@@ -1788,8 +1226,8 @@
 ></A
 ><B
 >delete</B
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Unit.html#t%3A%28%29"
@@ -1798,221 +1236,10 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Free HDB resource forcibly. 
- HDB is kept by ForeignPtr, so Haskell runtime GC cleans up memory for
+>Free ADB resource forcibly. 
+ ADB is kept by ForeignPtr, so Haskell runtime GC cleans up memory for
  almost situation. Most always, you don't need to call this. 
- After call this, you must not touch HDB object. Its behavior is undefined.
-</TD
-></TR
-><TR
-><TD CLASS="s15"
-></TD
-></TR
-><TR
-><TD CLASS="decl"
-><A NAME="v:ecode"
-><A NAME="v%3Aecode"
-></A
-></A
-><B
->ecode</B
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
-> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
->IO</A
-> <A HREF="Database-TokyoCabinet-HDB.html#t%3AECODE"
->ECODE</A
-></TD
-></TR
-><TR
-><TD CLASS="doc"
->Return the last happened error code.
-</TD
-></TR
-><TR
-><TD CLASS="s15"
-></TD
-></TR
-><TR
-><TD CLASS="decl"
-><A NAME="v:errmsg"
-><A NAME="v%3Aerrmsg"
-></A
-></A
-><B
->errmsg</B
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AECODE"
->ECODE</A
-> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
->String</A
-></TD
-></TR
-><TR
-><TD CLASS="doc"
->Convert error code to message string.
-</TD
-></TR
-><TR
-><TD CLASS="s15"
-></TD
-></TR
-><TR
-><TD CLASS="decl"
-><A NAME="v:tune"
-><A NAME="v%3Atune"
-></A
-></A
-><B
->tune</B
-></TD
-></TR
-><TR
-><TD CLASS="body"
-><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
-><TR
-><TD CLASS="arg"
->:: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
-></TD
-><TD CLASS="rdoc"
->HDB object
-</TD
-></TR
-><TR
-><TD CLASS="arg"
->-&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
->Int64</A
-></TD
-><TD CLASS="rdoc"
->the number of elements of the bucket array.
-</TD
-></TR
-><TR
-><TD CLASS="arg"
->-&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt8"
->Int8</A
-></TD
-><TD CLASS="rdoc"
->the size of record alignment by power of 2. 
-</TD
-></TR
-><TR
-><TD CLASS="arg"
->-&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt8"
->Int8</A
-></TD
-><TD CLASS="rdoc"
->the maximum number of elements of the free block
- pool by power of 2.
-</TD
-></TR
-><TR
-><TD CLASS="arg"
->-&gt; [<A HREF="Database-TokyoCabinet-HDB.html#t%3ATuningOption"
->TuningOption</A
->]</TD
-><TD CLASS="rdoc"
->tuning options.
-</TD
-></TR
-><TR
-><TD CLASS="arg"
->-&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
->IO</A
-> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
->Bool</A
-></TD
-><TD CLASS="rdoc"
->if successful, the return value is True.
-</TD
-></TR
-><TR
-><TD CLASS="ndoc" COLSPAN="2"
->Set the tuning parameters.
-</TD
-></TR
-></TABLE
-></TD
-></TR
-><TR
-><TD CLASS="s15"
-></TD
-></TR
-><TR
-><TD CLASS="decl"
-><A NAME="v:setcache"
-><A NAME="v%3Asetcache"
-></A
-></A
-><B
->setcache</B
-></TD
-></TR
-><TR
-><TD CLASS="body"
-><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
-><TR
-><TD CLASS="arg"
->:: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
-></TD
-><TD CLASS="rdoc"
->HDB object.
-</TD
-></TR
-><TR
-><TD CLASS="arg"
->-&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt32"
->Int32</A
-></TD
-><TD CLASS="rdoc"
->the maximum number of records to be cached.
-</TD
-></TR
-><TR
-><TD CLASS="arg"
->-&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
->IO</A
-> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
->Bool</A
-></TD
-><TD CLASS="rdoc"
->if successful, the return value is True.
-</TD
-></TR
-><TR
-><TD CLASS="ndoc" COLSPAN="2"
->Set the caching parameters.
-</TD
-></TR
-></TABLE
-></TD
-></TR
-><TR
-><TD CLASS="s15"
-></TD
-></TR
-><TR
-><TD CLASS="decl"
-><A NAME="v:setxmsiz"
-><A NAME="v%3Asetxmsiz"
-></A
-></A
-><B
->setxmsiz</B
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
-> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
->Int64</A
-> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
->IO</A
-> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
->Bool</A
-></TD
-></TR
-><TR
-><TD CLASS="doc"
->Set the size of extra mapped memory.
+ After call this, you must not touch ADB object. Its behavior is undefined.
 </TD
 ></TR
 ><TR
@@ -2027,13 +1254,11 @@
 ></A
 ><B
 >open</B
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
 >String</A
-> -&gt; [<A HREF="Database-TokyoCabinet-HDB.html#t%3AOpenMode"
->OpenMode</A
->] -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
@@ -2041,7 +1266,7 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Open a database file.
+>Open an abstract dataabse.
 </TD
 ></TR
 ><TR
@@ -2056,8 +1281,8 @@
 ></A
 ><B
 >close</B
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -2066,7 +1291,7 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Close the database file.
+>Close an abstract database object.
 </TD
 ></TR
 ><TR
@@ -2085,8 +1310,8 @@
 >Storable</A
 > k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> v) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> v) =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; k -&gt; v -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -2095,26 +1320,7 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Stora a record (key-value pair) on HDB.  Key and value type must
- be instance of Storable class.  Usually, we can use <TT
-><A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
->String</A
-></TT
->,
- ByteString for key, <TT
-><A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
->String</A
-></TT
->, ByteString, <TT
-><A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
->Int</A
-></TT
->, <TT
-><A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
->Double</A
-></TT
-> for
- value.
+>Stora a record into an abstract database object. 
 </TD
 ></TR
 ><TR
@@ -2133,8 +1339,8 @@
 >Storable</A
 > k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> v) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> v) =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; k -&gt; v -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -2143,8 +1349,7 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Store a new record. If a record with the same key exists in the
- database, this function has no effect.
+>Store a new record into an abstract database object.
 </TD
 ></TR
 ><TR
@@ -2163,8 +1368,8 @@
 >Storable</A
 > k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> v) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> v) =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; k -&gt; v -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -2173,36 +1378,8 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Concatenate a value at the end of the existing record.
-</TD
-></TR
-><TR
-><TD CLASS="s15"
-></TD
-></TR
-><TR
-><TD CLASS="decl"
-><A NAME="v:putasync"
-><A NAME="v%3Aputasync"
-></A
-></A
-><B
->putasync</B
-> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
->Storable</A
-> k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
->Storable</A
-> v) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
-> -&gt; k -&gt; v -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
->IO</A
-> <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
->Bool</A
-></TD
-></TR
-><TR
-><TD CLASS="doc"
->Store a record into a hash database object in asynchronous fashion.
+>Concatenate a value at the end of the existing record in an
+ abstract database object.
 </TD
 ></TR
 ><TR
@@ -2219,8 +1396,8 @@
 >out</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> k =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> k =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; k -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -2229,7 +1406,7 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Delete a record.
+>Remove a record of an abstract database object.
 </TD
 ></TR
 ><TR
@@ -2248,8 +1425,8 @@
 >Storable</A
 > k, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> v) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> v) =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; k -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > (<A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
@@ -2258,7 +1435,7 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Return the value of record. 
+>Retrieve a record in an abstract database object.
 </TD
 ></TR
 ><TR
@@ -2275,8 +1452,8 @@
 >vsiz</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> k =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> k =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; k -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > (<A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
@@ -2287,7 +1464,7 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Return the byte size of value in a record.
+>Get the size of the value of a record in an abstract database object.
 </TD
 ></TR
 ><TR
@@ -2302,8 +1479,8 @@
 ></A
 ><B
 >iterinit</B
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -2312,7 +1489,7 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Initialize the iterator of a HDB object.
+>Initialize the iterator of an abstract database object.
 </TD
 ></TR
 ><TR
@@ -2329,8 +1506,8 @@
 >iternext</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> k =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> k =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > (<A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
@@ -2339,7 +1516,7 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Return the next key of the iterator of a HDB object.
+>Get the next key of the iterator of an abstract database object.
 </TD
 ></TR
 ><TR
@@ -2360,8 +1537,8 @@
 >Storable</A
 > k2, <A HREF="Database-TokyoCabinet-Sequence.html#t%3ASequence"
 >Sequence</A
-> q) =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> q) =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; k1 -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
@@ -2370,7 +1547,7 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Return list of forward matched keys.
+>Get forward matching keys in an abstract database object.
 </TD
 ></TR
 ><TR
@@ -2387,8 +1564,8 @@
 >addint</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> k =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> k =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; k -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3AInt"
 >Int</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
@@ -2401,8 +1578,7 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Increment the corresponding value. (The value specified by a key
- is treated as integer.)
+>Add an integer to a record in an abstract database object.
 </TD
 ></TR
 ><TR
@@ -2419,8 +1595,8 @@
 >adddouble</B
 > :: <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
 >Storable</A
-> k =&gt; <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> k =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; k -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Types.html#t%3ADouble"
 >Double</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
@@ -2433,8 +1609,7 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Increment the corresponding value. (The value specified by a key
- is treated as double.)
+>Add a real number to a record in an abstract database object.
 </TD
 ></TR
 ><TR
@@ -2449,8 +1624,8 @@
 ></A
 ><B
 >sync</B
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -2459,8 +1634,8 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Synchronize updated contents of a database object with the file
- and the device.
+>Synchronize updated contents of an abstract database object with
+ the file and the device.
 </TD
 ></TR
 ><TR
@@ -2475,75 +1650,20 @@
 ></A
 ><B
 >optimize</B
-></TD
-></TR
-><TR
-><TD CLASS="body"
-><TABLE CLASS="vanilla" CELLSPACING="0" CELLPADDING="0"
-><TR
-><TD CLASS="arg"
->:: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
-></TD
-><TD CLASS="rdoc"
->HDB object
-</TD
-></TR
-><TR
-><TD CLASS="arg"
->-&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt64"
->Int64</A
-></TD
-><TD CLASS="rdoc"
->the number of elements of the bucket array.
-</TD
-></TR
-><TR
-><TD CLASS="arg"
->-&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt8"
->Int8</A
-></TD
-><TD CLASS="rdoc"
->the size of record alignment by power of 2. 
-</TD
-></TR
-><TR
-><TD CLASS="arg"
->-&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Int.html#t%3AInt8"
->Int8</A
-></TD
-><TD CLASS="rdoc"
->the maximum number of elements of the free block
- pool by power of 2.
-</TD
-></TR
-><TR
-><TD CLASS="arg"
->-&gt; [<A HREF="Database-TokyoCabinet-HDB.html#t%3ATuningOption"
->TuningOption</A
->]</TD
-><TD CLASS="rdoc"
->tuning options.
-</TD
-></TR
-><TR
-><TD CLASS="arg"
->-&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
+> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
 >Bool</A
 ></TD
-><TD CLASS="rdoc"
->if successful, the return value is True.
-</TD
 ></TR
 ><TR
-><TD CLASS="ndoc" COLSPAN="2"
->Optimize the file of a Hash database object.
+><TD CLASS="doc"
+>Optimize the storage of an abstract database object.
 </TD
-></TR
-></TABLE
-></TD
 ></TR
 ><TR
 ><TD CLASS="s15"
@@ -2557,8 +1677,8 @@
 ></A
 ><B
 >vanish</B
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -2567,7 +1687,7 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Delete all records.
+>Remove all records of an abstract database object.
 </TD
 ></TR
 ><TR
@@ -2582,8 +1702,8 @@
 ></A
 ><B
 >copy</B
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
 >String</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
@@ -2594,7 +1714,7 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Copy the database file.
+>Copy the database file of an abstract database object.
 </TD
 ></TR
 ><TR
@@ -2609,8 +1729,8 @@
 ></A
 ><B
 >tranbegin</B
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -2619,7 +1739,7 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Begin the transaction.
+>Begin the transaction of an abstract database object.
 </TD
 ></TR
 ><TR
@@ -2634,8 +1754,8 @@
 ></A
 ><B
 >trancommit</B
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -2644,7 +1764,7 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Commit the transaction.
+>Commit the transaction of an abstract database object.
 </TD
 ></TR
 ><TR
@@ -2659,8 +1779,8 @@
 ></A
 ><B
 >tranabort</B
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/ghc-prim/GHC-Bool.html#t%3ABool"
@@ -2669,7 +1789,7 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Abort the transaction.
+>Abort the transaction of an abstract database object.
 </TD
 ></TR
 ><TR
@@ -2684,8 +1804,8 @@
 ></A
 ><B
 >path</B
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > (<A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Maybe.html#t%3AMaybe"
@@ -2696,7 +1816,7 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Return the file path of currentry opened database.
+>Get the file path of an abstract database object.
 </TD
 ></TR
 ><TR
@@ -2711,8 +1831,8 @@
 ></A
 ><B
 >rnum</B
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord64"
@@ -2721,7 +1841,7 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Return the number of records in the database.
+>Get the number of records of an abstract database object.
 </TD
 ></TR
 ><TR
@@ -2730,14 +1850,14 @@
 ></TR
 ><TR
 ><TD CLASS="decl"
-><A NAME="v:fsiz"
-><A NAME="v%3Afsiz"
+><A NAME="v:size"
+><A NAME="v%3Asize"
 ></A
 ></A
 ><B
->fsiz</B
-> :: <A HREF="Database-TokyoCabinet-HDB.html#t%3AHDB"
->HDB</A
+>size</B
+> :: <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
 > -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
 >IO</A
 > <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Word.html#t%3AWord64"
@@ -2746,7 +1866,41 @@
 ></TR
 ><TR
 ><TD CLASS="doc"
->Return the size of the database file.
+>Get the size of the database of an abstract database object.
+</TD
+></TR
+><TR
+><TD CLASS="s15"
+></TD
+></TR
+><TR
+><TD CLASS="decl"
+><A NAME="v:misc"
+><A NAME="v%3Amisc"
+></A
+></A
+><B
+>misc</B
+> :: (<A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> a, <A HREF="Database-TokyoCabinet-Storable.html#t%3AStorable"
+>Storable</A
+> b, <A HREF="Database-TokyoCabinet-Sequence.html#t%3ASequence"
+>Sequence</A
+> q1, <A HREF="Database-TokyoCabinet-Sequence.html#t%3ASequence"
+>Sequence</A
+> q2) =&gt; <A HREF="Database-TokyoCabinet-ADB.html#t%3AADB"
+>ADB</A
+> -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/Data-Char.html#t%3AString"
+>String</A
+> -&gt; q1 a -&gt; <A HREF="/Users/tom/local/ghc/share/doc/ghc/libraries/base/System-IO.html#t%3AIO"
+>IO</A
+> (q2 b)</TD
+></TR
+><TR
+><TD CLASS="doc"
+>Call a versatile function for miscellaneous operations of an
+ abstract database object.
 </TD
 ></TR
 ><TR
