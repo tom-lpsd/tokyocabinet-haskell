@@ -1,5 +1,8 @@
+-- | Interface to TC's Abstract DataBase. See also,
+-- <http://tokyocabinet.sourceforge.net/spex-en.html#tcadbapi> for details
 module Database.TokyoCabinet.ADB
     (
+    -- $doc
       ADB
     , ECODE(..)
     , new
@@ -41,6 +44,52 @@ import Database.TokyoCabinet.Internal
 import Database.TokyoCabinet.Storable
 import Database.TokyoCabinet.Sequence
 
+-- $doc
+-- Example
+--
+-- @
+--   import Control.Monad
+--   import Database.TokyoCabinet.ADB
+-- @
+--
+-- @
+--   main = do adb <- new
+--             -- open the abstract database object
+--             -- \"+\" means that the database will be an on-memory tree database
+--             open adb \"+\" >>= err adb \"open failed\"
+--             -- store records
+--             puts adb [(\"foo\", \"hop\"), (\"bar\", \"step\"), (\"baz\", \"jump\")] >>=
+--                      err adb \"put failed\" . (all id)
+--             -- retrieve records
+--             get_print adb \"foo\"
+--             -- traverse records
+--             iterinit adb
+--             iter adb >>= mapM_ (\k -> putStr (k++\":\") >> get_print adb k)
+--             -- close the database
+--             close adb >>= err adb \"close failed\"
+--       where
+--         puts :: ADB -> [(String, String)] -> IO [Bool]
+--         puts adb = mapM (uncurry $ put adb)
+-- @
+--
+-- @
+--         get_print :: ADB -> String -> IO ()
+--         get_print adb key = get adb key >>=
+--                             maybe (error \"something goes wrong\") putStrLn
+-- @
+--
+-- @
+--         err :: ADB -> String -> Bool -> IO ()
+--         err adb msg = flip unless $ error msg
+-- @
+--
+-- @
+--         iter :: ADB -> IO [String]
+--         iter adb = iternext adb >>=
+--                    maybe (return []) (\x -> return . (x:) =<< iter adb)
+-- @
+--
+
 data ADB = ADB { unTCADB :: !(ForeignPtr ADB') }
 
 -- | Create a Abstract database object. 
@@ -48,7 +97,7 @@ new :: IO ADB
 new = ADB `fmap` (c_tcadbnew >>= newForeignPtr tcadbFinalizer)
 
 -- | Free ADB resource forcibly. 
--- HDB is kept by ForeignPtr, so Haskell runtime GC cleans up memory for
+-- ADB is kept by ForeignPtr, so Haskell runtime GC cleans up memory for
 -- almost situation. Most always, you don't need to call this. 
 -- After call this, you must not touch ADB object. Its behavior is undefined.
 delete :: ADB -> IO ()
