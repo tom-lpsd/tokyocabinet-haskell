@@ -14,34 +14,35 @@ module Database.TokyoCabinet.Error
 import Foreign
 import Foreign.C.Types
 import Foreign.C.String
+import System.IO.Unsafe (unsafePerformIO)
 
 #include <tcutil.h>
 
 -- | Represents error
 data ECODE =
-    ESUCCESS | -- ^ success            
-    ETHREAD  | -- ^ threading error    
-    EINVALID | -- ^ invalid operation  
-    ENOFILE  | -- ^ file not found     
-    ENOPERM  | -- ^ no permission      
-    EMETA    | -- ^ invalid meta data  
-    ERHEAD   | -- ^ invalid record header 
-    EOPEN    | -- ^ open error         
-    ECLOSE   | -- ^ close error        
-    ETRUNC   | -- ^ trunc error        
-    ESYNC    | -- ^ sync error         
-    ESTAT    | -- ^ stat error         
-    ESEEK    | -- ^ seek error         
-    EREAD    | -- ^ read error         
-    EWRITE   | -- ^ write error        
-    EMMAP    | -- ^ mmap error         
-    ELOCK    | -- ^ lock error         
-    EUNLINK  | -- ^ unlink error       
-    ERENAME  | -- ^ rename error       
-    EMKDIR   | -- ^ mkdir error        
-    ERMDIR   | -- ^ rmdir error        
-    EKEEP    | -- ^ existing record    
-    ENOREC   | -- ^ no record found    
+    ESUCCESS | -- ^ success
+    ETHREAD  | -- ^ threading error
+    EINVALID | -- ^ invalid operation
+    ENOFILE  | -- ^ file not found
+    ENOPERM  | -- ^ no permission
+    EMETA    | -- ^ invalid meta data
+    ERHEAD   | -- ^ invalid record header
+    EOPEN    | -- ^ open error
+    ECLOSE   | -- ^ close error
+    ETRUNC   | -- ^ trunc error
+    ESYNC    | -- ^ sync error
+    ESTAT    | -- ^ stat error
+    ESEEK    | -- ^ seek error
+    EREAD    | -- ^ read error
+    EWRITE   | -- ^ write error
+    EMMAP    | -- ^ mmap error
+    ELOCK    | -- ^ lock error
+    EUNLINK  | -- ^ unlink error
+    ERENAME  | -- ^ rename error
+    EMKDIR   | -- ^ mkdir error
+    ERMDIR   | -- ^ rmdir error
+    EKEEP    | -- ^ existing record
+    ENOREC   | -- ^ no record found
     EMISC      -- ^ miscellaneous error
     deriving (Eq, Ord)
 
