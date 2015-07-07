@@ -11,6 +11,7 @@ module Database.TokyoCabinet.Error
     , cINT_MIN
     ) where
 
+import System.IO.Unsafe (unsafePerformIO)
 import Foreign
 import Foreign.C.Types
 import Foreign.C.String

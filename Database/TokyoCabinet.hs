@@ -68,7 +68,7 @@ import Data.Word
 newtype TCM a =
     TCM { -- | Unwrap TCM.
           runTCM :: IO a
-    } deriving (Monad, MonadIO)
+    } deriving (Functor, Applicative, Monad, MonadIO)
 
 -- | Represent open mode for `open' function.
 data OpenMode = OREADER |
